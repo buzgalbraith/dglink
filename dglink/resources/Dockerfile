@@ -41,4 +41,4 @@ ENV DOCKERIZED="TRUE"
 ENV NEO4J_URL="bolt://localhost:7687"
 
 ENTRYPOINT ["/bin/bash", "/sw/startup.sh"]
-COPY startup.sh startup.sh
+COPY startup.sh /sw/startup.sh
