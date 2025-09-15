@@ -68,7 +68,7 @@ def get_entity_grounder():
     }
     alternative_entity_names = {
         "compound": ["drug", "compound", "chemical compound"],
-        "gene": ["gene", "target", "genetic material", "criston"],
+        "gene": ["gene", "target",'target(s)', "genetic material", "criston"],
         "cell line": ["cell line", "cellline", "cell_line"],
     }
     terms = []
@@ -132,17 +132,17 @@ def process_enteries(project_id, entries, entity_type):
     process found enteties into lists of nodes and relations
     """
     node_project = (project_id, "Project")
-    node_entries = [
+    node_entries = set([
         (f"{nsid[0]}:{nsid[1]}", entity_type)
         for name, nsid in entries.items()
         if nsid is not None
-    ]
-    relations = [
+    ])
+    relations = set([
         (project_id, f"{nsid[0]}:{nsid[1]}", f"has_{entity_type}")
         for name, nsid in entries.items()
         if nsid is not None
-    ]
-    return [node_project] + node_entries, relations
+    ])
+    return set([node_project]) | node_entries, relations
 
 
 if __name__ == "__main__":
@@ -167,11 +167,11 @@ if __name__ == "__main__":
     ]
     ## get a grounder for col names to entity types
     entity_grounder = get_entity_grounder()
-
     ## lets focous on one example file from that project
-    nodes = [["curie:ID", ":LABEL"]]
-    relations = [[":START_ID", ":END_ID", ":TYPE"]]
-    
+    # nodes = [["curie:ID", ":LABEL"]]
+    # relations = [[":START_ID", ":END_ID", ":TYPE"]]
+    nodes = set()
+    relations = set()
     for i, project_id in enumerate(projects_to_check):
         ## when expanding this have another loop here over all the files pulled for each project
         file_id = selected_files[i]
@@ -179,7 +179,8 @@ if __name__ == "__main__":
         df_dict = file_reader(obj)
         ## extra loop in case there are multiple sheets
         for sheet in df_dict:
-            df = df_dict[sheet]
+            df = df_dict[sheet].fillna('') ## fill na with '' for now. 
+
             ## keep only string types
             # df = df.select_dtypes(include=["object", "string"])
             # import ipdb; ipdb.set_trace()
@@ -191,6 +192,7 @@ if __name__ == "__main__":
 
 
             ## find cols that represent enteties in the KG
+            # import ipdb; ipdb.set_trace()
             for col in df.columns:
                 entity_type_match = entity_grounder.ground(gilda.process.normalize(col))
                 if len(entity_type_match) > 0:
@@ -200,8 +202,10 @@ if __name__ == "__main__":
                         entries=entries,
                         entity_type=entity_type_match[0].term.entry_name,
                     )
-                    nodes += project_nodes
-                    relations += project_relations
+                    nodes = nodes | project_nodes
+                    relations = relations | project_relations
+    nodes = [["curie:ID", ":LABEL"]] + list(nodes)
+    relations = [[":START_ID", ":END_ID", ":TYPE"]] + list(relations)
     # # # Dump nodes into nodes.tsv and relations into edges.tsv
     with open("dglink/resources/nodes.tsv", "w") as f:
         for row in nodes:
