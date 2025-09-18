@@ -1,7 +1,5 @@
 """
-Goals:
-    1. pull the required info using the synapse api
-    2. run the functionality of build.py
+this script recreates Ben's original build script using the synapse API
 """
 
 import synapseclient
@@ -10,6 +8,7 @@ import os
 import pandas
 import gilda
 import chardet
+from indra.ontology.bio import bio_ontology
 
 FILE_TYPES = [
     ".tsv",
@@ -108,7 +107,7 @@ def ground_entries(entries):
 
 def read_csv_auto(path, nbytes=100000, **kwargs):
     """
-    Reads a CSV file with automatic encoding detection.
+    Reads a CSV (or TSV) file with automatic encoding detection.
     """
     # Detect encoding
     with open(path, "rb") as f:
@@ -119,10 +118,8 @@ def read_csv_auto(path, nbytes=100000, **kwargs):
     # Fall back if detection fails
     if encoding is None:
         encoding = "latin1"
-
-
-    return pandas.read_csv(path, encoding=encoding, **kwargs)
-
+    df = pandas.read_csv(path, encoding=encoding, **kwargs)
+    return df 
 def file_reader(obj):
     """
     reads in files from a synapse file object. Returns files as a dictionary for working with sheets
@@ -137,25 +134,30 @@ def file_reader(obj):
         df = pandas.read_excel(obj.path, sheet_name=None)
     ## work around for cases where need to skip lines
     for sheet_name in df:
-        if df[sheet_name].columns.str.contains('Unnamed', case=False).any():
+        unnamed_count = sum(df[sheet_name].columns.str.contains('Unnamed', case=False))
+        ## here we are allowing for one un-named col in the context of an index
+        ## TODO: so far this only reads excel files. eventually this will crash but i want to see what file makes it crash
+        if unnamed_count > 1:
             df[sheet_name] = pandas.read_excel(
                 obj.path, sheet_name=sheet_name, skiprows=1
             )  ## load all sheets
     return df
 
 
-def process_enteries(project_id, entries, entity_type):
+def process_enteries(project_id, entries):
     """
     process found enteties into lists of nodes and relations
     """
+
     node_project = (project_id, "Project")
+
     node_entries = set([
-        (f"{nsid[0]}:{nsid[1]}", entity_type)
+        (f"{nsid[0]}:{nsid[1]}", bio_ontology.get_type(nsid[0], nsid[1]))
         for name, nsid in entries.items()
         if nsid is not None
     ])
     relations = set([
-        (project_id, f"{nsid[0]}:{nsid[1]}", f"has_{entity_type}")
+        (project_id, f"{nsid[0]}:{nsid[1]}", f"has_{bio_ontology.get_type(nsid[0], nsid[1])}")
         for name, nsid in entries.items()
         if nsid is not None
     ])
@@ -197,19 +199,6 @@ if __name__ == "__main__":
         ## extra loop in case there are multiple sheets
         for sheet in df_dict:
             df = df_dict[sheet].fillna('') ## fill na with '' for now. 
-
-            ## keep only string types
-            # df = df.select_dtypes(include=["object", "string"])
-            # import ipdb; ipdb.set_trace()
-            # for val in df.iloc[0].items():
-            #     anns = gilda.annotate(val[1])
-            #     if anns:
-            #         print(val)
-            #         print(anns)
-
-
-            ## find cols that represent enteties in the KG
-            # import ipdb; ipdb.set_trace()
             for col in df.columns:
                 entity_type_match = entity_grounder.ground(gilda.process.normalize(col))
                 if len(entity_type_match) > 0:
@@ -217,7 +206,6 @@ if __name__ == "__main__":
                     project_nodes, project_relations = process_enteries(
                         project_id=project_id,
                         entries=entries,
-                        entity_type=entity_type_match[0].term.entry_name,
                     )
                     nodes = nodes | project_nodes
                     relations = relations | project_relations
