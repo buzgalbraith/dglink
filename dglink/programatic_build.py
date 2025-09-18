@@ -9,6 +9,7 @@ from synapseutils import walk
 import os
 import pandas
 import gilda
+import chardet
 
 FILE_TYPES = [
     ".tsv",
@@ -105,22 +106,38 @@ def ground_entries(entries):
     return name_to_id
 
 
+def read_csv_auto(path, nbytes=100000, **kwargs):
+    """
+    Reads a CSV file with automatic encoding detection.
+    """
+    # Detect encoding
+    with open(path, "rb") as f:
+        rawdata = f.read(nbytes)
+    result = chardet.detect(rawdata)
+    encoding = result["encoding"]
+
+    # Fall back if detection fails
+    if encoding is None:
+        encoding = "latin1"
+
+
+    return pandas.read_csv(path, encoding=encoding, **kwargs)
+
 def file_reader(obj):
     """
     reads in files from a synapse file object. Returns files as a dictionary for working with sheets
     """
     ext = os.path.splitext(obj.path)[-1]
     if ext == ".tsv":
-        df = {"Sheet1": pandas.read_csv(obj.path, sep="\t")}
-    
+        df = {"Sheet1": read_csv_auto(obj.path, sep="\t")}
+    elif ext == '.csv':
+        df = {"Sheet1": read_csv_auto(obj.path)}
     elif ext == ".xlsx":
         ## reads in all sheets at once 
         df = pandas.read_excel(obj.path, sheet_name=None)
     ## work around for cases where need to skip lines
     for sheet_name in df:
-        if ("Unnamed" in df[sheet_name].columns[0]) & (
-            "Unnamed" in df[sheet_name].columns[1]
-        ):
+        if df[sheet_name].columns.str.contains('Unnamed', case=False).any():
             df[sheet_name] = pandas.read_excel(
                 obj.path, sheet_name=sheet_name, skiprows=1
             )  ## load all sheets
