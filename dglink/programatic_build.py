@@ -99,48 +99,137 @@ def ground_entries(entries):
                 anns[0].matches[0].term.db,
                 anns[0].matches[0].term.id,
             )
-        else:
-            name_to_id[entity] = None
-            print(entity)
+        # else:
+        #     name_to_id[entity] = None
+        #     print(entity)
     return name_to_id
 
 
-def read_csv_auto(path, nbytes=100000, **kwargs):
+def process_df(df, cols, project_id):
+    all_nodes = set()
+    all_edges = set()
+
+    for _, row in df.iterrows(): 
+        for col in cols:
+            entity = row[f"{col}_entity"]
+            entity_type = row[f"{col}_type"]
+            if (not pandas.isna(entity)) & (not pandas.isna(entity_type)):
+                all_nodes.add((entity, entity_type))
+                all_edges.add((project_id, entity, f"has_{entity_type}"))
+
+    return all_nodes, all_edges
+def apply_ground(row):
+    result = {}  
+    for col in row.index:
+        anns = gilda.annotate(row[col])
+        if anns:
+            nsid = anns[0].matches[0].term
+            result[f"{col}_entity"] = (
+                f"{nsid.db}:{nsid.id}"
+            )
+            result[f"{col}_type"] = bio_ontology.get_type(nsid.db, nsid.id)
+        else:
+            result[f"{col}_entity"] = (
+                    pandas.NA
+            )
+            result[f"{col}_type"] = (
+                    pandas.NA
+            )
+    return pandas.Series(result)
+
+
+def read_csv_auto(path, nbytes=100 * 1024 * 1024, **kwargs):
     """
     Reads a CSV (or TSV) file with automatic encoding detection.
     """
     # Detect encoding
     with open(path, "rb") as f:
         rawdata = f.read(nbytes)
+    ## deal with empty file
+    if len(rawdata) < 1:
+        return None
     result = chardet.detect(rawdata)
     encoding = result["encoding"]
-
+    ## check if there are comments 
+    comment = None 
+    with open(path, "rb") as f:
+        first_byte = f.read(1)
+        is_comment = first_byte == b"#"
+    if is_comment:
+        comment = '#'
     # Fall back if detection fails
     if encoding is None:
         encoding = "latin1"
-    df = pandas.read_csv(path, encoding=encoding, **kwargs)
+    sample_lines = 3
+    with open(path, "r", encoding=encoding, errors="ignore") as f:
+        all_lines = f.readlines()
+
+    n = min(sample_lines, len(all_lines))
+    lines = all_lines[:n]
+
+    header_idx = 0
+    max_alpha = -1
+    if 'sep' in kwargs:
+        delimiter = "\t"
+    else:
+        delimiter = ","
+    for i, line in enumerate(lines):
+        # Split and count how many entries look like text vs numbers
+        parts = [p.strip() for p in line.split(delimiter)]
+        alpha_count = sum(not p.replace(".", "", 1).isdigit() for p in parts if p)
+        if alpha_count > max_alpha:
+            max_alpha = alpha_count
+            header_idx = i
+    df = pandas.read_csv(path, encoding=encoding,comment=comment,header = header_idx,  **kwargs)
     return df 
-def file_reader(obj):
+
+def read_xlsx_auto(path, sample_rows = 20, **kwargs):
+    preview = pandas.read_excel(path, sheet_name=None, header=None, nrows=sample_rows)
+    df_dict = {}
+    for sheet_name in preview:
+        header_idx = 0
+        max_alpha = -1
+        for i, row in preview[sheet_name].iterrows():
+            values = row.dropna().astype(str)
+            # Count how many look like text instead of numbers
+            alpha_count = sum(not v.replace(".", "", 1).isdigit() for v in values)
+            if alpha_count > max_alpha:
+                max_alpha = alpha_count
+                header_idx = i
+        df_dict[sheet_name] = pandas.read_excel(path, sheet_name=sheet_name, header=header_idx, **kwargs)
+    return df_dict
+
+def file_reader(obj, max_size_bytes = 100 * 1024 * 1024):
     """
     reads in files from a synapse file object. Returns files as a dictionary for working with sheets
     """
+    if obj is None:
+        return {}
+    if obj.path is None:
+        return {}
+    file_size = os.path.getsize(obj.path)
+    if file_size > max_size_bytes:
+        print("file to large to read")
+        return {}
     ext = os.path.splitext(obj.path)[-1]
     if ext == ".tsv":
         df = {"Sheet1": read_csv_auto(obj.path, sep="\t")}
     elif ext == '.csv':
-        df = {"Sheet1": read_csv_auto(obj.path)}
-    elif ext == ".xlsx":
+        try:
+            df = {"Sheet1": read_csv_auto(obj.path)}
+        except:
+            df = {"Sheet1": read_csv_auto(obj.path, sep="\t")}
+    elif ext  == ".xlsx":
         ## reads in all sheets at once 
-        df = pandas.read_excel(obj.path, sheet_name=None)
-    ## work around for cases where need to skip lines
-    for sheet_name in df:
-        unnamed_count = sum(df[sheet_name].columns.str.contains('Unnamed', case=False))
-        ## here we are allowing for one un-named col in the context of an index
-        ## TODO: so far this only reads excel files. eventually this will crash but i want to see what file makes it crash
-        if unnamed_count > 1:
-            df[sheet_name] = pandas.read_excel(
-                obj.path, sheet_name=sheet_name, skiprows=1
-            )  ## load all sheets
+            df = read_xlsx_auto(obj.path)
+    elif ext == '.xls':
+        try:
+            df = pandas.read_excel(obj.path, engine="xlrd")
+            if type(df) != dict:
+                df = {"Sheet1" : df}
+        ## anecdotal there seem to be a lot of these that are just mislabeled tsv
+        except:
+            df = {"Sheet1": read_csv_auto(obj.path, sep="\t")}
     return df
 
 
