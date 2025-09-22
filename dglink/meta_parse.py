@@ -49,11 +49,11 @@ unstructured_fields = ["studyName", "name", "keywords"]
 
 wiki_fields = ["markdown", "title"]
 
-def load_existing_graph():
+def load_existing_graph(modifier = ''):
     """read in the files already in nodes and edges as sets"""
     existing_nodes = set()
     existing_relations = set()
-    with open("dglink/resources/nodes.tsv", "r") as f:
+    with open(f"dglink/resources/{modifier}nodes.tsv", "r") as f:
         for row in f.readlines()[1:]:
             existing_nodes.add(tuple(row.strip().split("\t")))
     with open("dglink/resources/edges.tsv", "r") as f:
