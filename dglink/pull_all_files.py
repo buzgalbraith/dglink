@@ -128,8 +128,10 @@ if __name__ == "__main__":
                          'file_id' : '_',
                          'file_path' : str(p_file),
                          'can_read' : False,
+                         'reason' : 'Locked',
                          'sheet' : 'all'}
                         )
+                continue
             ## read in the file
             df_dict = file_reader(obj)
             ## record cases where can't read in 
@@ -139,6 +141,7 @@ if __name__ == "__main__":
                          'file_id' : "_",
                          'file_path' : p_file,
                          'can_read' : False,
+                         'reason' : 'Locked', 
                          'sheet' : 'all'}
                         )
             ## loop over dictionary of data frames
@@ -146,12 +149,14 @@ if __name__ == "__main__":
                 df = df_dict[sheet]
                 ## determine if the file was read in correctly 
                 df_read, df = check_df_readable(df)
+                reason = 'good' if df_read else 'look_into'
                 ## adding to a list of what files can actually be read 
                 files_read.append(
                         {'project_id' : project_id,
                          'file_id' : obj.id,
                          'file_path' : str(obj.path),
                          'can_read' : df_read,
+                         'reason' : reason,
                          'sheet' : sheet}
                         )
                 if df is not None:
