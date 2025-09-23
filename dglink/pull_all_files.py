@@ -2,9 +2,6 @@
 This will download all files related to the drug screening projects
 """
 import synapseclient
-from synapseutils import walk
-import os
-import tqdm
 from programatic_build import file_reader, get_project_files
 import gilda
 import pandas
@@ -56,18 +53,19 @@ def check_df_readable(df, max_unnamed = 2):
         df = None
     else:
         print("can read")
-        df = df.select_dtypes(include=["object", "string"]).dropna()
+        df = df.select_dtypes(include=["object", "string"])
         can_read = True
     return can_read, df
 
 @lru_cache(maxsize=None)
 def cached_annotate(val):
     """cached inner function for grounding with gilda"""
-    anns = gilda.annotate(str(val))
-    if anns:
-        nsid = anns[0].matches[0].term
-        return f"{nsid.db}:{nsid.id}",bio_ontology.get_type(nsid.db, nsid.id)
-    return None, None
+    if pandas.notna(val):
+        anns = gilda.annotate(str(val))
+        if anns:
+            nsid = anns[0].matches[0].term
+            return f"{nsid.db}:{nsid.id}",bio_ontology.get_type(nsid.db, nsid.id)
+    return pandas.NA, pandas.NA
 
 def apply_ground(row):
     """method for applying grounding to data frame"""
