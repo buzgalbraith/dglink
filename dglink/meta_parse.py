@@ -29,8 +29,13 @@ all_project_ids = [
     "syn52740594",
 ]
 
+ground_fields = [
+    "manifestation",
+    "diseaseFocus",
+]
 
-structured_fields = [
+
+unground_fields = [
     "manifestation",
     "diseaseFocus",
     "fundingAgency",
@@ -44,12 +49,11 @@ structured_fields = [
     "grantDOI",
 ]
 
-## these are fields that have entities which may not be from a specific type of entity
-unstructured_fields = ["studyName", "name", "keywords"]
 
 wiki_fields = ["markdown", "title"]
 
-def load_existing_graph(modifier = ''):
+
+def load_existing_graph(modifier=""):
     """read in the files already in nodes and edges as sets"""
     existing_nodes = set()
     existing_relations = set()
@@ -62,17 +66,16 @@ def load_existing_graph(modifier = ''):
     return existing_nodes, existing_relations
 
 
-def get_entities_from_meta(study_metadata, structured_fields, unstructured_fields):
-    """parse entities from project metadata. 
-        Args:
-            study_metadata : meta data of the project run syn.get(study_id)
-            structured_fields: fields that will return a single (or list of) entities. Examples drugFocous, institution. Note these will be added to the KG both as there grounded entity type as well as there are in the meta data, so for instance will add nodes and edges both for disease and disease focus
-            unstructured_fields: fields that will return a free text response, that can then be parsed for information. Examples StudyName, keywords. note will only add the grounded domain to the kg. 
-
+def get_entities_from_meta(study_metadata, ground_fields, unground_fields):
+    """parse entities from project metadata.
+    Args:
+        study_metadata : meta data of the project run syn.get(study_id)
+        ground_fields: fields to ground with gilda
+        unground_fields: fields to not ground with gilda.
     """
     meta_nodes = set()
     meta_relations = set()
-    for field in structured_fields + unstructured_fields:
+    for field in ground_fields + unground_fields:
         if field in study_metadata.keys():
             field_val = (
                 study_metadata[field]
@@ -81,32 +84,32 @@ def get_entities_from_meta(study_metadata, structured_fields, unstructured_field
             )
             ## loop through in case list
             for entry in field_val:
-            ## see if entity can be grounded. if so use grounded identifier and also add edge to that entity type
-                ans = gilda.annotate(entry)
-                ## list in case there are multiple terms to be annotated 
-                enteries = []
-                if ans:
-                    for annotation in ans:
-                        nsid = annotation.matches[0].term
-                        enteries.append(f"{nsid.db}:{nsid.id}")
+                ## ground the node if it is in a grounded field
+                if field in ground_fields:
+                    ans = gilda.annotate(entry)
+                    ## if the node should be grounded and can be grounded save the node as that entity type as well.
+                    if ans:
+                        nsid = ans[0].matches[0].term
+                        entry = f"{nsid.db}:{nsid.id}"
                         alternate_field = bio_ontology.get_type(nsid.db, nsid.id)
-                        meta_nodes.add((enteries[-1], alternate_field))
+                        meta_nodes.add((entry, alternate_field))
                         meta_relations.add(
-                            (project_id, enteries[-1], f"has_{alternate_field}")
+                            (study_metadata.id, entry, f"has_{alternate_field}")
                         )
-                else:
-                    enteries = [entry]
-                ### add the primary entity type if in the structured fields
-                if field in structured_fields:
-                    for entery in enteries:
-                        meta_nodes.add((entry, field))
-                        meta_relations.add((project_id, entry, f"has_{field}"))
+                ## add the nodes with their corresponding meta data fields
+                meta_nodes.add((entry, field))
+                meta_relations.add((study_metadata.id, entry, f"has_{field}"))
     return meta_nodes, meta_relations
 
+
 def get_entities_from_wiki(study_wiki, wiki_fields):
-    """pull entities from a projects wiki"""
+    """pull entities from a projects wiki, and add links to them to the graph."""
     wiki_nodes = set()
     wiki_relations = set()
+    ## add a node for that wiki, and a link between the project and this wiki node.
+    wiki_id = f"{study_wiki.ownerId}:Wiki"
+    wiki_nodes.add((wiki_id, "Wiki"))
+    wiki_relations.add((study_wiki.ownerId, wiki_id, f"hasWiki"))
     for field in wiki_fields:
         if field in study_wiki.keys():
             field_val = study_wiki[field]
@@ -116,10 +119,9 @@ def get_entities_from_wiki(study_wiki, wiki_fields):
                 entry = f"{nsid.db}:{nsid.id}"
                 alternate_field = bio_ontology.get_type(nsid.db, nsid.id)
                 wiki_nodes.add((entry, alternate_field))
-                wiki_relations.add(
-                    (project_id, entry, f"has_{alternate_field}")
-                )
+                wiki_relations.add((wiki_id, entry, "mentions"))
     return wiki_nodes, wiki_relations
+
 
 if __name__ == "__main__":
     ## all projects have an accessible list of funding agencies as well as a markdown from the wiki
@@ -128,12 +130,17 @@ if __name__ == "__main__":
     for project_id in all_project_ids:
         study_metadata = syn.get(project_id)
         study_wiki = syn.getWiki(project_id)
-        meta_nodes, meta_relations = get_entities_from_meta(study_metadata=study_metadata, structured_fields=structured_fields, unstructured_fields=unstructured_fields)
-        wiki_nodes, wiki_relations = get_entities_from_wiki(study_wiki=study_wiki, wiki_fields=wiki_fields)
+        meta_nodes, meta_relations = get_entities_from_meta(
+            study_metadata=study_metadata,
+            ground_fields=ground_fields,
+            unground_fields=unground_fields,
+        )
+        wiki_nodes, wiki_relations = get_entities_from_wiki(
+            study_wiki=study_wiki, wiki_fields=wiki_fields
+        )
         nodes.add((project_id, "Project"))
         nodes = nodes | meta_nodes | wiki_nodes
         relations = relations | meta_relations | wiki_relations
-
 
     ## read in existing nodes and edges to avoid duplicates
     existing_nodes, existing_relations = load_existing_graph()
