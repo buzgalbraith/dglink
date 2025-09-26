@@ -105,6 +105,7 @@ def check_related_study_exists(edges_df, id_1, id_2):
 if __name__ == "__main__":
     train = True
     model_name = 'RotatE' #'TransE'
+    # model_name = 'TransE'
     if train:
         model, entity_to_id = train_embedding_model(
             edge_path="dglink/resources/edges_with_no_related.tsv",
@@ -140,27 +141,6 @@ if __name__ == "__main__":
     ## exploration stuff 
     ## plotting
     distance_df = pd.DataFrame(res)
-    # import matplotlib.pyplot as plt
-    # color = ['red' if x else 'blue' for x in distance_df['has_related']]
-    # plt.scatter(x = distance_df['x'], y = distance_df['distance'], c=color)
-    # plt.xlabel('index')
-    # plt.ylabel('distance')
-    # plt.show()
-    # ## TSNE
-    # from sklearn.manifold import TSNE
-    # entity_ids = [entity_to_id[x] for x in all_project_ids]
-    # embeddings = model.entity_representations[0](indices=torch.as_tensor(entity_ids)).detach().cpu().numpy()
-    # tsne_embeddings = TSNE(n_components=2, learning_rate='auto',
-    #               init='random', perplexity=3).fit_transform(embeddings)
-    # plt.scatter(x = tsne_embeddings[:, 0], y = tsne_embeddings[:, 1],)
-    # plt.show()
-
-    # fig, ax = plt.subplots()
-    # ax.scatter(x = tsne_embeddings[:, 0], y = tsne_embeddings[:, 1],)
-    # for i, label in enumerate(all_project_ids):
-    #     ax.text(tsne_embeddings[i, 0] + 0.05, tsne_embeddings[i, 1] + 0.05, label, fontsize=9)
-    # plt.show()
-
     # ## point based corelation 
     from scipy.stats import pointbiserialr
 
@@ -168,3 +148,6 @@ if __name__ == "__main__":
     r_cos, pval = pointbiserialr(distance_df['has_related'], distance_df['cosine'])
     print(r_l2)
     print(r_cos)
+
+    write_df = distance_df[['study_1', 'study_2', 'l_2', 'cosine', 'has_related']].sort_values(by=['l_2'])
+    write_df.to_csv('study_embedding_by_distance.tsv', sep='\t', index=False)
