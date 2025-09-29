@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Synapse KG Semantic Search</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .option {
+            margin-bottom: 20px;
+        }
+        .option img {
+            display: block;
+            margin-top: 5px;
+            width: 100px; /* adjust as needed */
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Synapse KG Semantic Search</h1>
+
+    <form method="POST">
+        <label for="Agent">Agent:</label>
+        <input type="text" id="Agent" name="Agent" required><br><br>
+
+        <label for="Relation">Relation:</label>
+        <input type="text" id="Relation" name="Relation"><br><br>
+
+        <label for="OtherAgent">Other Agent:</label>
+        <input type="text" id="OtherAgent" name="OtherAgent"><br><br>
+        <p>Agent Role:</p>
+        <div style="display: flex; gap: 20px; align-items: center;">
+            <!-- Option 1 -->
+            <div style="text-align: center;">
+                <img src="{{ url_for('static', filename='subject_object.png') }}" alt="Option 1" style="width: 250px; height: auto;"><br>
+                <input type="radio" id="Subject/Object" name="QueryType" value="Subject/Object">
+                <label for="Subject/Object">Subject/Object</label>
+            </div>
+
+            <!-- Option 2 -->
+            <div style="text-align: center;">
+                <img src="{{ url_for('static', filename='subject.png') }}" alt="Option 2" style="width: 250px; height: auto;"><br>
+                <input type="radio" id="Subject" name="QueryType" value="Subject" checked>
+                <label for="Subject">Subject</label>
+            </div>
+
+            <!-- Option 3 -->
+            <div style="text-align: center;">
+                <img src="{{ url_for('static', filename='object.png') }}" alt="Option 3" style="width: 250px; height: auto;"><br>
+                <input type="radio" id="Object" name="QueryType" value="Object">
+                <label for="Object">Object</label>
+            </div>
+        </div>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if result %}
+        <h2>Results:</h2>
+        <ul>
+            {% for item in result %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
