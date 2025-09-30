@@ -1,8 +1,14 @@
 # DGLink
 Introducing semantic interoperability within data portals and with 
 external knowledge.
+## structure 
+1. `dglink/kg_construction` - for programmatically building the knowledge graph from Synapse data. 
+1. `dglink/example` - reconstruct the basic example, we started with. 
+1. `dglink/semantic_search` - bring up web UI for semantic searching on the KG (see instructions bellow)
+1. `dglink/graph_embedding` - Leverage KG embedding methods for accessing project similarity (need to install additional dependencies with) `uv pip install ".[graph_embedding]"`
+1. `dglink/resources` - data and code for brining up the Neo4j instance. 
 ## Steps for running semantic search UI
-1. go into the resources directory with `cd dglink/resources`
+1. go into the semantic search directory with `cd dglink/semantic_search`
 2. bring up the service (and build images if required with) `docker-compose up --build`
 3. Connect to the services. 
     - semantic search UI [http://localhost:5000/](http://localhost:5000/)

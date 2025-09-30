@@ -57,10 +57,10 @@ def load_existing_graph(modifier=""):
     """read in the files already in nodes and edges as sets"""
     existing_nodes = set()
     existing_relations = set()
-    with open(f"dglink/resources/neo4j/{modifier}nodes.tsv", "r") as f:
+    with open(f"dglink/resources/{modifier}nodes.tsv", "r") as f:
         for row in f.readlines()[1:]:
             existing_nodes.add(tuple(row.strip().split("\t")))
-    with open(f"dglink/resources/neo4j/{modifier}edges.tsv", "r") as f:
+    with open(f"dglink/resources/{modifier}edges.tsv", "r") as f:
         for row in f.readlines()[1:]:
             existing_relations.add(tuple(row.strip().split("\t")))
     return existing_nodes, existing_relations
@@ -150,9 +150,9 @@ if __name__ == "__main__":
         relations | existing_relations
     )
     # # # Dump nodes into nodes.tsv and relations into edges.tsv
-    with open("dglink/resources/neo4j/nodes.tsv", "w") as f:
+    with open("dglink/resources/nodes.tsv", "w") as f:
         for row in nodes:
             f.write("\t".join(row) + "\n")
-    with open("dglink/resources/neo4j/edges.tsv", "w") as f:
+    with open("dglink/resources/edges.tsv", "w") as f:
         for row in relations:
             f.write("\t".join(row) + "\n")
