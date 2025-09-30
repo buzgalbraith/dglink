@@ -40,7 +40,7 @@ def train_embedding_model(
     model_name="TransE",
     epochs=100,
     save=True,
-    save_path="dglink/resources/embedding_test",
+    save_path="dglink/graph_embedding/embedding_test",
 ):
     """Trains a network embedding model with the PyKEEN pipeline. Return the model and entity_to_id mapping"""
     ## split the dataset
@@ -61,7 +61,7 @@ def train_embedding_model(
     return result.model, result.training.entity_to_id
 
 
-def load_entity_to_id(save_path="dglink/resources/embedding_test"):
+def load_entity_to_id(save_path="dglink/graph_embedding/embedding_test"):
     """reads in entity to id mapping as dictionary"""
     id_path = f"{save_path}/training_triples/entity_to_id.tsv.gz"
     entity_to_id = {}
@@ -72,7 +72,7 @@ def load_entity_to_id(save_path="dglink/resources/embedding_test"):
     return entity_to_id
 
 
-def load_embedding_model(save_path="dglink/resources/embedding_test"):
+def load_embedding_model(save_path="dglink/graph_embedding/embedding_test"):
     """loads embedding model and entity_to_id mapping"""
     model = torch.load(f"{save_path}/trained_model.pkl", weights_only=False)
     entity_to_id = load_entity_to_id(save_path=save_path)
@@ -103,23 +103,21 @@ def check_related_study_exists(edges_df, id_1, id_2):
     return (len(forward_df) + len(backward_df)) > 0
 
 if __name__ == "__main__":
-    train = True
-    model_name = 'RotatE' #'TransE'
+    train = False
+    model_name = 'RotatE' 
     # model_name = 'TransE'
     if train:
         model, entity_to_id = train_embedding_model(
-            edge_path="dglink/resources/edges_with_no_related.tsv",
+            edge_path="dglink/resources/edges.tsv",
             model_name=model_name,
             epochs=250,
         )
     else:
         model, entity_to_id = load_embedding_model(
-            save_path="dglink/resources/embedding_test"
+            save_path="dglink/graph_embedding/embedding_test"
         )
     res = []
-    ## TODO: remove later 
-    edges_df = pd.read_csv("dglink/resources/edges_with_related.tsv", sep='\t')
-    ## TODO end of remove
+    edges_df = pd.read_csv("dglink/resources/edges.tsv", sep='\t')
     x = 0 
     for id_1, id_2 in combinations(all_project_ids, 2):
         embed_1, embed_2 = id_to_embedding(
@@ -128,7 +126,6 @@ if __name__ == "__main__":
         distance = l2(embed_1, embed_2)
         cos = cosine_dist(embed_1, embed_2).real
         has_related = check_related_study_exists(edges_df=edges_df, id_1=id_1, id_2=id_2)
-        # print(f"distance between projects {id_1} and {id_2} is {distance}")
         res.append({
             'study_1' : id_1,
             'study_2' : id_2, 
@@ -141,13 +138,5 @@ if __name__ == "__main__":
     ## exploration stuff 
     ## plotting
     distance_df = pd.DataFrame(res)
-    # ## point based corelation 
-    from scipy.stats import pointbiserialr
-
-    r_l2, pval = pointbiserialr(distance_df['has_related'], distance_df['l_2'])
-    r_cos, pval = pointbiserialr(distance_df['has_related'], distance_df['cosine'])
-    print(r_l2)
-    print(r_cos)
-
     write_df = distance_df[['study_1', 'study_2', 'l_2', 'cosine', 'has_related']].sort_values(by=['l_2'])
     write_df.to_csv('study_embedding_by_distance.tsv', sep='\t', index=False)
