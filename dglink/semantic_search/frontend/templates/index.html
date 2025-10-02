@@ -53,13 +53,27 @@
         <button type="submit">Search</button>
     </form>
 
-    {% if result %}
-        <h2>Results:</h2>
-        <ul>
-            {% for item in result %}
-                <li>{{ item }}</li>
+{% if result %}
+    <h2>Results:</h2>
+    <ul>
+    {% for row in result %}
+        <li>
+            <ul>
+            {% for entry in row %}
+                <li>
+                    {% if entry.url %}
+                        {{ entry.text | replace(entry.url, '') }}
+                        {{ entry.field }} <a href="{{ entry.url }}" target="_blank">{{ entry.text }}</a>
+                    {% else %}
+                        {{ entry.text }}
+                    {% endif %}
+                </li>
             {% endfor %}
-        </ul>
-    {% endif %}
+            </ul>
+        </li>
+        <br>
+    {% endfor %}
+    </ul>
+{% endif %}
 </body>
 </html>

@@ -45,8 +45,8 @@ def train_embedding_model(
     """Trains a network embedding model with the PyKEEN pipeline. Return the model and entity_to_id mapping"""
     ## split the dataset
     # tf = TriplesFactory.from_path(edge_path)
-    triples = load_triples(path = edge_path, column_remapping = (0, 2, 1))     
-    tf = TriplesFactory.from_labeled_triples(triples[1:]) ## drop header 
+    triples = load_triples(path=edge_path, column_remapping=(0, 2, 1))
+    tf = TriplesFactory.from_labeled_triples(triples[1:])  ## drop header
     training, testing = tf.split()
     # training, testing, validation = tf.split([0.8, 0.1, 0.1])
     ## train the model
@@ -90,21 +90,25 @@ def id_to_embedding(entity_to_id, model, id_1, id_2):
 def l2(a, b):
     """simple l2 distance metric"""
 
-    return np.linalg.norm(a-b)
+    return np.linalg.norm(a - b)
 
-def cosine_dist(a,b):
-    sim = np.sum(a*b)/(np.linalg.norm(a) * np.linalg.norm(b))
+
+def cosine_dist(a, b):
+    sim = np.sum(a * b) / (np.linalg.norm(a) * np.linalg.norm(b))
     return 1 - sim
+
+
 def check_related_study_exists(edges_df, id_1, id_2):
     """checks if a pair of studies has a related edge"""
-    df = edges_df[edges_df[':TYPE'] == 'has_relatedStudies']
-    forward_df = df[(df[':START_ID'] == id_1) & (df[':END_ID'] == id_2)]
-    backward_df = df[(df[':START_ID'] == id_2) & (df[':END_ID'] == id_1)]
+    df = edges_df[edges_df[":TYPE"] == "has_relatedStudies"]
+    forward_df = df[(df[":START_ID"] == id_1) & (df[":END_ID"] == id_2)]
+    backward_df = df[(df[":START_ID"] == id_2) & (df[":END_ID"] == id_1)]
     return (len(forward_df) + len(backward_df)) > 0
 
+
 if __name__ == "__main__":
-    train = False
-    model_name = 'RotatE' 
+    train = True
+    model_name = "RotatE"
     # model_name = 'TransE'
     if train:
         model, entity_to_id = train_embedding_model(
@@ -117,26 +121,32 @@ if __name__ == "__main__":
             save_path="dglink/graph_embedding/embedding_test"
         )
     res = []
-    edges_df = pd.read_csv("dglink/resources/edges.tsv", sep='\t')
-    x = 0 
+    edges_df = pd.read_csv("dglink/resources/edges.tsv", sep="\t")
+    x = 0
     for id_1, id_2 in combinations(all_project_ids, 2):
         embed_1, embed_2 = id_to_embedding(
             entity_to_id=entity_to_id, model=model, id_1=id_1, id_2=id_2
         )
         distance = l2(embed_1, embed_2)
         cos = cosine_dist(embed_1, embed_2).real
-        has_related = check_related_study_exists(edges_df=edges_df, id_1=id_1, id_2=id_2)
-        res.append({
-            'study_1' : id_1,
-            'study_2' : id_2, 
-            'l_2': distance, 
-            'cosine':cos, 
-            'has_related' : has_related,
-            'x' : x
-        })
+        has_related = check_related_study_exists(
+            edges_df=edges_df, id_1=id_1, id_2=id_2
+        )
+        res.append(
+            {
+                "study_1": id_1,
+                "study_2": id_2,
+                "l_2": distance,
+                "cosine": cos,
+                "has_related": has_related,
+                "x": x,
+            }
+        )
         x = x + 1
-    ## exploration stuff 
+    ## exploration stuff
     ## plotting
     distance_df = pd.DataFrame(res)
-    write_df = distance_df[['study_1', 'study_2', 'l_2', 'cosine', 'has_related']].sort_values(by=['l_2'])
-    write_df.to_csv('study_embedding_by_distance.tsv', sep='\t', index=False)
+    write_df = distance_df[
+        ["study_1", "study_2", "l_2", "cosine", "has_related"]
+    ].sort_values(by=["l_2"])
+    write_df.to_csv("study_embedding_by_distance.tsv", sep="\t", index=False)

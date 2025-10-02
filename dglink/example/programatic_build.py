@@ -68,7 +68,7 @@ def get_entity_grounder():
     }
     alternative_entity_names = {
         "compound": ["drug", "compound", "chemical compound"],
-        "gene": ["gene", "target",'target(s)', "genetic material", "criston"],
+        "gene": ["gene", "target", "target(s)", "genetic material", "criston"],
         "cell line": ["cell line", "cellline", "cell_line"],
     }
     terms = []
@@ -109,7 +109,7 @@ def process_df(df, cols, project_id):
     all_nodes = set()
     all_edges = set()
 
-    for _, row in df.iterrows(): 
+    for _, row in df.iterrows():
         for col in cols:
             entity = row[f"{col}_entity"]
             entity_type = row[f"{col}_type"]
@@ -118,23 +118,19 @@ def process_df(df, cols, project_id):
                 all_edges.add((project_id, entity, f"has_{entity_type}"))
 
     return all_nodes, all_edges
+
+
 def apply_ground(row):
-    result = {}  
+    result = {}
     for col in row.index:
         anns = gilda.annotate(row[col])
         if anns:
             nsid = anns[0].matches[0].term
-            result[f"{col}_entity"] = (
-                f"{nsid.db}:{nsid.id}"
-            )
+            result[f"{col}_entity"] = f"{nsid.db}:{nsid.id}"
             result[f"{col}_type"] = bio_ontology.get_type(nsid.db, nsid.id)
         else:
-            result[f"{col}_entity"] = (
-                    pandas.NA
-            )
-            result[f"{col}_type"] = (
-                    pandas.NA
-            )
+            result[f"{col}_entity"] = pandas.NA
+            result[f"{col}_type"] = pandas.NA
     return pandas.Series(result)
 
 
@@ -150,13 +146,13 @@ def read_csv_auto(path, nbytes=100 * 1024 * 1024, **kwargs):
         return None
     result = chardet.detect(rawdata)
     encoding = result["encoding"]
-    ## check if there are comments 
-    comment = None 
+    ## check if there are comments
+    comment = None
     with open(path, "rb") as f:
         first_byte = f.read(1)
         is_comment = first_byte == b"#"
     if is_comment:
-        comment = '#'
+        comment = "#"
     # Fall back if detection fails
     if encoding is None:
         encoding = "latin1"
@@ -169,7 +165,7 @@ def read_csv_auto(path, nbytes=100 * 1024 * 1024, **kwargs):
 
     header_idx = 0
     max_alpha = -1
-    if 'sep' in kwargs:
+    if "sep" in kwargs:
         delimiter = "\t"
     else:
         delimiter = ","
@@ -180,10 +176,13 @@ def read_csv_auto(path, nbytes=100 * 1024 * 1024, **kwargs):
         if alpha_count > max_alpha:
             max_alpha = alpha_count
             header_idx = i
-    df = pandas.read_csv(path, encoding=encoding,comment=comment,header = header_idx,  **kwargs)
-    return df 
+    df = pandas.read_csv(
+        path, encoding=encoding, comment=comment, header=header_idx, **kwargs
+    )
+    return df
 
-def read_xlsx_auto(path, sample_rows = 20, **kwargs):
+
+def read_xlsx_auto(path, sample_rows=20, **kwargs):
     preview = pandas.read_excel(path, sheet_name=None, header=None, nrows=sample_rows)
     df_dict = {}
     for sheet_name in preview:
@@ -196,10 +195,13 @@ def read_xlsx_auto(path, sample_rows = 20, **kwargs):
             if alpha_count > max_alpha:
                 max_alpha = alpha_count
                 header_idx = i
-        df_dict[sheet_name] = pandas.read_excel(path, sheet_name=sheet_name, header=header_idx, **kwargs)
+        df_dict[sheet_name] = pandas.read_excel(
+            path, sheet_name=sheet_name, header=header_idx, **kwargs
+        )
     return df_dict
 
-def file_reader(obj, max_size_bytes = 100 * 1024 * 1024):
+
+def file_reader(obj, max_size_bytes=100 * 1024 * 1024):
     """
     reads in files from a synapse file object. Returns files as a dictionary for working with sheets
     """
@@ -214,19 +216,19 @@ def file_reader(obj, max_size_bytes = 100 * 1024 * 1024):
     ext = os.path.splitext(obj.path)[-1]
     if ext == ".tsv":
         df = {"Sheet1": read_csv_auto(obj.path, sep="\t")}
-    elif ext == '.csv':
+    elif ext == ".csv":
         try:
             df = {"Sheet1": read_csv_auto(obj.path)}
         except:
             df = {"Sheet1": read_csv_auto(obj.path, sep="\t")}
-    elif ext  == ".xlsx":
-        ## reads in all sheets at once 
-            df = read_xlsx_auto(obj.path)
-    elif ext == '.xls':
+    elif ext == ".xlsx":
+        ## reads in all sheets at once
+        df = read_xlsx_auto(obj.path)
+    elif ext == ".xls":
         try:
             df = pandas.read_excel(obj.path, engine="xlrd")
             if type(df) != dict:
-                df = {"Sheet1" : df}
+                df = {"Sheet1": df}
         ## anecdotal there seem to be a lot of these that are just mislabeled tsv
         except:
             df = {"Sheet1": read_csv_auto(obj.path, sep="\t")}
@@ -240,16 +242,24 @@ def process_enteries(project_id, entries):
 
     node_project = (project_id, "Project")
 
-    node_entries = set([
-        (f"{nsid[0]}:{nsid[1]}", bio_ontology.get_type(nsid[0], nsid[1]))
-        for name, nsid in entries.items()
-        if nsid is not None
-    ])
-    relations = set([
-        (project_id, f"{nsid[0]}:{nsid[1]}", f"has_{bio_ontology.get_type(nsid[0], nsid[1])}")
-        for name, nsid in entries.items()
-        if nsid is not None
-    ])
+    node_entries = set(
+        [
+            (f"{nsid[0]}:{nsid[1]}", bio_ontology.get_type(nsid[0], nsid[1]))
+            for name, nsid in entries.items()
+            if nsid is not None
+        ]
+    )
+    relations = set(
+        [
+            (
+                project_id,
+                f"{nsid[0]}:{nsid[1]}",
+                f"has_{bio_ontology.get_type(nsid[0], nsid[1])}",
+            )
+            for name, nsid in entries.items()
+            if nsid is not None
+        ]
+    )
     return set([node_project]) | node_entries, relations
 
 
@@ -287,7 +297,7 @@ if __name__ == "__main__":
         df_dict = file_reader(obj)
         ## extra loop in case there are multiple sheets
         for sheet in df_dict:
-            df = df_dict[sheet].fillna('') ## fill na with '' for now. 
+            df = df_dict[sheet].fillna("")  ## fill na with '' for now.
             for col in df.columns:
                 entity_type_match = entity_grounder.ground(gilda.process.normalize(col))
                 if len(entity_type_match) > 0:

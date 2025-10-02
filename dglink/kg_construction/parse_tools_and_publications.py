@@ -106,7 +106,7 @@ if __name__ == "__main__":
         for row in tool_edges:
             f.write("\t".join(row) + "\n")
 
-    publication_nodes = [("curie:ID", "name", "tool_type", ":LABEL")] + list(
+    publication_nodes = [("curie:ID", "DOI", "PMID", ":LABEL")] + list(
         publication_node_set
     )
     with open("dglink/resources/publication_nodes.tsv", "w") as f:

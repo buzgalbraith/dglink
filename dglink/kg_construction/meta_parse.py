@@ -4,7 +4,9 @@ The goal of this script is to load the meta data and wiki information from each 
 
 import synapseclient
 import gilda
+from bioregistry import get_iri
 from indra.ontology.bio import bio_ontology
+from utils import load_existing_edges, load_existing_nodes, write_nodes, write_edges
 
 syn = synapseclient.login()
 
@@ -53,19 +55,6 @@ unground_fields = [
 wiki_fields = ["markdown", "title"]
 
 
-def load_existing_graph(modifier=""):
-    """read in the files already in nodes and edges as sets"""
-    existing_nodes = set()
-    existing_relations = set()
-    with open(f"dglink/resources/{modifier}nodes.tsv", "r") as f:
-        for row in f.readlines()[1:]:
-            existing_nodes.add(tuple(row.strip().split("\t")))
-    with open(f"dglink/resources/{modifier}edges.tsv", "r") as f:
-        for row in f.readlines()[1:]:
-            existing_relations.add(tuple(row.strip().split("\t")))
-    return existing_nodes, existing_relations
-
-
 def get_entities_from_meta(study_metadata, ground_fields, unground_fields):
     """parse entities from project metadata.
     Args:
@@ -73,7 +62,7 @@ def get_entities_from_meta(study_metadata, ground_fields, unground_fields):
         ground_fields: fields to ground with gilda
         unground_fields: fields to not ground with gilda.
     """
-    meta_nodes = set()
+    meta_nodes = dict()
     meta_relations = set()
     for field in ground_fields + unground_fields:
         if field in study_metadata.keys():
@@ -91,24 +80,46 @@ def get_entities_from_meta(study_metadata, ground_fields, unground_fields):
                     if ans:
                         nsid = ans[0].matches[0].term
                         entry = f"{nsid.db}:{nsid.id}"
-                        alternate_field = bio_ontology.get_type(nsid.db, nsid.id)
-                        meta_nodes.add((entry, alternate_field))
-                        meta_relations.add(
-                            (study_metadata.id, entry, f"has_{alternate_field}")
-                        )
-                ## add the nodes with their corresponding meta data fields
-                meta_nodes.add((entry, field))
-                meta_relations.add((study_metadata.id, entry, f"has_{field}"))
+                        meta_nodes[entry] = {
+                            ":LABEL": bio_ontology.get_type(nsid.db, nsid.id),
+                            "grounded_entity_name": nsid.entry_name,
+                            "raw_texts:string[]": '""',
+                            "columns:string[]": '""',
+                            "iri": get_iri(nsid.db, nsid.id),
+                        }
+                        meta_relations.add((study_metadata.id, entry, f"has_{field}"))
+                    else:
+                        ## add the nodes with their corresponding meta data fields
+                        meta_nodes[entry] = {
+                            ":LABEL": field,
+                            "grounded_entity_name": "",
+                            "raw_texts:string[]": '""',
+                            "columns:string[]": '""',
+                            "iri": "",
+                        }
+                        meta_relations.add((study_metadata.id, entry, f"has_{field}"))
+                else:
+                    ## add the nodes with their corresponding meta data fields
+                    meta_nodes[entry] = {
+                        ":LABEL": field,
+                        "grounded_entity_name": "",
+                        "raw_texts:string[]": '""',
+                        "columns:string[]": '""',
+                        "iri": "",
+                    }
+                    meta_relations.add((study_metadata.id, entry, f"has_{field}"))
+
     return meta_nodes, meta_relations
 
 
 def get_entities_from_wiki(study_wiki, wiki_fields):
     """pull entities from a projects wiki, and add links to them to the graph."""
-    wiki_nodes = set()
+    wiki_nodes = dict()
+    wiki_entities = dict()
     wiki_relations = set()
     ## add a node for that wiki, and a link between the project and this wiki node.
     wiki_id = f"{study_wiki.ownerId}:Wiki"
-    wiki_nodes.add((wiki_id, "Wiki"))
+    wiki_nodes[wiki_id] = {":LABEL": "Wiki"}
     wiki_relations.add((study_wiki.ownerId, wiki_id, f"hasWiki"))
     for field in wiki_fields:
         if field in study_wiki.keys():
@@ -117,15 +128,20 @@ def get_entities_from_wiki(study_wiki, wiki_fields):
             for annotation in ans:
                 nsid = annotation.matches[0].term
                 entry = f"{nsid.db}:{nsid.id}"
-                alternate_field = bio_ontology.get_type(nsid.db, nsid.id)
-                wiki_nodes.add((entry, alternate_field))
+                wiki_entities[entry] = {
+                    ":LABEL": bio_ontology.get_type(nsid.db, nsid.id),
+                    "grounded_entity_name": nsid.entry_name,
+                    "raw_texts:string[]": '""',
+                    "columns:string[]": '""',
+                    "iri": get_iri(nsid.db, nsid.id),
+                }
                 wiki_relations.add((wiki_id, entry, "mentions"))
-    return wiki_nodes, wiki_relations
+    return wiki_nodes, wiki_entities, wiki_relations
 
 
 if __name__ == "__main__":
     ## all projects have an accessible list of funding agencies as well as a markdown from the wiki
-    nodes = set()
+    nodes = {"entities": dict(), "project": dict()}
     relations = set()
     for project_id in all_project_ids:
         study_metadata = syn.get(project_id)
@@ -135,24 +151,24 @@ if __name__ == "__main__":
             ground_fields=ground_fields,
             unground_fields=unground_fields,
         )
-        wiki_nodes, wiki_relations = get_entities_from_wiki(
+        wiki_nodes, wiki_entities, wiki_relations = get_entities_from_wiki(
             study_wiki=study_wiki, wiki_fields=wiki_fields
         )
-        nodes.add((project_id, "Project"))
-        nodes = nodes | meta_nodes | wiki_nodes
+        nodes["project"][project_id] = {":LABEL": "Project"} | wiki_nodes
+        nodes["project"] = nodes["project"] | wiki_nodes
+        nodes["entities"] = nodes["entities"] | wiki_entities | meta_nodes
         relations = relations | meta_relations | wiki_relations
 
     ## read in existing nodes and edges to avoid duplicates
-    existing_nodes, existing_relations = load_existing_graph()
-    ## combine the sets
-    nodes = [["curie:ID", ":LABEL"]] + list(nodes | existing_nodes)
-    relations = [[":START_ID", ":END_ID", ":TYPE"]] + list(
-        relations | existing_relations
+    nodes["entities"] = nodes["entities"] | load_existing_nodes(
+        "dglink/resources/entity_nodes.tsv"
     )
-    # # # Dump nodes into nodes.tsv and relations into edges.tsv
-    with open("dglink/resources/nodes.tsv", "w") as f:
-        for row in nodes:
-            f.write("\t".join(row) + "\n")
-    with open("dglink/resources/edges.tsv", "w") as f:
-        for row in relations:
-            f.write("\t".join(row) + "\n")
+    nodes["project"] = nodes["project"] | load_existing_nodes(
+        "dglink/resources/project_nodes.tsv"
+    )
+    relations = relations | load_existing_edges("dglink/resources/edges.tsv")
+    ## write edges
+    write_edges(edges=relations)
+    ## write nodes
+    write_nodes(nodes=nodes["project"], node_path="dglink/resources/project_nodes.tsv")
+    write_nodes(nodes=nodes["entities"], node_path="dglink/resources/entity_nodes.tsv")
