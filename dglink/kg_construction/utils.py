@@ -4,6 +4,8 @@ import pandas
 import chardet
 import os
 from synapseutils import walk
+from pathlib import Path
+from frictionless import Schema, Resource, formats, Package
 
 
 def read_csv_auto(path, nbytes=100 * 1024 * 1024, **kwargs):
@@ -177,3 +179,74 @@ def write_edges(edges, edge_path="dglink/resources/edges.tsv"):
     with open(edge_path, "w") as f:
         for row in edges:
             f.write("\t".join(row) + "\n")
+
+
+def update_entity_nodes(entity_nodes: dict, file_nodes: set):
+    """updates the entity nodes with entities found in experimental data"""
+    for node in file_nodes:
+        if node[0] in entity_nodes:
+            entity_nodes[node[0]]["raw_texts:string[]"] = entity_nodes[node[0]][
+                "raw_texts:string[]"
+            ] | set([node[3]])
+            entity_nodes[node[0]]["columns:string[]"] = entity_nodes[node[0]][
+                "columns:string[]"
+            ] | set([node[4]])
+            entity_nodes[node[0]]["file_id:string[]"] = entity_nodes[node[0]][
+                "file_id:string[]"
+            ] | set([node[6]])
+        ## make a new dictionary
+        else:
+            entity_nodes[node[0]] = {
+                ":LABEL": node[1],
+                "grounded_entity_name": node[2],
+                "raw_texts:string[]": set([node[3]]),
+                "columns:string[]": set([node[4]]),
+                "iri": node[5],
+                "file_id:string[]": set([node[6]]),
+            }
+    return entity_nodes
+
+def syn_id_to_path(syn_id:str):
+    import synapseclient
+    syn = synapseclient.login()
+    raw =  syn.get(syn_id).path
+    return Path(raw)
+
+def get_frictionless_package(pth):
+    pac = Package()
+    if pth.suffix in ['.xls', '.xlsx']:
+        pac = Package(pth)
+        control_func = lambda x:  formats.ExcelControl(sheet=x.dialect.controls[0].sheet)
+    else:
+        pac.add_resource(Resource(pth))
+        control_func = lambda x: None
+    for res in pac.resources:
+            raw_schema = Schema.describe(res.path, control = control_func(res))
+            to_drop = [field.name for field in raw_schema.fields if field.type != "string"]
+            for x in to_drop:
+                raw_schema.remove_field(x)
+            res.schema = raw_schema
+    return pac
+
+def frictionless_file_reader(obj,  max_size_bytes=100 * 1024 * 1024):
+    """
+    reads in files from a synapse file object with frictionless. Returns files as a dictionary for working with sheets
+    """
+    ## issues with pull
+    if obj is None:
+        return {}
+    if obj.path is None:
+        return {}
+    ## check file size
+    pth = Path(obj.path)
+    file_size = os.path.getsize(pth)
+    if file_size > max_size_bytes:
+        print("file to large to read")
+        return {}
+    ## load file contents into frictionless package
+    pack = get_frictionless_package(pth=pth)
+    ## load frictionless package into dictionary of pandas data frames
+    df_dict = {}
+    for res in pack.resources:
+        df_dict[res.name] = pandas.DataFrame(res.read_rows())  # stream rows directly
+    return df_dict
