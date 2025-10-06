@@ -79,13 +79,13 @@ def get_entities_from_meta(study_metadata, ground_fields, unground_fields):
                     ## if the node should be grounded and can be grounded save the node as that entity type as well.
                     if ans:
                         nsid = ans[0].matches[0].term
-                        entry = f"{nsid.db}:{nsid.id}"
-                        meta_nodes[entry] = {
+                        meta_nodes[f"{nsid.db}:{nsid.id}"] = {
                             ":LABEL": bio_ontology.get_type(nsid.db, nsid.id),
                             "grounded_entity_name": nsid.entry_name,
                             "raw_texts:string[]": '""',
                             "columns:string[]": '""',
                             "iri": get_iri(nsid.db, nsid.id),
+                            # "file_id:string[]": set([node[6]]),
                         }
                         meta_relations.add((study_metadata.id, entry, f"has_{field}"))
                     else:
@@ -154,7 +154,6 @@ if __name__ == "__main__":
         wiki_nodes, wiki_entities, wiki_relations = get_entities_from_wiki(
             study_wiki=study_wiki, wiki_fields=wiki_fields
         )
-        nodes["project"][project_id] = {":LABEL": "Project"} | wiki_nodes
         nodes["project"] = nodes["project"] | wiki_nodes
         nodes["entities"] = nodes["entities"] | wiki_entities | meta_nodes
         relations = relations | meta_relations | wiki_relations
