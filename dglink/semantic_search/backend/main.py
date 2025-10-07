@@ -47,10 +47,10 @@ def subject_search(
     )
     res = []
     for record in records:
-        object_whole = record.data()["object_whole"]
-        subject_whole = record.data()["subject_whole"]
-        del object_whole["curie"]
-        del subject_whole["curie"]
+        object_whole = {f'Object {key}':record.data()["object_whole"][key] for key in record.data()["object_whole"]}
+        subject_whole = {f'Subject {key}':record.data()["subject_whole"][key] for key in record.data()["subject_whole"]}
+        del subject_whole["Subject curie"]
+        del object_whole["Object curie"]
         res.append(
             (
                 f"Subject identifier : {record.data()['subject']}",
@@ -78,10 +78,10 @@ def object_search(
     )
     res = []
     for record in records:
-        object_whole = record.data()["object_whole"]
-        subject_whole = record.data()["subject_whole"]
-        del object_whole["curie"]
-        del subject_whole["curie"]
+        object_whole = {f'Object {key}':record.data()["object_whole"][key] for key in record.data()["object_whole"]}
+        subject_whole = {f'Subject {key}':record.data()["subject_whole"][key] for key in record.data()["subject_whole"]}
+        del subject_whole["Subject curie"]
+        del object_whole["Object curie"]
         res.append(
             (
                 f"Subject identifier : {record.data()['subject']}",

@@ -18,7 +18,7 @@ def process_results(raw_results):
                 load = ast.literal_eval(ent.split(":", 1)[1].strip())
                 for key in load:
                     val = load[key]
-                    if key == "iri":
+                    if key.split(' ')[-1] == "iri":
                         processed_row.append(
                             {
                                 "text": f"{val}",
