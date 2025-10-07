@@ -4,13 +4,9 @@ This will download all files related to the drug screening projects
 import time
 import synapseclient
 from utils import (
-    file_reader,
     get_project_files,
-    load_existing_nodes,
-    write_nodes,
     write_edges,
     load_existing_edges,
-    update_entity_nodes,
     frictionless_file_reader,
 )
 from nodes import PROJECT_ATTRIBUTES, ENTITY_ATTRIBUTES, Node, NodeSet
@@ -32,24 +28,24 @@ FILE_TYPES = [
 
 
 all_project_ids = [
-    # "syn2343195", ## large project
+    "syn2343195", ## large project
     "syn5562324",  ## small project
     "syn27761862", ## small project
-    # "syn4939874",   ## large project
+    "syn4939874",   ## large project
     "syn4939876", ## locked
     "syn4939906", ## small
     "syn4939916", ## locked
-    # "syn7217928", ## large
+    "syn7217928", ## large
     "syn8016635", ## small
-    # "syn11638893", ## locked
-    # "syn11817821", ## large
-    # "syn21641813", ## locked
-    # "syn21642027", ## locked
-    # "syn21650493", ## large
-    # "syn21984813", ## large
-    # "syn23639889", ## locked
-    # "syn51133914", ## locked
-    # "syn52740594", ## large
+    "syn11638893", ## locked
+    "syn11817821", ## large
+    "syn21641813", ## locked
+    "syn21642027", ## locked
+    "syn21650493", ## large
+    "syn21984813", ## large
+    "syn23639889", ## locked
+    "syn51133914", ## locked
+    "syn52740594", ## large
 ]
 
 

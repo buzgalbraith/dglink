@@ -7,6 +7,7 @@ requires-python = "==3.10"
 dependencies = [
     "bioregistry>=0.12.42",
     "chardet>=5.2.0",
+    "frictionless>=5.18.1",
     "gilda>=1.4.1",
     "indra>=1.24.0",
     "ipdb>=0.13.13",
