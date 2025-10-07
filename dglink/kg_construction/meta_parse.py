@@ -5,7 +5,7 @@ The goal of this script is to load the meta data and wiki information from each 
 import synapseclient
 from nodes import Node, NodeSet, ENTITY_ATTRIBUTES, PROJECT_ATTRIBUTES
 import gilda
-from bioregistry import get_iri
+from bioregistry import normalize_curie, get_bioregistry_iri
 from indra.ontology.bio import bio_ontology
 from utils import write_edges, load_existing_edges
 
@@ -79,27 +79,29 @@ def get_entities_from_meta(study_metadata, ground_fields, unground_fields, nodes
                     ## if the node should be grounded and can be grounded save the node as that entity type as well.
                     if ans:
                         nsid = ans[0].matches[0].term
-                        entry = f"{nsid.db}:{nsid.id}"
+                        curie = normalize_curie(f"{nsid.db}:{nsid.id}")
                         node_attributes = {
-                            'curie:ID':entry,
+                            'curie:ID':curie,
                             ":LABEL": bio_ontology.get_type(nsid.db, nsid.id),
                             "grounded_entity_name": nsid.entry_name,
-                            "iri": get_iri(nsid.db, nsid.id),
-                            'columns:string[]' : 'wiki',
+                            "iri": get_bioregistry_iri(nsid.db, nsid.id),
+                            "raw_texts:string[]": entry,
+                            'columns:string[]' : 'metadata',
                         }
                 else:
                     ## add the nodes with their corresponding meta data fields
                     node_attributes = {
                             'curie:ID':entry,
                             ":LABEL": field,
-                            'columns:string[]' : 'wiki',
+                            'columns:string[]' : 'metadata',
+                            "raw_texts:string[]": entry,
                         }
                 working_node = Node(
                         attribute_names=ENTITY_ATTRIBUTES, 
                         attributes = node_attributes
                 )
                 nodes.update_nodes(new_node= working_node, new_node_id = entry)
-                meta_relations.add((study_metadata.id, entry, f"has_{field}"))
+                meta_relations.add((study_metadata.id, curie, f"has_{field}"))
     return nodes, meta_relations
 
 
@@ -120,16 +122,16 @@ def get_entities_from_wiki(study_wiki, wiki_fields, entity_nodes:NodeSet, projec
             ans = gilda.annotate(field_val)
             for annotation in ans:
                 nsid = annotation.matches[0].term
-                entry = f"{nsid.db}:{nsid.id}"
+                entry = normalize_curie(f"{nsid.db}:{nsid.id}")
                 working_node = Node(
                     ENTITY_ATTRIBUTES,
                     attributes={
                     'curie:ID':entry,
                     ":LABEL": bio_ontology.get_type(nsid.db, nsid.id),
                     "grounded_entity_name": nsid.entry_name,
-                    "raw_texts:string[]": '""',
+                    "raw_texts:string[]": annotation.text,
                     'columns:string[]' : 'wiki',
-                    "iri": get_iri(nsid.db, nsid.id),
+                    "iri": get_bioregistry_iri(nsid.db, nsid.id),
                 }
                 )
                 entity_nodes.update_nodes(new_node=working_node, new_node_id=entry)

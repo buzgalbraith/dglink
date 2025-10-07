@@ -14,9 +14,11 @@ import gilda
 import pandas
 from functools import lru_cache
 from indra.ontology.bio import bio_ontology
-from bioregistry import get_iri
+from bioregistry import normalize_curie, get_bioregistry_iri
+
 
 syn = synapseclient.login()
+url = 'https://bioregistry.io/doid:123'
 
 
 FILE_TYPES = [
@@ -28,24 +30,24 @@ FILE_TYPES = [
 
 
 all_project_ids = [
-    "syn2343195", ## large project
+    # "syn2343195", ## large project
     "syn5562324",  ## small project
     "syn27761862", ## small project
-    "syn4939874",   ## large project
+    # "syn4939874",   ## large project
     "syn4939876", ## locked
-    "syn4939906", ## small
-    "syn4939916", ## locked
-    "syn7217928", ## large
-    "syn8016635", ## small
-    "syn11638893", ## locked
-    "syn11817821", ## large
-    "syn21641813", ## locked
-    "syn21642027", ## locked
-    "syn21650493", ## large
-    "syn21984813", ## large
-    "syn23639889", ## locked
-    "syn51133914", ## locked
-    "syn52740594", ## large
+    # "syn4939906", ## small
+    # "syn4939916", ## locked
+    # "syn7217928", ## large
+    # "syn8016635", ## small
+    # "syn11638893", ## locked
+    # "syn11817821", ## large
+    # "syn21641813", ## locked
+    # "syn21642027", ## locked
+    # "syn21650493", ## large
+    # "syn21984813", ## large
+    # "syn23639889", ## locked
+    # "syn51133914", ## locked
+    # "syn52740594", ## large
 ]
 
 
@@ -69,16 +71,17 @@ def check_df_readable(df, max_unnamed=2):
 def cached_annotate(val, col):
     """cached inner function for grounding with gilda"""
     if pandas.notna(val):
-        anns = gilda.annotate(str(val))
-        if anns:
-            nsid = anns[0].matches[0].term
+        ans = gilda.annotate(str(val))
+        if ans:
+            nsid = ans[0].matches[0].term
+            
             return (
-                f"{nsid.db}:{nsid.id}",
+                normalize_curie(f"{nsid.db}:{nsid.id}"),
                 bio_ontology.get_type(nsid.db, nsid.id),
                 nsid.entry_name,
                 val,
                 col,
-                get_iri(nsid.db, nsid.id),
+                get_bioregistry_iri(nsid.db, nsid.id),
             )
     return pandas.NA, pandas.NA, pandas.NA, pandas.NA, pandas.NA, pandas.NA
 
@@ -169,7 +172,7 @@ if __name__ == "__main__":
     project_nodes = NodeSet(attributes=PROJECT_ATTRIBUTES)
     entity_nodes.load_node_set('dglink/resources/entity_nodes.tsv')
     project_nodes.load_node_set('dglink/resources/project_nodes.tsv')
-    relations = set()
+    relations = load_existing_edges(edge_path="dglink/resources/edges.tsv")
     for project_id in all_project_ids:
         ## add the project id directly
         working_project_node = Node(attribute_names=PROJECT_ATTRIBUTES, attributes={
@@ -188,15 +191,48 @@ if __name__ == "__main__":
                 obj = syn.get(p_file[1])
             except:
                 obj = None
+                files_read.append(
+                    {
+                        "project_id": project_id,
+                        "file_id": "_",
+                        "file_path": str(p_file),
+                        "can_read": False,
+                        "reason": "Locked",
+                        "sheet": "all",
+                    }
+                )
                 continue
             ## read in the file
             # df_dict = file_reader(obj)
             df_dict = frictionless_file_reader(obj)
+            if len(df_dict) < 1:
+                files_read.append(
+                    {
+                        "project_id": project_id,
+                        "file_id": "_",
+                        "file_path": p_file,
+                        "can_read": False,
+                        "reason": "Locked",
+                        "sheet": "all",
+                    }
+                )
             ## loop over dictionary of data frames
             for sheet in df_dict:
                 df = df_dict[sheet]
                 ## determine if the file was read in correctly
                 df_read, df = check_df_readable(df)
+                reason = "good" if df_read else "look_into"
+                ## adding to a list of what files can actually be read
+                files_read.append(
+                    {
+                        "project_id": project_id,
+                        "file_id": obj.id,
+                        "file_path": str(obj.path),
+                        "can_read": df_read,
+                        "reason": reason,
+                        "sheet": sheet,
+                    }
+                )
                 if df is not None:
                     base_cols = df.columns
                     ## ground data frame
@@ -206,15 +242,29 @@ if __name__ == "__main__":
                         entity_df, base_cols, project_id, obj.id, nodes=entity_nodes
                     )
                     relations = relations | file_relations
+                    for col in base_cols:
+                        entity_cols.append(
+                            {
+                                "project_id": project_id,
+                                "file_id": obj.id,
+                                "file_path": str(obj.path),
+                                "sheet": sheet,
+                                "col": col,
+                            }
+                        )
+        ## dump things found this project
+        ## write nodes
+        entity_nodes.write_node_set('dglink/resources/entity_nodes.tsv')
+        project_nodes.write_node_set('dglink/resources/project_nodes.tsv')
+        # # # # Dump nodes into nodes.tsv and relations into edges.tsv
+        write_edges(edges=relations, edge_path="dglink/resources/edges.tsv")
+    files_df = pandas.DataFrame(data=files_read)
+    cols_df = pandas.DataFrame(data=entity_cols)
+    files_df.to_csv("file_report.tsv", sep="\t", index=False)
+    cols_df.to_csv("col_report.tsv", sep="\t", index=False)
+    # ## other stats
     end_time = time.perf_counter()
     elapsed_time = end_time - start_time
-    ## original 46.617653 vs frictionless method 46.500883
+    ## 1274.293036 seconds for second half
     print(f"Function execution time: {elapsed_time:.6f} seconds") 
-    ## sync up with existing project and entity nodes
-    existing_relations = load_existing_edges(edge_path="dglink/resources/edges.tsv")
-    relations = existing_relations | relations
-    ## write nodes
-    entity_nodes.write_node_set('dglink/resources/entity_nodes.tsv')
-    project_nodes.write_node_set('dglink/resources/project_nodes.tsv')
-    # # # # Dump nodes into nodes.tsv and relations into edges.tsv
-    write_edges(edges=relations, edge_path="dglink/resources/edges.tsv")
+

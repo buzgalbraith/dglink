@@ -64,7 +64,7 @@ class NodeSet():
         self.set_attributes = [x for x in self.attributes if 'string[]' in x]
         if new_node_id in self.nodes:
             for attribute in self.set_attributes:
-                if new_node[attribute] != '':
+                if new_node[attribute].replace('"', "").replace("'", "") != '':
                     self.nodes[new_node_id][attribute].add(new_node[attribute])
         else:
             self.nodes[new_node_id] = dict()
@@ -104,5 +104,7 @@ class NodeSet():
                     val = self.nodes[curie][col]
                     if type(val) == set:
                         val = f'"{";".join(val)}"'
-                    write_str += f"{val}\t"
+                    ## take out any weird line breaks 
+                    write_str += val.replace('\n', '') + "\t"
+
                 f.write(write_str[:-1] + "\n")
