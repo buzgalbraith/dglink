@@ -214,14 +214,33 @@ def syn_id_to_path(syn_id:str):
 
 def get_frictionless_package(pth):
     pac = Package()
-    if pth.suffix in ['.xls', '.xlsx']:
-        pac = Package(pth)
-        control_func = lambda x:  formats.ExcelControl(sheet=x.dialect.controls[0].sheet)
+    format = pth.suffix
+    control_func = lambda x: None
+    if pth.suffix in ['.xlsx', '.xls']:
+        ## try to directly load as a package
+        try:
+            pac = Package(pth)
+            control_func = lambda x:  formats.ExcelControl(sheet=x.dialect.controls[0].sheet)
+        ## this fails for some excel sheets with weird formatting 
+        except:
+            ## try to add each sheet of the file to the package as a resource
+            try:
+                if format == '.xlsx':
+                    from openpyxl import load_workbook
+                    col_names = load_workbook(pth, read_only=True)
+                else:
+                    col_names = pandas.ExcelFile(pth).sheet_names
+                for sheet in col_names:
+                    pac.add_resource(Resource(pth, control=formats.ExcelControl(sheet=sheet)))
+                control_func = lambda x:  formats.ExcelControl(sheet=x.dialect.controls[0].sheet)
+            ## if this fails, as a last ditch effort try loading the file as an excel file. 
+            except:
+                pac.add_resource(Resource(pth, format='tsv'))
+                format = '.tsv'        
     else:
         pac.add_resource(Resource(pth))
-        control_func = lambda x: None
     for res in pac.resources:
-            raw_schema = Schema.describe(res.path, control = control_func(res))
+            raw_schema = Schema.describe(res.path, control = control_func(res), format=format)
             to_drop = [field.name for field in raw_schema.fields if field.type != "string"]
             for x in to_drop:
                 raw_schema.remove_field(x)
@@ -244,9 +263,13 @@ def frictionless_file_reader(obj,  max_size_bytes=100 * 1024 * 1024):
         print("file to large to read")
         return {}
     ## load file contents into frictionless package
+    
     pack = get_frictionless_package(pth=pth)
     ## load frictionless package into dictionary of pandas data frames
     df_dict = {}
     for res in pack.resources:
-        df_dict[res.name] = pandas.DataFrame(res.read_rows())  # stream rows directly
+        try:
+            df_dict[res.name] = pandas.DataFrame(res.read_rows())  # stream rows directly
+        except:
+            import ipdb; ipdb.set_trace()
     return df_dict
