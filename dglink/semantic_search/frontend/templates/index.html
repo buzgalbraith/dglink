@@ -26,6 +26,66 @@
     </style>
 </head>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    function setupAutocomplete(inputId, endpoint="/autocomplete") {
+        const input = document.getElementById(inputId);
+        const suggestionBox = document.createElement('ul');
+        suggestionBox.classList.add('list-group', 'position-absolute', 'w-100', 'z-3');
+        suggestionBox.style.maxHeight = "200px";
+        suggestionBox.style.overflowY = "auto";
+        input.parentNode.style.position = "relative";
+        input.parentNode.appendChild(suggestionBox);
+
+        let debounceTimeout;
+
+        input.addEventListener('input', function() {
+            clearTimeout(debounceTimeout);
+            const query = input.value.trim();
+            if (!query) {
+                suggestionBox.innerHTML = '';
+                return;
+            }
+
+            debounceTimeout = setTimeout(() => {
+                fetch(`${endpoint}?inputId=${encodeURIComponent(inputId)}&query=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        suggestionBox.innerHTML = '';
+                        data.suggestions.forEach(s => {
+                            const li = document.createElement('li');
+                            li.classList.add('list-group-item', 'list-group-item-action');
+                            li.textContent = s;
+                            li.addEventListener('click', () => {
+                                input.value = s;
+                                suggestionBox.innerHTML = '';
+                            });
+                            suggestionBox.appendChild(li);
+                        });
+                    })
+                    .catch(err => console.error('Error fetching autocomplete:', err));
+            }, 300);
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!input.contains(e.target) && !suggestionBox.contains(e.target)) {
+                suggestionBox.innerHTML = '';
+            }
+        });
+    }
+
+    // Initialize autocomplete for all fields
+    setupAutocomplete('Agent');
+    setupAutocomplete('Relation');
+    setupAutocomplete('OtherAgent');
+});
+</script>
+
+
+
+
+
 <body class="bg-light">
     <div class="container py-5">
         <h1 class="text-center mb-5">Synapse KG Semantic Search</h1>
@@ -33,17 +93,22 @@
         <form method="POST" class="card shadow p-4">
             <div class="mb-3">
                 <label for="Agent" class="form-label">Agent</label>
-                <input type="text" id="Agent" name="Agent" class="form-control" required>
+                <input type="text" id="Agent" name="Agent" class="form-control" 
+                    value="{{ form_data.Agent }}" required>
+
             </div>
 
             <div class="mb-3">
                 <label for="Relation" class="form-label">Relation</label>
-                <input type="text" id="Relation" name="Relation" class="form-control">
+                <input type="text" id="Relation" name="Relation" class="form-control" 
+                    value="{{ form_data.Relation }}">
+
             </div>
 
             <div class="mb-4">
                 <label for="OtherAgent" class="form-label">Other Agent</label>
-                <input type="text" id="OtherAgent" name="OtherAgent" class="form-control">
+                <input type="text" id="OtherAgent" name="OtherAgent" class="form-control" 
+                    value="{{ form_data.OtherAgent }}">
             </div>
 
             <h5 class="mb-3">Agent Role:</h5>
@@ -58,16 +123,14 @@
                             class="option-img mx-auto mb-3"
                         >
                         <div class="form-check d-flex justify-content-center">
-                            <input 
-                                class="form-check-input me-2" 
-                                type="radio" 
-                                id="Subject/Object" 
-                                name="QueryType" 
-                                value="Subject/Object"
-                            >
-                            <label class="form-check-label" for="Subject/Object">
-                                Subject/Object
-                            </label>
+                        <input class="form-check-input me-2" 
+                            type="radio" 
+                            id="Subject/Object" 
+                            name="QueryType" 
+                            value="Subject/Object"
+                            {% if form_data.QueryType == "Subject/Object" %}checked{% endif %}>
+                        <label class="form-check-label" for="Subject/Object">Subject/Object</label>
+
                         </div>
                     </div>
                 </div>
@@ -81,17 +144,14 @@
                             class="option-img mx-auto mb-3"
                         >
                         <div class="form-check d-flex justify-content-center">
-                            <input 
-                                class="form-check-input me-2" 
-                                type="radio" 
-                                id="Subject" 
-                                name="QueryType" 
-                                value="Subject" 
-                                checked
-                            >
-                            <label class="form-check-label" for="Subject">
-                                Subject
-                            </label>
+                        <input class="form-check-input me-2" 
+                            type="radio" 
+                            id="Subject" 
+                            name="QueryType" 
+                            value="Subject"
+                            {% if form_data.QueryType == "Subject" %}checked{% endif %}>
+                        <label class="form-check-label" for="Subject">Subject</label>
+
                         </div>
                     </div>
                 </div>
@@ -105,16 +165,13 @@
                             class="option-img mx-auto mb-3"
                         >
                         <div class="form-check d-flex justify-content-center">
-                            <input 
-                                class="form-check-input me-2" 
-                                type="radio" 
-                                id="Object" 
-                                name="QueryType" 
-                                value="Object"
-                            >
-                            <label class="form-check-label" for="Object">
-                                Object
-                            </label>
+                        <input class="form-check-input me-2" 
+                            type="radio" 
+                            id="Object" 
+                            name="QueryType" 
+                            value="Object"
+                            {% if form_data.QueryType == "Object" %}checked{% endif %}>
+                        <label class="form-check-label" for="Object">Object</label>
                         </div>
                     </div>
                 </div>

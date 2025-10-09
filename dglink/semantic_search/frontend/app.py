@@ -1,10 +1,10 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import requests
 import ast
 
 app = Flask(__name__)
 
-BACKEND_URL = "http://backend:8000/query"
+BACKEND_URL = "http://backend:8000/"
 
 
 
@@ -41,13 +41,23 @@ def process_results(raw_results):
 @app.route("/", methods=["GET", "POST"])
 def index():
     result = None
+    form_data = {
+        'Agent': '',
+        'Relation': '',
+        'OtherAgent': '',
+        'QueryType': 'Subject',  # default selection
+    }
     if request.method == "POST":
+        form_data['Agent'] = request.form.get('Agent', '')
+        form_data['Relation'] = request.form.get('Relation', '')
+        form_data['OtherAgent'] = request.form.get('OtherAgent', '')
+        form_data['QueryType'] = request.form.get('QueryType', 'Subject')
         agent = request.form.get("Agent")
         relation = request.form.get("Relation")
         other_agent = request.form.get("OtherAgent")
         query_type = request.form.get("QueryType")
         response = requests.get(
-            BACKEND_URL,
+            f"{BACKEND_URL}/query",
             params={
                 "agent": agent,
                 "relation": relation,
@@ -59,7 +69,28 @@ def index():
         raw_result = data["message"]
         result = process_results(raw_results=raw_result)
 
-    return render_template("index.html", result=result)
+    return render_template("index.html", result=result, form_data=form_data)
+
+@app.route("/autocomplete")
+def autocomplete():
+    query = request.args.get("query", "")
+    completion_type = request.args.get("inputId", "").lower()
+    response = requests.get(
+        f"{BACKEND_URL}/autoComplete",
+        params={
+            "query": query,
+            "completion_type": completion_type,
+        },
+    )
+    # all_terms = [
+    #     "BRCA1", "BRCA2", "TP53", "EGFR", "KRAS", "PIK3CA", "CDK4", "CDK6", "ALK", "BRAF"
+    # ]  # example list — replace with your real logic
+    data = response.json()
+    return data
+    # Simple filtering (replace with DB lookup or model)
+    # suggestions = [t for t in all_terms if query in t.lower()] 
+    # return jsonify({"suggestions": suggestions[:10]})  # limit to 10
+
 
 
 if __name__ == "__main__":

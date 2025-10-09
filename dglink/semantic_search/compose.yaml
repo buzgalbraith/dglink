@@ -6,7 +6,9 @@ services:
       - "7687:7687"
       - "7474:7474"
   backend:
-    build: ./backend
+    build:
+      context: ./          # directory used as build context
+      dockerfile: ./backend/Dockerfile 
     container_name: fastapi_backend
     ports:
       - "8000:8000"
