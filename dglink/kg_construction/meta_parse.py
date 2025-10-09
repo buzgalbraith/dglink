@@ -39,8 +39,6 @@ ground_fields = [
 
 
 unground_fields = [
-    "manifestation",
-    "diseaseFocus",
     "fundingAgency",
     "studyStatus",
     "initiative",
@@ -88,6 +86,7 @@ def get_entities_from_meta(study_metadata, ground_fields, unground_fields, nodes
                             "raw_texts:string[]": entry,
                             'columns:string[]' : 'metadata',
                         }
+                        meta_relations.add((study_metadata.id, curie, f"has_{field}"))
                 else:
                     ## add the nodes with their corresponding meta data fields
                     node_attributes = {
@@ -96,12 +95,12 @@ def get_entities_from_meta(study_metadata, ground_fields, unground_fields, nodes
                             'columns:string[]' : 'metadata',
                             "raw_texts:string[]": entry,
                         }
+                    meta_relations.add((study_metadata.id, entry, f"has_{field}"))
                 working_node = Node(
                         attribute_names=ENTITY_ATTRIBUTES, 
                         attributes = node_attributes
                 )
                 nodes.update_nodes(new_node= working_node, new_node_id = entry)
-                meta_relations.add((study_metadata.id, curie, f"has_{field}"))
     return nodes, meta_relations
 
 
