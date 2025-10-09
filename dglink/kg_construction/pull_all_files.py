@@ -30,24 +30,24 @@ FILE_TYPES = [
 
 
 all_project_ids = [
-    # "syn2343195", ## large project
+    "syn2343195", ## large project
     "syn5562324",  ## small project
     "syn27761862", ## small project
-    # "syn4939874",   ## large project
+    "syn4939874",   ## large project
     "syn4939876", ## locked
-    # "syn4939906", ## small
-    # "syn4939916", ## locked
-    # "syn7217928", ## large
-    # "syn8016635", ## small
-    # "syn11638893", ## locked
-    # "syn11817821", ## large
-    # "syn21641813", ## locked
-    # "syn21642027", ## locked
-    # "syn21650493", ## large
-    # "syn21984813", ## large
-    # "syn23639889", ## locked
-    # "syn51133914", ## locked
-    # "syn52740594", ## large
+    "syn4939906", ## small
+    "syn4939916", ## locked
+    "syn7217928", ## large
+    "syn8016635", ## small
+    "syn11638893", ## locked
+    "syn11817821", ## large
+    "syn21641813", ## locked
+    "syn21642027", ## locked
+    "syn21650493", ## large
+    "syn21984813", ## large
+    "syn23639889", ## locked
+    "syn51133914", ## locked
+    "syn52740594", ## large
 ]
 
 
@@ -265,6 +265,6 @@ if __name__ == "__main__":
     # ## other stats
     end_time = time.perf_counter()
     elapsed_time = end_time - start_time
-    ## 1274.293036 seconds for second half
+    ## 4839.771967 seconds (~80 mins) for whole run 
     print(f"Function execution time: {elapsed_time:.6f} seconds") 
 
