@@ -6,7 +6,7 @@ import os
 from synapseutils import walk
 from pathlib import Path
 from frictionless import Schema, Resource, formats, Package
-
+DGLINK_CACHE =  Path.joinpath(Path(os.getenv("HOME")), '.dglink')
 
 def read_csv_auto(path, nbytes=100 * 1024 * 1024, **kwargs):
     """
@@ -127,6 +127,31 @@ def get_project_files(syn, project_syn_id, file_types):
                     project_files.add(filename)
     return project_files
 
+
+def get_project_df(syn, project_syn_id, file_types):
+    project_file_path = f"{DGLINK_CACHE}/study_files/{project_syn_id}.tsv"
+    if not os.path.exists(project_file_path):
+        print("project file does not yet exist")
+        project_files = get_project_files(syn, project_syn_id, file_types)
+        res = []
+        for p_file in project_files:
+            try:
+                obj = syn.get(p_file[1])
+                res.append({
+                    'project_syn_id' : project_syn_id,
+                    "file_id": obj.id,
+                    "file_path": str(obj.path),
+                })
+            except:
+                pass
+        df = pandas.DataFrame.from_records(res, columns=['project_syn_id', 'file_id', 'file_path'])
+        os.makedirs(f"{DGLINK_CACHE}/study_files/", exist_ok=True, )
+        df.to_csv(project_file_path, sep='\t', index=False, columns=['project_syn_id', 'file_id', 'file_path'])
+        print(f"project file created as {project_file_path}")
+    else:
+        print(f"Reading project file from {project_file_path}")
+        df = pandas.read_csv(project_file_path, sep='\t')
+    return df['file_path'].to_list()
 
 def load_existing_nodes(node_path="dglink/resources/nodes.tsv"):
     """loads existing set of nodes as a dictionary"""

@@ -103,8 +103,10 @@ class NodeSet():
                 for col in self.attributes:
                     val = self.nodes[curie][col]
                     if type(val) == set:
-                        val = f'"{";".join(val)}"'
+                        if len(val) > 20:
+                            val = list(val)[:20] ## limit max number of elements to 20
+                        val = f'"{";".join(val)}"' 
                     ## take out any weird line breaks 
+                    
                     write_str += val.replace('\n', '') + "\t"
-
                 f.write(write_str[:-1] + "\n")

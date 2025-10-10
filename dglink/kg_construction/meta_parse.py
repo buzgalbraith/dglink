@@ -7,8 +7,8 @@ from nodes import Node, NodeSet, ENTITY_ATTRIBUTES, PROJECT_ATTRIBUTES
 import gilda
 from bioregistry import normalize_curie, get_bioregistry_iri
 from indra.ontology.bio import bio_ontology
-from utils import write_edges, load_existing_edges
-
+from utils import write_edges, load_existing_edges, DGLINK_CACHE
+import pandas
 syn = synapseclient.login()
 
 all_project_ids = [
@@ -31,7 +31,7 @@ all_project_ids = [
     "syn51133914",
     "syn52740594",
 ]
-
+all_project_ids = pandas.read_csv(f'{DGLINK_CACHE}/all_studies.tsv', sep='\t')['studyId'].to_list()
 ground_fields = [
     "manifestation",
     "diseaseFocus",
@@ -72,6 +72,14 @@ def get_entities_from_meta(study_metadata, ground_fields, unground_fields, nodes
             ## loop through in case list
             for entry in field_val:
                 ## ground the node if it is in a grounded field
+                    ## add the nodes with their corresponding meta data fields
+                entry = str(entry)
+                node_attributes = {
+                        'curie:ID':entry,
+                        ":LABEL": field,
+                        'columns:string[]' : 'metadata',
+                        "raw_texts:string[]": entry,
+                    }
                 if field in ground_fields:
                     ans = gilda.annotate(entry)
                     ## if the node should be grounded and can be grounded save the node as that entity type as well.
@@ -87,15 +95,7 @@ def get_entities_from_meta(study_metadata, ground_fields, unground_fields, nodes
                             'columns:string[]' : 'metadata',
                         }
                         meta_relations.add((study_metadata.id, curie, f"has_{field}"))
-                else:
-                    ## add the nodes with their corresponding meta data fields
-                    node_attributes = {
-                            'curie:ID':entry,
-                            ":LABEL": field,
-                            'columns:string[]' : 'metadata',
-                            "raw_texts:string[]": entry,
-                        }
-                    meta_relations.add((study_metadata.id, entry, f"has_{field}"))
+                meta_relations.add((study_metadata.id, entry, f"has_{field}"))
                 working_node = Node(
                         attribute_names=ENTITY_ATTRIBUTES, 
                         attributes = node_attributes
@@ -126,8 +126,8 @@ def get_entities_from_wiki(study_wiki, wiki_fields, entity_nodes:NodeSet, projec
                     ENTITY_ATTRIBUTES,
                     attributes={
                     'curie:ID':entry,
-                    ":LABEL": bio_ontology.get_type(nsid.db, nsid.id),
-                    "grounded_entity_name": nsid.entry_name,
+                    ":LABEL":  bio_ontology.get_type(nsid.db, nsid.id)  or 'unknown',
+                    "grounded_entity_name": nsid.entry_name or 'no_name_found',
                     "raw_texts:string[]": annotation.text,
                     'columns:string[]' : 'wiki',
                     "iri": get_bioregistry_iri(nsid.db, nsid.id),

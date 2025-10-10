@@ -7,7 +7,9 @@ from utils import (
     get_project_files,
     write_edges,
     load_existing_edges,
+    get_project_df,
     frictionless_file_reader,
+    DGLINK_CACHE
 )
 from nodes import PROJECT_ATTRIBUTES, ENTITY_ATTRIBUTES, Node, NodeSet
 import gilda
@@ -18,8 +20,6 @@ from bioregistry import normalize_curie, get_bioregistry_iri
 
 
 syn = synapseclient.login()
-url = 'https://bioregistry.io/doid:123'
-
 
 FILE_TYPES = [
     ".tsv",
@@ -49,7 +49,7 @@ all_project_ids = [
     "syn51133914", ## locked
     "syn52740594", ## large
 ]
-
+all_project_ids = pandas.read_csv(f'{DGLINK_CACHE}/all_studies.tsv', sep='\t')['studyId'].to_list()
 
 def check_df_readable(df, max_unnamed=2):
     """determine if a given data frame was correctly read in"""
@@ -173,6 +173,7 @@ if __name__ == "__main__":
     entity_nodes.load_node_set('dglink/resources/entity_nodes.tsv')
     project_nodes.load_node_set('dglink/resources/project_nodes.tsv')
     relations = load_existing_edges(edge_path="dglink/resources/edges.tsv")
+    
     for project_id in all_project_ids:
         ## add the project id directly
         working_project_node = Node(attribute_names=PROJECT_ATTRIBUTES, attributes={
@@ -181,11 +182,13 @@ if __name__ == "__main__":
         })
         project_nodes.update_nodes(new_node=working_project_node, 
                                    new_node_id=project_id)
-        ## load all files for a given project
+        # ## load all files for a given project
         project_files = get_project_files(
             syn=syn, project_syn_id=project_id, file_types=FILE_TYPES
         )
+        # project_files = get_project_df(syn=syn, project_syn_id=project_id, file_types=FILE_TYPES)
         for p_file in project_files:
+            print(p_file)
             ## this function can throw an error depending on file permissions
             try:
                 obj = syn.get(p_file[1])
@@ -265,6 +268,6 @@ if __name__ == "__main__":
     # ## other stats
     end_time = time.perf_counter()
     elapsed_time = end_time - start_time
-    ## 4839.771967 seconds (~80 mins) for whole run 
+    ## 6.5 hours to pull all 310 or so studies
     print(f"Function execution time: {elapsed_time:.6f} seconds") 
 

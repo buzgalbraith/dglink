@@ -25,7 +25,7 @@ for entity_type in entity_types:
         df = pandas.read_csv(node_path, sep='\t')
         name_check = 'name' in df.columns
         grounded_name_check = 'grounded_entity_name' in df.columns
-        entity_prefix_set = entity_prefix_set | pygtrie.PrefixSet(df['curie:ID'])
+        entity_prefix_set = entity_prefix_set | pygtrie.PrefixSet(df['curie:ID'].astype(str))
         if grounded_name_check:
             entity_prefix_set = entity_prefix_set | pygtrie.PrefixSet(df['grounded_entity_name'].dropna())
         if name_check:
