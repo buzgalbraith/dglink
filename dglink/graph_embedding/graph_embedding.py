@@ -11,32 +11,31 @@ from itertools import combinations
 import gzip
 import torch
 import pandas as pd
-
-
+import re 
+RESOURCE_DIR = 'dglink/graph_embedding/resources'
 all_project_ids = [
-    "syn2343195",  ## large project
+    "syn2343195", ## large project
     "syn5562324",  ## small project
-    "syn27761862",  ## small project
-    "syn4939874",  ## large project
-    "syn4939876",  ## locked
-    "syn4939906",  ## small
-    "syn4939916",  ## locked
-    "syn7217928",  ## large
-    "syn8016635",  ## small
-    "syn11638893",  ## locked
-    "syn11817821",  ## large
-    "syn21641813",  ## locked
-    "syn21642027",  ## locked
-    "syn21650493",  ## large
-    "syn21984813",  ## large
-    "syn23639889",  ## locked
-    "syn51133914",  ## locked
-    "syn52740594",  ## large
+    "syn27761862", ## small project
+    "syn4939874",   ## large project
+    "syn4939876", ## locked
+    "syn4939906", ## small
+    "syn4939916", ## locked
+    "syn7217928", ## large
+    "syn8016635", ## small
+    "syn11638893", ## locked
+    "syn11817821", ## large
+    "syn21641813", ## locked
+    "syn21642027", ## locked
+    "syn21650493", ## large
+    "syn21984813", ## large
+    "syn23639889", ## locked
+    "syn51133914", ## locked
+    "syn52740594", ## large
 ]
 
-
 def train_embedding_model(
-    edge_path="dglink/resources/edges.tsv",
+    resource_dir=RESOURCE_DIR,
     model_name="TransE",
     epochs=100,
     save=True,
@@ -45,6 +44,7 @@ def train_embedding_model(
     """Trains a network embedding model with the PyKEEN pipeline. Return the model and entity_to_id mapping"""
     ## split the dataset
     # tf = TriplesFactory.from_path(edge_path)
+    edge_path = f'{resource_dir}/non_related_projects_edges.tsv'
     triples = load_triples(path=edge_path, column_remapping=(0, 2, 1))
     tf = TriplesFactory.from_labeled_triples(triples[1:])  ## drop header
     training, testing = tf.split()
@@ -112,7 +112,7 @@ if __name__ == "__main__":
     # model_name = 'TransE'
     if train:
         model, entity_to_id = train_embedding_model(
-            edge_path="dglink/resources/edges.tsv",
+            resource_dir=RESOURCE_DIR,
             model_name=model_name,
             epochs=250,
         )
@@ -121,8 +121,9 @@ if __name__ == "__main__":
             save_path="dglink/graph_embedding/embedding_test"
         )
     res = []
-    edges_df = pd.read_csv("dglink/resources/edges.tsv", sep="\t")
+    related_project_edges_df = pd.read_csv(f"{RESOURCE_DIR}/related_project_edges.tsv", sep="\t")
     x = 0
+    # all_project_ids = filter(lambda x:re.match(r'^syn\d*$', x) is not None, entity_to_id.keys())
     for id_1, id_2 in combinations(all_project_ids, 2):
         embed_1, embed_2 = id_to_embedding(
             entity_to_id=entity_to_id, model=model, id_1=id_1, id_2=id_2
@@ -130,7 +131,7 @@ if __name__ == "__main__":
         distance = l2(embed_1, embed_2)
         cos = cosine_dist(embed_1, embed_2).real
         has_related = check_related_study_exists(
-            edges_df=edges_df, id_1=id_1, id_2=id_2
+            edges_df=related_project_edges_df, id_1=id_1, id_2=id_2
         )
         res.append(
             {

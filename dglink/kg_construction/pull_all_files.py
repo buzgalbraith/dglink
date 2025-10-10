@@ -271,3 +271,9 @@ if __name__ == "__main__":
     ## 6.5 hours to pull all 310 or so studies
     print(f"Function execution time: {elapsed_time:.6f} seconds") 
 
+    # total_counts = files_df.groupby("project_id")["file_path"].nunique()
+    # read_counts = files_df[files_df['can_read']].groupby("project_id")["file_path"].nunique()
+
+    # count_cols = cols_df.groupby(["project_id", "file_path", "sheet"])["col"].nunique()
+    # count_files_with_cols = cols_df.groupby("project_id")["file_path"].nunique()
+    
