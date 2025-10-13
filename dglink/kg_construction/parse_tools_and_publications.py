@@ -1,7 +1,7 @@
 """Parses tools and publications used in each project from NF data Portal."""
 
 import synapseclient
-from pandas import isnull,read_csv
+from pandas import isnull, read_csv
 from utils import DGLINK_CACHE
 
 syn = synapseclient.login()
@@ -27,7 +27,10 @@ all_project_ids = [
     "syn52740594",  ## large
 ]
 
-all_project_ids = read_csv(f'{DGLINK_CACHE}/all_studies.tsv', sep='\t')['studyId'].to_list()
+all_project_ids = read_csv(f"{DGLINK_CACHE}/all_studies.tsv", sep="\t")[
+    "studyId"
+].to_list()
+
 
 def get_tool_nodes():
     """returns a set with all tool nodes and a mapping from any name (or synonym) to its curie"""

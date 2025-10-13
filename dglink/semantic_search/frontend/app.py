@@ -7,8 +7,6 @@ app = Flask(__name__)
 BACKEND_URL = "http://backend:8000/"
 
 
-
-
 def process_results(raw_results):
     processed = []
     for row in raw_results:
@@ -18,7 +16,9 @@ def process_results(raw_results):
                 load = ast.literal_eval(ent.split(":", 1)[1].strip())
                 for key in load:
                     val = load[key]
-                    if key.split(' ')[-1] == "iri":
+                    if (key.split(" ")[-1] == "iri") or (
+                        key.split(" ")[-1] == "project_url"
+                    ):
                         processed_row.append(
                             {
                                 "text": f"{val}",
@@ -38,20 +38,21 @@ def process_results(raw_results):
         processed.append(processed_row)
     return processed
 
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     result = None
     form_data = {
-        'Agent': '',
-        'Relation': '',
-        'OtherAgent': '',
-        'QueryType': 'Subject',  # default selection
+        "Agent": "",
+        "Relation": "",
+        "OtherAgent": "",
+        "QueryType": "Subject",  # default selection
     }
     if request.method == "POST":
-        form_data['Agent'] = request.form.get('Agent', '')
-        form_data['Relation'] = request.form.get('Relation', '')
-        form_data['OtherAgent'] = request.form.get('OtherAgent', '')
-        form_data['QueryType'] = request.form.get('QueryType', 'Subject')
+        form_data["Agent"] = request.form.get("Agent", "")
+        form_data["Relation"] = request.form.get("Relation", "")
+        form_data["OtherAgent"] = request.form.get("OtherAgent", "")
+        form_data["QueryType"] = request.form.get("QueryType", "Subject")
         agent = request.form.get("Agent")
         relation = request.form.get("Relation")
         other_agent = request.form.get("OtherAgent")
@@ -71,6 +72,7 @@ def index():
 
     return render_template("index.html", result=result, form_data=form_data)
 
+
 @app.route("/autocomplete")
 def autocomplete():
     query = request.args.get("query", "")
@@ -82,15 +84,8 @@ def autocomplete():
             "completion_type": completion_type,
         },
     )
-    # all_terms = [
-    #     "BRCA1", "BRCA2", "TP53", "EGFR", "KRAS", "PIK3CA", "CDK4", "CDK6", "ALK", "BRAF"
-    # ]  # example list — replace with your real logic
     data = response.json()
     return data
-    # Simple filtering (replace with DB lookup or model)
-    # suggestions = [t for t in all_terms if query in t.lower()] 
-    # return jsonify({"suggestions": suggestions[:10]})  # limit to 10
-
 
 
 if __name__ == "__main__":

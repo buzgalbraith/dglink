@@ -6,7 +6,9 @@ import os
 from synapseutils import walk
 from pathlib import Path
 from frictionless import Schema, Resource, formats, Package
-DGLINK_CACHE =  Path.joinpath(Path(os.getenv("HOME")), '.dglink')
+
+DGLINK_CACHE = Path.joinpath(Path(os.getenv("HOME")), ".dglink")
+
 
 def read_csv_auto(path, nbytes=100 * 1024 * 1024, **kwargs):
     """
@@ -137,21 +139,34 @@ def get_project_df(syn, project_syn_id, file_types):
         for p_file in project_files:
             try:
                 obj = syn.get(p_file[1])
-                res.append({
-                    'project_syn_id' : project_syn_id,
-                    "file_id": obj.id,
-                    "file_path": str(obj.path),
-                })
+                res.append(
+                    {
+                        "project_syn_id": project_syn_id,
+                        "file_id": obj.id,
+                        "file_path": str(obj.path),
+                    }
+                )
             except:
                 pass
-        df = pandas.DataFrame.from_records(res, columns=['project_syn_id', 'file_id', 'file_path'])
-        os.makedirs(f"{DGLINK_CACHE}/study_files/", exist_ok=True, )
-        df.to_csv(project_file_path, sep='\t', index=False, columns=['project_syn_id', 'file_id', 'file_path'])
+        df = pandas.DataFrame.from_records(
+            res, columns=["project_syn_id", "file_id", "file_path"]
+        )
+        os.makedirs(
+            f"{DGLINK_CACHE}/study_files/",
+            exist_ok=True,
+        )
+        df.to_csv(
+            project_file_path,
+            sep="\t",
+            index=False,
+            columns=["project_syn_id", "file_id", "file_path"],
+        )
         print(f"project file created as {project_file_path}")
     else:
         print(f"Reading project file from {project_file_path}")
-        df = pandas.read_csv(project_file_path, sep='\t')
-    return df['file_path'].to_list()
+        df = pandas.read_csv(project_file_path, sep="\t")
+    return df["file_path"].to_list()
+
 
 def load_existing_nodes(node_path="dglink/resources/nodes.tsv"):
     """loads existing set of nodes as a dictionary"""
@@ -231,48 +246,59 @@ def update_entity_nodes(entity_nodes: dict, file_nodes: set):
             }
     return entity_nodes
 
-def syn_id_to_path(syn_id:str):
+
+def syn_id_to_path(syn_id: str):
     import synapseclient
+
     syn = synapseclient.login()
-    raw =  syn.get(syn_id).path
+    raw = syn.get(syn_id).path
     return Path(raw)
+
 
 def get_frictionless_package(pth):
     pac = Package()
     format = pth.suffix
     control_func = lambda x: None
-    if pth.suffix in ['.xlsx', '.xls']:
+    if pth.suffix in [".xlsx", ".xls"]:
         ## try to directly load as a package
         try:
             pac = Package(pth)
-            control_func = lambda x:  formats.ExcelControl(sheet=x.dialect.controls[0].sheet)
-        ## this fails for some excel sheets with weird formatting 
+            control_func = lambda x: formats.ExcelControl(
+                sheet=x.dialect.controls[0].sheet
+            )
+        ## this fails for some excel sheets with weird formatting
         except:
             ## try to add each sheet of the file to the package as a resource
             try:
-                if format == '.xlsx':
+                if format == ".xlsx":
                     from openpyxl import load_workbook
+
                     col_names = load_workbook(pth, read_only=True)
                 else:
                     col_names = pandas.ExcelFile(pth).sheet_names
                 for sheet in col_names:
-                    pac.add_resource(Resource(pth, control=formats.ExcelControl(sheet=sheet)))
-                control_func = lambda x:  formats.ExcelControl(sheet=x.dialect.controls[0].sheet)
-            ## if this fails, as a last ditch effort try loading the file as an excel file. 
+                    pac.add_resource(
+                        Resource(pth, control=formats.ExcelControl(sheet=sheet))
+                    )
+                control_func = lambda x: formats.ExcelControl(
+                    sheet=x.dialect.controls[0].sheet
+                )
+            ## if this fails, as a last ditch effort try loading the file as an excel file.
             except:
-                pac.add_resource(Resource(pth, format='tsv'))
-                format = '.tsv'        
+                pac.add_resource(Resource(pth, format="tsv"))
+                format = ".tsv"
     else:
         pac.add_resource(Resource(pth))
     for res in pac.resources:
-            raw_schema = Schema.describe(res.path, control = control_func(res), format=format)
-            to_drop = [field.name for field in raw_schema.fields if field.type != "string"]
-            for x in to_drop:
-                raw_schema.remove_field(x)
-            res.schema = raw_schema
+        raw_schema = Schema.describe(res.path, control=control_func(res), format=format)
+        to_drop = [field.name for field in raw_schema.fields if field.type != "string"]
+        for x in to_drop:
+            raw_schema.remove_field(x)
+        res.schema = raw_schema
     return pac
 
-def frictionless_file_reader(obj,  max_size_bytes=100 * 1024 * 1024):
+
+def frictionless_file_reader(obj, max_size_bytes=100 * 1024 * 1024):
     """
     reads in files from a synapse file object with frictionless. Returns files as a dictionary for working with sheets
     """
@@ -288,13 +314,17 @@ def frictionless_file_reader(obj,  max_size_bytes=100 * 1024 * 1024):
         print("file to large to read")
         return {}
     ## load file contents into frictionless package
-    
+
     pack = get_frictionless_package(pth=pth)
     ## load frictionless package into dictionary of pandas data frames
     df_dict = {}
     for res in pack.resources:
         try:
-            df_dict[res.name] = pandas.DataFrame(res.read_rows())  # stream rows directly
+            df_dict[res.name] = pandas.DataFrame(
+                res.read_rows()
+            )  # stream rows directly
         except:
-            import ipdb; ipdb.set_trace()
+            import ipdb
+
+            ipdb.set_trace()
     return df_dict

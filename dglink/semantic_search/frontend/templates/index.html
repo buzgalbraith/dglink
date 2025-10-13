@@ -94,21 +94,21 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="mb-3">
                 <label for="Agent" class="form-label">Agent</label>
                 <input type="text" id="Agent" name="Agent" class="form-control" 
-                    value="{{ form_data.Agent }}" required>
+                    value="{{ form_data.Agent }}" autocomplete="off">
 
             </div>
 
             <div class="mb-3">
                 <label for="Relation" class="form-label">Relation</label>
                 <input type="text" id="Relation" name="Relation" class="form-control" 
-                    value="{{ form_data.Relation }}">
+                    value="{{ form_data.Relation }}" autocomplete="off">
 
             </div>
 
             <div class="mb-4">
                 <label for="OtherAgent" class="form-label">Other Agent</label>
                 <input type="text" id="OtherAgent" name="OtherAgent" class="form-control" 
-                    value="{{ form_data.OtherAgent }}">
+                    value="{{ form_data.OtherAgent }}" autocomplete="off">
             </div>
 
             <h5 class="mb-3">Agent Role:</h5>
@@ -194,8 +194,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     {% for entry in row %}
                     <li class="mb-1">
                         {% if entry.url %}
-                            <a href="{{ entry.url }}" target="_blank" class="link-primary text-decoration-none">
-                                {{ entry.text }}
+                            {{ entry.field }}:<a href="{{ entry.url }}" target="_blank" class="link-primary text-decoration-none">
+                                 {{ entry.text }}
                             </a>
                         {% else %}
                             {{ entry.text }}

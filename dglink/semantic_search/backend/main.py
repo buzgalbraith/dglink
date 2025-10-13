@@ -12,26 +12,32 @@ driver = GraphDatabase.driver(
     auth=(os.environ.get("NEO4J_URI"), os.environ.get("NEO4J_PASSWORD")),
 )
 
-## get the prefix sets 
+## get the prefix sets
 
-entity_types = ['entity', 'project', 'publication', 'tool']
-edge_types = ['edges','publication', 'tool']
+entity_types = ["entity", "project", "publication", "tool"]
+edge_types = ["edges", "publication", "tool", "related_edges_gl"]
 entity_prefix_set = pygtrie.PrefixSet()
 edge_prefix_set = pygtrie.PrefixSet()
 names_mapping = dict()
 for entity_type in entity_types:
     node_path = f"/app/resources/{entity_type}_nodes.tsv"
     if os.path.exists(node_path):
-        df = pandas.read_csv(node_path, sep='\t')
-        name_check = 'name' in df.columns
-        grounded_name_check = 'grounded_entity_name' in df.columns
-        entity_prefix_set = entity_prefix_set | pygtrie.PrefixSet(df['curie:ID'].astype(str))
+        df = pandas.read_csv(node_path, sep="\t")
+        name_check = "name" in df.columns
+        grounded_name_check = "grounded_entity_name" in df.columns
+        entity_prefix_set = entity_prefix_set | pygtrie.PrefixSet(
+            df["curie:ID"].astype(str)
+        )
         if grounded_name_check:
-            entity_prefix_set = entity_prefix_set | pygtrie.PrefixSet(df['grounded_entity_name'].dropna())
+            entity_prefix_set = entity_prefix_set | pygtrie.PrefixSet(
+                df["grounded_entity_name"].dropna()
+            )
         if name_check:
-            entity_prefix_set = entity_prefix_set | pygtrie.PrefixSet(df['name'].dropna())      
+            entity_prefix_set = entity_prefix_set | pygtrie.PrefixSet(
+                df["name"].dropna()
+            )
         for _, row in df.iterrows():
-            curie = row['curie:ID']
+            curie = row["curie:ID"]
             names_mapping[curie] = curie
             if grounded_name_check:
                 names_mapping[row["grounded_entity_name"]] = curie
@@ -40,10 +46,14 @@ for entity_type in entity_types:
 
 
 for edge_type in edge_types:
-    edge_path = f"/app/resources/{edge_type}_edges.tsv" if edge_type != 'edges' else f"/app/resources/edges.tsv"
+    edge_path = (
+        f"/app/resources/{edge_type}_edges.tsv"
+        if edge_type not in ["edges", "related_edges_gl"]
+        else f"/app/resources/{edge_type}.tsv"
+    )
     if os.path.exists(edge_path):
-        df = pandas.read_csv(edge_path, sep='\t')
-        edge_prefix_set = edge_prefix_set | pygtrie.PrefixSet(df[':TYPE'])
+        df = pandas.read_csv(edge_path, sep="\t")
+        edge_prefix_set = edge_prefix_set | pygtrie.PrefixSet(df[":TYPE"])
 
 
 # driver = GraphDatabase.driver('bolt://localhost:7687', )
@@ -58,7 +68,9 @@ def query_dispatch(
         agent = names_mapping[agent]
     if other_agent in names_mapping:
         other_agent = names_mapping[other_agent]
-    if query_type == "Subject":
+    if agent == "" and relation != "":
+        res = relation_search(relation=relation)
+    elif query_type == "Subject":
         res = subject_search(agent=agent, relation=relation, other_agent=other_agent)
     elif query_type == "Object":
         res = object_search(agent=agent, relation=relation, other_agent=other_agent)
@@ -71,6 +83,43 @@ def query_dispatch(
     return {"message": res}
 
 
+def relation_search(relation: str = None):
+    records, _, _ = driver.execute_query(
+        f"""
+        MATCH (p)-[r:{relation}]->(e)
+        RETURN p.curie as subject, p as subject_whole, r as relation, properties(r) as whole_relation, e.curie as object, e as object_whole
+        """,
+        database_="neo4j",
+    )
+    res = []
+    for record in records:
+        object_whole = {
+            f"Object {key}": record.data()["object_whole"][key]
+            for key in record.data()["object_whole"]
+        }
+        subject_whole = {
+            f"Subject {key}": record.data()["subject_whole"][key]
+            for key in record.data()["subject_whole"]
+        }
+        relation_whole = {
+            f"Relation {key}": record.data()["whole_relation"][key]
+            for key in record.data()["whole_relation"]
+        }
+        del subject_whole["Subject curie"]
+        del object_whole["Object curie"]
+        res.append(
+            (
+                f"Subject identifier : {record.data()['subject']}",
+                f"subject attributes : {subject_whole}",
+                f"Relation : {record.data()['relation'][1]}",
+                f"Relation attributes : {relation_whole}",
+                f"Object identifier : {record.data()['object']}",
+                f"object attributes : {object_whole}",
+            )
+        )
+    return res
+
+
 def subject_search(
     agent: str = "syn52740594", relation: str = None, other_agent: str = None
 ):
@@ -80,14 +129,24 @@ def subject_search(
         f"""
         MATCH (p)-[{relation_query}]->(e)
         WHERE p.curie = '{agent}' {other_agent_query}
-        RETURN p.curie as subject, p as subject_whole, r as relation, e.curie as object, e as object_whole
+        RETURN p.curie as subject, p as subject_whole, r as relation, properties(r) as whole_relation, e.curie as object, e as object_whole
         """,
         database_="neo4j",
     )
     res = []
     for record in records:
-        object_whole = {f'Object {key}':record.data()["object_whole"][key] for key in record.data()["object_whole"]}
-        subject_whole = {f'Subject {key}':record.data()["subject_whole"][key] for key in record.data()["subject_whole"]}
+        object_whole = {
+            f"Object {key}": record.data()["object_whole"][key]
+            for key in record.data()["object_whole"]
+        }
+        subject_whole = {
+            f"Subject {key}": record.data()["subject_whole"][key]
+            for key in record.data()["subject_whole"]
+        }
+        relation_whole = {
+            f"Relation {key}": record.data()["whole_relation"][key]
+            for key in record.data()["whole_relation"]
+        }
         del subject_whole["Subject curie"]
         del object_whole["Object curie"]
         res.append(
@@ -95,6 +154,7 @@ def subject_search(
                 f"Subject identifier : {record.data()['subject']}",
                 f"subject attributes : {subject_whole}",
                 f"Relation : {record.data()['relation'][1]}",
+                f"Relation attributes : {relation_whole}",
                 f"Object identifier : {record.data()['object']}",
                 f"object attributes : {object_whole}",
             )
@@ -111,14 +171,24 @@ def object_search(
         f"""
         MATCH (p)-[{relation_query}]->(e)
         WHERE e.curie = '{agent}' {other_agent_query}
-        RETURN p.curie as subject, p as subject_whole, r as relation, e.curie as object, e as object_whole
+        RETURN p.curie as subject, p as subject_whole, r as relation, properties(r) as whole_relation, e.curie as object, e as object_whole
         """,
         database_="neo4j",
     )
     res = []
     for record in records:
-        object_whole = {f'Object {key}':record.data()["object_whole"][key] for key in record.data()["object_whole"]}
-        subject_whole = {f'Subject {key}':record.data()["subject_whole"][key] for key in record.data()["subject_whole"]}
+        object_whole = {
+            f"Object {key}": record.data()["object_whole"][key]
+            for key in record.data()["object_whole"]
+        }
+        subject_whole = {
+            f"Subject {key}": record.data()["subject_whole"][key]
+            for key in record.data()["subject_whole"]
+        }
+        relation_whole = {
+            f"Relation {key}": record.data()["whole_relation"][key]
+            for key in record.data()["whole_relation"]
+        }
         del subject_whole["Subject curie"]
         del object_whole["Object curie"]
         res.append(
@@ -127,19 +197,17 @@ def object_search(
                 f"subject attributes : {subject_whole}",
                 f"Relation : {record.data()['relation'][1]}",
                 f"Object identifier : {record.data()['object']}",
+                f"Relation attributes : {relation_whole}",
                 f"object attributes : {object_whole}",
             )
         )
     return res
 
+
 @app.get("/autoComplete")
-def Autocomplete(
-    query:str, 
-    completion_type:str, 
-    k:int = 5
-):
-    if completion_type != 'relation':
-        res = [''.join(x) for x in entity_prefix_set.iter(prefix = query)][:k]
+def Autocomplete(query: str, completion_type: str, k: int = 5):
+    if completion_type != "relation":
+        res = ["".join(x) for x in entity_prefix_set.iter(prefix=query)][:k]
     else:
-        res = [''.join(x) for x in edge_prefix_set.iter(prefix = query)][:k]
+        res = ["".join(x) for x in edge_prefix_set.iter(prefix=query)][:k]
     return {"suggestions": res}
