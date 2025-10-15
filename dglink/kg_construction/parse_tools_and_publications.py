@@ -3,6 +3,8 @@
 import synapseclient
 from pandas import isnull, read_csv
 from utils import DGLINK_CACHE
+from bioregistry import normalize_curie, get_bioregistry_iri
+
 
 syn = synapseclient.login()
 
@@ -43,8 +45,13 @@ def get_tool_nodes():
     for row in df.itertuples():
         ## some tools do not have a curie, in this case we just use the plane text name as an identifier
         rrid = row.rrid if not isnull(row.rrid) else row.resourceName
+        curie = ''
+        if type(row.rrid) == str:
+            tmp = row.rrid.split(":", maxsplit=1)
+            curie = get_bioregistry_iri(tmp[0], tmp[1])
+        
         ## saving curie as id for node and tool as type but also keeping plane text name and type of tools as node attributes
-        node_set.add((rrid, row.resourceName, row.resourceType, "tool"))
+        node_set.add((rrid, row.resourceName, row.resourceType,curie, "tool"))
         ## update name mapping with primary name and synonyms
         name_to_rid[row.resourceName] = rrid
         for synonym in row.synonyms:
@@ -101,7 +108,7 @@ if __name__ == "__main__":
     ## get sets of all publications formatted as neo4j
     publication_node_set, publication_edge_set = get_publications()
     ## dump found nodes and edges.
-    tool_nodes = [("curie:ID", "name", "tool_type", ":LABEL")] + list(tool_node_set)
+    tool_nodes = [("curie:ID", "name", "tool_type","iri", ":LABEL")] + list(tool_node_set)
     with open("dglink/resources/tool_nodes.tsv", "w") as f:
         for row in tool_nodes:
             f.write("\t".join(row) + "\n")

@@ -150,7 +150,7 @@ if __name__ == "__main__":
     relations = set()
     entity_nodes = NodeSet(attributes=ENTITY_ATTRIBUTES)
     project_nodes = NodeSet(attributes=PROJECT_ATTRIBUTES)
-    entity_nodes.load_node_set("dglink/entity_nodes.tsv")
+    entity_nodes.load_node_set("dglink/resources/entity_nodes.tsv")
     project_nodes.load_node_set("dglink/resources/project_nodes.tsv")
     for project_id in all_project_ids:
         study_metadata = syn.get(project_id)

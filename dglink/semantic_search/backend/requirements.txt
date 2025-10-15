@@ -3,3 +3,4 @@ uvicorn[standard]
 neo4j~=5.28.0
 pygtrie
 pandas
+indra

@@ -1,15 +1,20 @@
 import pandas
 import re
 from itertools import combinations
-from graph_embedding import check_related_study_exists
 import json
 import tqdm
 from math import comb
 
 RESOURCE_DIR = "dglink/graph_embedding/resources/"
 
+def check_related_study_exists(edges_df, id_1, id_2):
+    """checks if a pair of studies has a related edge"""
+    df = edges_df[edges_df[":TYPE"] == "has_relatedStudies"]
+    forward_df = df[(df[":START_ID"] == id_1) & (df[":END_ID"] == id_2)]
+    backward_df = df[(df[":START_ID"] == id_2) & (df[":END_ID"] == id_1)]
+    return (len(forward_df) + len(backward_df)) > 0
 
-def get_projects_to_edges():
+def get_projects_to_edges(edges_df):
     """get mapping project_id -> entity -> edge_type, which is used for calculating jacquard sim"""
     all_project_ids = set(
         filter(
@@ -97,8 +102,8 @@ def jacquard_sim(pid_1, pid_2):
         for edge_type in types_1 | types_2:
             if edge_type in types_1.difference(types_2):
                 edge_attrs["head_only_edges:string[]"].add(f"{edge_type}:{e_name}")
-            elif edge_type in types_1.difference(types_2):
-                edge_attrs["head_only_edges:string[]"].add(f"{edge_type}:{e_name}")
+            elif edge_type in types_2.difference(types_1):
+                edge_attrs["tail_only_edges:string[]"].add(f"{edge_type}:{e_name}")
             union_score += edge_weights.get(edge_type, 1)
     jacquard_score = intersection_score / union_score if union_score > 0 else 0
     edge_attrs["jacquard_score"] = jacquard_score
@@ -134,7 +139,7 @@ if __name__ == "__main__":
         f"{RESOURCE_DIR}/non_related_projects_edges.tsv", sep="\t"
     )
     cutoff = 0.20
-    project_to_edges_map, all_project_ids = get_projects_to_edges()
+    project_to_edges_map, all_project_ids = get_projects_to_edges(edges_df=edges_df)
     edge_weights = get_edge_weights()
     name_maps = get_entity_names()
     res = []
@@ -181,3 +186,5 @@ if __name__ == "__main__":
     print(
         f"Total known {total}, remaining known : {remaining} ({remaining/total}), Total predicted {len(after_cutoff)}"
     )
+
+

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Synapse KG Semantic Search</title>
+    <title>NF Data Portal KG Semantic Search</title>
 
     <!-- Bootstrap CSS -->
     <link 
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <body class="bg-light">
     <div class="container py-5">
-        <h1 class="text-center mb-5">Synapse KG Semantic Search</h1>
+        <h1 class="text-center mb-5">NF Data Portal KG Semantic Search</h1>
 
         <form method="POST" class="card shadow p-4">
             <div class="mb-3">
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <li class="mb-1">
                         {% if entry.url %}
                             {{ entry.field }}:<a href="{{ entry.url }}" target="_blank" class="link-primary text-decoration-none">
-                                 {{ entry.text }}
+                                 Link 
                             </a>
                         {% else %}
                             {{ entry.text }}
