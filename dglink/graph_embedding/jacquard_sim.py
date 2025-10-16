@@ -121,8 +121,8 @@ def write_edges_with_attrs(edges, path):
             for col in attributes:
                 val = edge[col]
                 if type(val) == set:
-                    if len(val) > 20:
-                        val = list(val)[:20]  ## limit max number of elements to 20
+                    # if len(val) > 20:
+                    #     val = list(val)[:20]  ## limit max number of elements to 20
                     val = f'"{";".join(val)}"'
                 elif type(val) == dict:
                     res = [":".join([x, str(val[x])]) for x in val]
@@ -173,7 +173,7 @@ if __name__ == "__main__":
     sorted_df = df[(df["entity_id2"] > n) & (df["entity_id1"] > n)].sort_values(
         by=["jacquard_score"]
     )
-    sorted_df.to_csv("jac.csv")
+    # sorted_df.to_csv("jac.csv")
 
     write_edges_with_attrs(path="related_edges_gl.tsv", edges=edges)
 

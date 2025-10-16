@@ -10,6 +10,7 @@ import numpy as np
 from itertools import combinations
 import gzip
 import torch
+from jacquard_sim import get_projects_to_edges, check_related_study_exists
 import pandas as pd
 import re 
 RESOURCE_DIR = 'dglink/graph_embedding/resources'
@@ -66,7 +67,8 @@ def load_entity_to_id(save_path="dglink/graph_embedding/embedding_test"):
     id_path = f"{save_path}/training_triples/entity_to_id.tsv.gz"
     entity_to_id = {}
     with gzip.open(id_path, "rt", encoding="utf-8") as f:
-        for line in f.readlines()[1:]:
+        for line in f.readlines()[2:]:
+            # import ipdb; ipdb.set_trace()
             id, term = line.strip().split("\t")
             entity_to_id[term] = int(id)
     return entity_to_id
@@ -98,16 +100,11 @@ def cosine_dist(a, b):
     return 1 - sim
 
 
-def check_related_study_exists(edges_df, id_1, id_2):
-    """checks if a pair of studies has a related edge"""
-    df = edges_df[edges_df[":TYPE"] == "has_relatedStudies"]
-    forward_df = df[(df[":START_ID"] == id_1) & (df[":END_ID"] == id_2)]
-    backward_df = df[(df[":START_ID"] == id_2) & (df[":END_ID"] == id_1)]
-    return (len(forward_df) + len(backward_df)) > 0
+
 
 
 if __name__ == "__main__":
-    train = True
+    train = False
     model_name = "RotatE"
     # model_name = 'TransE'
     if train:
@@ -122,8 +119,12 @@ if __name__ == "__main__":
         )
     res = []
     related_project_edges_df = pd.read_csv(f"{RESOURCE_DIR}/related_project_edges.tsv", sep="\t")
+    non_related_edges_df = pd.read_csv(
+        f"{RESOURCE_DIR}/non_related_projects_edges.tsv", sep="\t"
+    )
     x = 0
     # all_project_ids = filter(lambda x:re.match(r'^syn\d*$', x) is not None, entity_to_id.keys())
+    _, all_project_ids = get_projects_to_edges(edges_df=non_related_edges_df)
     for id_1, id_2 in combinations(all_project_ids, 2):
         embed_1, embed_2 = id_to_embedding(
             entity_to_id=entity_to_id, model=model, id_1=id_1, id_2=id_2

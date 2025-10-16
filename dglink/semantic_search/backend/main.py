@@ -74,6 +74,8 @@ def get_no_context_indra_url(curie):
         if len(split_curie)<2:
             return None
         db, id = bioregistry_client.get_ns_id_from_bioregistry_curie(curie)
+        if id is None:
+            return None
         id = id.split(':')[-1]
         return get_indra_url(db, id)
 
@@ -83,11 +85,16 @@ def get_url_with_context_indra_url(curie, project_curie):
         if len(split_curie)<2:
             return None
         db, id = bioregistry_client.get_ns_id_from_bioregistry_curie(curie)
+        if id is None:
+            return None
         id = id.split(':')[-1]
-        project_disease_focus = project_to_disease_focus[project_curie][0]
+        project_curie = project_curie.removesuffix(":Wiki")
+        project_disease_focus = project_to_disease_focus.get(project_curie, '')
+
+
         if project_disease_focus == '':
             return None
-        mesh_id = project_disease_focus.split(':', maxsplit=1)
+        mesh_id = project_disease_focus[0].split(':', maxsplit=1)
         if len(mesh_id)<2:
             return None
         return get_indra_url(db, id, mesh_id=mesh_id[1]), project_to_disease_focus[project_curie][1]
