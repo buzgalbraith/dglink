@@ -14,115 +14,116 @@ driver = GraphDatabase.driver(
     auth=(os.environ.get("NEO4J_URI"), os.environ.get("NEO4J_PASSWORD")),
 )
 
-## get the prefix sets
 
-entity_types = ["entity", "project", "publication", "tool"]
-edge_types = ["edges", "publication", "tool", "related_edges_gl"]
-entity_prefix_set = pygtrie.PrefixSet()
-edge_prefix_set = pygtrie.PrefixSet()
-names_mapping = dict()
-for entity_type in entity_types:
-    node_path = f"/app/resources/{entity_type}_nodes.tsv"
-    if os.path.exists(node_path):
-        df = pandas.read_csv(node_path, sep="\t")
-        name_check = "name" in df.columns
-        grounded_name_check = "grounded_entity_name" in df.columns
-        entity_prefix_set = entity_prefix_set | pygtrie.PrefixSet(
-            df["curie:ID"].astype(str)
-        )
-        if grounded_name_check:
-            entity_prefix_set = entity_prefix_set | pygtrie.PrefixSet(
-                df["grounded_entity_name"].dropna()
-            )
-        if name_check:
-            entity_prefix_set = entity_prefix_set | pygtrie.PrefixSet(
-                df["name"].dropna()
-            )
-        for _, row in df.iterrows():
-            curie = row["curie:ID"]
-            names_mapping[curie] = curie
-            if grounded_name_check:
-                names_mapping[row["grounded_entity_name"]] = curie
-            if name_check:
-                names_mapping[row["name"]] = curie
 
-inverse_names_mapping = {names_mapping[key]:key for key in names_mapping}
-
-project_to_disease_focus = dict()
-
-for edge_type in edge_types:
-    edge_path = (
-        f"/app/resources/{edge_type}_edges.tsv"
-        if edge_type not in ["edges", "related_edges_gl"]
-        else f"/app/resources/{edge_type}.tsv"
+def load_prefix_sets(nodes_df, edges_df):
+    """load the prefix sets of nodes and edges for auto-complete"""
+    ## load node prefix set 
+    node_prefix_set = pygtrie.PrefixSet()
+    ## add curie and name to node prefix set 
+    node_prefix_set = node_prefix_set | pygtrie.PrefixSet(nodes_df["curie:ID"].astype(str))
+    node_prefix_set = node_prefix_set | pygtrie.PrefixSet(
+                    nodes_df["name"].dropna()
     )
-    if os.path.exists(edge_path):
-        df = pandas.read_csv(edge_path, sep="\t")
-        edge_prefix_set = edge_prefix_set | pygtrie.PrefixSet(df[":TYPE"])
-        if edge_type == "edges":
-            disease_focus_df = df[df[":TYPE"]=='has_diseaseFocus'].drop_duplicates()
-            for _, row in disease_focus_df.iterrows():
-                if row.iloc[0] not in project_to_disease_focus:
-                    project_to_disease_focus[row.iloc[0]] = ['','']
-                if row.iloc[1].startswith("mesh"):
-                    project_to_disease_focus[row.iloc[0]][0] = row.iloc[1]
-                else:
-                    project_to_disease_focus[row.iloc[0]][1] = row.iloc[1]
+    # load edge prefix set 
+    edge_prefix_set = pygtrie.PrefixSet()
+    edges_df = pandas.read_csv(f"/app/resources/edges.tsv", sep="\t")
+    edge_prefix_set = edge_prefix_set | pygtrie.PrefixSet(edges_df[":TYPE"])
+    return node_prefix_set, edge_prefix_set
+
+def load_mappings(nodes_df, edges_df):
+    """get mapping from entity name to curie (and inverse) as well as a list of projects to their disease focus"""
+    ## get name mappings
+    names_mapping = {}
+    for _, row in nodes_df.iterrows():
+        curie = row["curie:ID"]
+        names_mapping[curie] = curie
+        names_mapping[row["name"]] = curie
+    inverse_names_mapping = {names_mapping[key]: key for key in names_mapping}
+    ## get project to disease focus
+    project_to_disease_focus = {}
+    disease_focus_df = edges_df[edges_df[":TYPE"] == "has_diseaseFocus"].drop_duplicates()
+    for _, row in disease_focus_df.iterrows():
+        if row.iloc[0] not in project_to_disease_focus:
+            project_to_disease_focus[row.iloc[0]] = ["", ""]
+        if row.iloc[1].startswith("mesh"):
+            project_to_disease_focus[row.iloc[0]][0] = row.iloc[1]
+        else:
+            project_to_disease_focus[row.iloc[0]][1] = row.iloc[1]
+    return names_mapping, inverse_names_mapping, project_to_disease_focus
+
 def get_no_context_indra_url(curie):
-        get_indra_url = lambda db, id : f'https://discovery.indra.bio/search/?agent_tuple=[%22{db}%22,%22{db}:{id}%22]'
-        split_curie = curie.split(':', maxsplit=1)
-        if len(split_curie)<2:
-            return None
-        db, id = bioregistry_client.get_ns_id_from_bioregistry_curie(curie)
-        if id is None:
-            return None
-        id = id.split(':')[-1]
-        return get_indra_url(db, id)
+    get_indra_url = (
+        lambda db, id: f"https://discovery.indra.bio/search/?agent_tuple=[%22{db}%22,%22{db}:{id}%22]"
+    )
+    split_curie = curie.split(":", maxsplit=1)
+    if len(split_curie) < 2:
+        return None
+    db, id = bioregistry_client.get_ns_id_from_bioregistry_curie(curie)
+    if id is None:
+        return None
+    id = id.split(":")[-1]
+    return get_indra_url(db, id)
+
 
 def get_url_with_context_indra_url(curie, project_curie):
-        get_indra_url = lambda db, id, mesh_id : f'https://discovery.indra.bio/search/?agent_tuple=[%22{db}%22,%22{db}:{id}%22]&mesh_tuple=[%22MESH%22,%22{mesh_id}%22]'
-        split_curie = curie.split(':', maxsplit=1)
-        if len(split_curie)<2:
-            return None
-        db, id = bioregistry_client.get_ns_id_from_bioregistry_curie(curie)
-        if id is None:
-            return None
-        id = id.split(':')[-1]
-        project_curie = project_curie.removesuffix(":Wiki")
-        project_disease_focus = project_to_disease_focus.get(project_curie, '')
+    get_indra_url = (
+        lambda db, id, mesh_id: f"https://discovery.indra.bio/search/?agent_tuple=[%22{db}%22,%22{db}:{id}%22]&mesh_tuple=[%22MESH%22,%22{mesh_id}%22]"
+    )
+    split_curie = curie.split(":", maxsplit=1)
+    if len(split_curie) < 2:
+        return None
+    db, id = bioregistry_client.get_ns_id_from_bioregistry_curie(curie)
+    if id is None:
+        return None
+    id = id.split(":")[-1]
+    project_curie = project_curie.removesuffix(":Wiki")
+    project_disease_focus = project_to_disease_focus.get(project_curie, "")
 
-
-        if project_disease_focus == '':
-            return None
-        mesh_id = project_disease_focus[0].split(':', maxsplit=1)
-        if len(mesh_id)<2:
-            return None
-        return get_indra_url(db, id, mesh_id=mesh_id[1]), project_to_disease_focus[project_curie][1]
+    if project_disease_focus == "":
+        return None
+    mesh_id = project_disease_focus[0].split(":", maxsplit=1)
+    if len(mesh_id) < 2:
+        return None
+    return (
+        get_indra_url(db, id, mesh_id=mesh_id[1]),
+        project_to_disease_focus[project_curie][1],
+    )
 
 
 def add_indra_url_no_context(record, object_whole, subject_whole):
-    subject_curie = record.data()['subject']
+    subject_curie = record.data()["subject"]
     subject_indra_url = get_no_context_indra_url(curie=subject_curie)
     if subject_indra_url is not None:
-        subject_whole['Subject literature evidence'] = subject_indra_url 
-    object_curie = record.data()['object']
+        subject_whole["Subject literature evidence"] = subject_indra_url
+    object_curie = record.data()["object"]
     object_indra_url = get_no_context_indra_url(curie=object_curie)
     if object_indra_url is not None:
-        object_whole['Object literature evidence'] = object_indra_url      
+        object_whole["Object literature evidence"] = object_indra_url
     return subject_whole, object_whole
 
+
 def add_indra_url_with_context(record, object_whole, subject_whole):
-    subject_curie = record.data()['subject']
-    object_curie = record.data()['object']
+    subject_curie = record.data()["subject"]
+    object_curie = record.data()["object"]
     if subject_curie.startswith("syn"):
-        context_url = get_url_with_context_indra_url(curie=object_curie, project_curie=subject_curie)
+        context_url = get_url_with_context_indra_url(
+            curie=object_curie, project_curie=subject_curie
+        )
         if context_url is not None:
-            object_whole[f'Object {context_url[1]} context literature evidence'] = context_url[0]
+            object_whole[f"Object {context_url[1]} context literature evidence"] = (
+                context_url[0]
+            )
     elif object_curie.startswith("syn"):
-        context_url = get_url_with_context_indra_url(curie=subject_curie, project_curie=object_curie)
+        context_url = get_url_with_context_indra_url(
+            curie=subject_curie, project_curie=object_curie
+        )
         if context_url is not None:
-            subject_whole[f'Subject {context_url[1]} context literature evidence'] = context_url[0]
+            subject_whole[f"Subject {context_url[1]} context literature evidence"] = (
+                context_url[0]
+            )
     return subject_whole, object_whole
+
 
 # driver = GraphDatabase.driver('bolt://localhost:7687', )
 @app.get("/query")
@@ -132,8 +133,8 @@ def query_dispatch(
     other_agent: str = None,
     query_type: str = "Subject",
 ):
-    agent = agent.split(', ', maxsplit=1)[-1]
-    other_agent = other_agent.split(', ', maxsplit=1)[-1]
+    agent = agent.split(", ", maxsplit=1)[-1]
+    other_agent = other_agent.split(", ", maxsplit=1)[-1]
     if agent in names_mapping:
         agent = names_mapping[agent]
     if other_agent in names_mapping:
@@ -176,14 +177,10 @@ def relation_search(relation: str = None):
             for key in record.data()["whole_relation"]
         }
         subject_whole, object_whole = add_indra_url_no_context(
-            record=record,
-            object_whole=object_whole, 
-            subject_whole=subject_whole
+            record=record, object_whole=object_whole, subject_whole=subject_whole
         )
         subject_whole, object_whole = add_indra_url_with_context(
-            record=record, 
-            object_whole=object_whole, 
-            subject_whole=subject_whole
+            record=record, object_whole=object_whole, subject_whole=subject_whole
         )
         del subject_whole["Subject curie"]
         del object_whole["Object curie"]
@@ -227,18 +224,14 @@ def subject_search(
             f"Relation {key}": record.data()["whole_relation"][key]
             for key in record.data()["whole_relation"]
         }
-        
+
         del subject_whole["Subject curie"]
         del object_whole["Object curie"]
         subject_whole, object_whole = add_indra_url_no_context(
-            record=record,
-            object_whole=object_whole, 
-            subject_whole=subject_whole
+            record=record, object_whole=object_whole, subject_whole=subject_whole
         )
         subject_whole, object_whole = add_indra_url_with_context(
-            record=record, 
-            object_whole=object_whole, 
-            subject_whole=subject_whole
+            record=record, object_whole=object_whole, subject_whole=subject_whole
         )
         res.append(
             (
@@ -281,14 +274,10 @@ def object_search(
             for key in record.data()["whole_relation"]
         }
         subject_whole, object_whole = add_indra_url_no_context(
-            record=record,
-            object_whole=object_whole, 
-            subject_whole=subject_whole
+            record=record, object_whole=object_whole, subject_whole=subject_whole
         )
         subject_whole, object_whole = add_indra_url_with_context(
-            record=record, 
-            object_whole=object_whole, 
-            subject_whole=subject_whole
+            record=record, object_whole=object_whole, subject_whole=subject_whole
         )
         del subject_whole["Subject curie"]
         del object_whole["Object curie"]
@@ -308,13 +297,13 @@ def object_search(
 @app.get("/autoComplete")
 def Autocomplete(query: str, completion_type: str, k: int = 100):
     if completion_type != "relation":
-        res = ["".join(x) for x in entity_prefix_set.iter(prefix=query)][:k]
-        if len(res)>0:
+        res = ["".join(x) for x in node_prefix_set.iter(prefix=query)][:k]
+        if len(res) > 0:
             ret = []
             for x in res:
-                if x!=names_mapping[x]:
+                if x != names_mapping[x]:
                     ret.append(f"{x}, {names_mapping[x]}")
-                elif x!=inverse_names_mapping[x]:
+                elif x != inverse_names_mapping[x]:
                     ret.append(f"{x}, {inverse_names_mapping[x]}")
                 else:
                     ret.append(x)
@@ -323,3 +312,10 @@ def Autocomplete(query: str, completion_type: str, k: int = 100):
         res = ["".join(x) for x in edge_prefix_set.iter(prefix=query)][:k]
     return {"suggestions": res}
 
+
+
+## read in the graph as data frame.
+nodes_df = pandas.read_csv(f"/app/resources/nodes.tsv", sep="\t")
+edges_df = pandas.read_csv(f"/app/resources/edges.tsv", sep="\t")
+node_prefix_set, edge_prefix_set = load_prefix_sets(nodes_df, edges_df)
+names_mapping, inverse_names_mapping, project_to_disease_focus = load_mappings(nodes_df, edges_df)

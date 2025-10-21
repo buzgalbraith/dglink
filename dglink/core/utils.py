@@ -52,6 +52,21 @@ def write_graph(
         edge_set.write_edge_set(os.path.join(resource_path, edge_name))
     ## save all nodes and edges from multiple sources
 
+def filter_edge_set(
+        edge_set: EdgeSet,
+        filter_for:str
+):
+    """filter out edges of a certain type"""
+    filtered_edge_set = EdgeSet()
+    for edge_id in edge_set.edges:
+        edge = edge_set.edges[edge_id]
+        if edge[':TYPE'] != filter_for:
+            filtered_edge_set.edges[edge_id] = edge
+    filtered_edge_set.write_edge_set(
+        os.path.join(RESOURCE_PATH, "edges.tsv")
+    )
+    return filtered_edge_set
+
 
 def get_graph_for_source(
     node_set: NodeSet,

@@ -316,14 +316,13 @@ def get_experimental_data(
     cols_read = []
     i = 1
     for project_id in tqdm.tqdm(project_ids):
-
+        project_files = get_project_files(project_syn_id=project_id)
         logger.info(
             f"adding experimental data project {project_id}\n\
                     This is project {i} out of {len(project_ids)+1} \n\
                     There are {len(project_files)} total files to parse."
         )
         i = i + 1
-        project_files = get_project_files(project_syn_id=project_id)
         node_set, edge_set, files_read, cols_read = process_project(
             project_files=project_files,
             project_id=project_id,

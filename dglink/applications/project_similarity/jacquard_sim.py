@@ -4,8 +4,14 @@ from itertools import combinations
 import json
 import tqdm
 from math import comb
+import os
+from dglink import load_graph
+from dglink.core.utils import filter_edge_set
+from dglink.core.constants import SEMANTIC_SEARCH_RESOURCE_PATH
 
-RESOURCE_DIR = "dglink/graph_embedding/resources/"
+
+RESOURCE_DIR = "dglink/applications/project_similarity/resources"
+
 
 def check_related_study_exists(edges_df, id_1, id_2):
     """checks if a pair of studies has a related edge"""
@@ -13,6 +19,7 @@ def check_related_study_exists(edges_df, id_1, id_2):
     forward_df = df[(df[":START_ID"] == id_1) & (df[":END_ID"] == id_2)]
     backward_df = df[(df[":START_ID"] == id_2) & (df[":END_ID"] == id_1)]
     return (len(forward_df) + len(backward_df)) > 0
+
 
 def get_projects_to_edges(edges_df):
     """get mapping project_id -> entity -> edge_type, which is used for calculating jacquard sim"""
@@ -34,18 +41,18 @@ def get_projects_to_edges(edges_df):
         head_edges = edges_df.loc[
             edges_df[":START_ID"].isin([project_id, f"{project_id}:Wiki"]),
         ]
-        for x, _ in head_edges.groupby(by=[":END_ID", ":TYPE"]).first().itertuples():
-            if x[0] not in project_to_edges_map[project_id]:
-                project_to_edges_map[project_id][x[0]] = set()
-            project_to_edges_map[project_id][x[0]].add(x[1])
+        for x, _ in head_edges.groupby(by=[":END_ID", ":TYPE", "source:string[]"]).first().itertuples():
+            if x[1] not in project_to_edges_map[project_id]:
+                project_to_edges_map[project_id][x[1]] = set()
+            project_to_edges_map[project_id][x[1]].add(x[0])
         # get edges where that project (or its wiki) is the tail node
         tail_edges = edges_df.loc[
             edges_df[":END_ID"].isin([project_id, f"{project_id}:Wiki"]),
         ]
-        for x, _ in tail_edges.groupby(by=[":START_ID", ":TYPE"]).first().itertuples():
-            if x[0] not in project_to_edges_map[project_id]:
-                project_to_edges_map[project_id][x[0]] = set()
-            project_to_edges_map[project_id][x[0]].add(x[1])
+        for x, _ in tail_edges.groupby(by=[":START_ID", ":TYPE", "source:string[]"]).first().itertuples():
+            if x[1] not in project_to_edges_map[project_id]:
+                project_to_edges_map[project_id][x[1]] = set()
+            project_to_edges_map[project_id][x[1]].add(x[0])
     return project_to_edges_map, all_project_ids
 
 
@@ -112,29 +119,11 @@ def jacquard_sim(pid_1, pid_2):
     return jacquard_score, edge_attrs
 
 
-def write_edges_with_attrs(edges, path):
-    attributes = edges[0].keys()
-    with open(path, "w") as f:
-        f.write("\t".join(attributes) + "\n")
-        for edge in edges:
-            write_str = f""
-            for col in attributes:
-                val = edge[col]
-                if type(val) == set:
-                    # if len(val) > 20:
-                    #     val = list(val)[:20]  ## limit max number of elements to 20
-                    val = f'"{";".join(val)}"'
-                elif type(val) == dict:
-                    res = [":".join([x, str(val[x])]) for x in val]
-                    val = f'"{";".join(res)}"'
-                ## take out any weird line breaks
-
-                val = str(val).replace('"', "").replace("'", "")
-                write_str += val.replace("\n", "") + "\t"
-            f.write(write_str[:-1] + "\n")
 
 
 if __name__ == "__main__":
+    _, edge_set = load_graph()
+    edge_set = filter_edge_set(edge_set=edge_set, filter_for='predicted_relatedStudies_GL')
     edges_df = pandas.read_csv(
         f"{RESOURCE_DIR}/non_related_projects_edges.tsv", sep="\t"
     )
@@ -165,7 +154,7 @@ if __name__ == "__main__":
             }
         )
         if jacquard_score >= cutoff:
-            edges.append(edge_attrs)
+            edge_set.update_edges(edge_attrs)
 
     df = pandas.DataFrame.from_records(res)
     df.sort_values(by=["jacquard_score"])
@@ -173,9 +162,8 @@ if __name__ == "__main__":
     sorted_df = df[(df["entity_id2"] > n) & (df["entity_id1"] > n)].sort_values(
         by=["jacquard_score"]
     )
-    # sorted_df.to_csv("jac.csv")
+    sorted_df.to_csv("jac.csv")
 
-    write_edges_with_attrs(path="related_edges_gl.tsv", edges=edges)
 
     ## cutoff analysis
     cutoff = 0.15
@@ -186,5 +174,6 @@ if __name__ == "__main__":
     print(
         f"Total known {total}, remaining known : {remaining} ({remaining/total}), Total predicted {len(after_cutoff)}"
     )
-
-
+    edge_set.write_edge_set(
+        os.path.join(SEMANTIC_SEARCH_RESOURCE_PATH, "edges.tsv")
+    )

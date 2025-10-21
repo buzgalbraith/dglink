@@ -12,40 +12,42 @@ import gzip
 import torch
 from jacquard_sim import get_projects_to_edges, check_related_study_exists
 import pandas as pd
-import re 
-RESOURCE_DIR = 'dglink/graph_embedding/resources'
+import re
+
+RESOURCE_DIR = "dglink/applications/project_similarity/resources"
 all_project_ids = [
-    "syn2343195", ## large project
+    "syn2343195",  ## large project
     "syn5562324",  ## small project
-    "syn27761862", ## small project
-    "syn4939874",   ## large project
-    "syn4939876", ## locked
-    "syn4939906", ## small
-    "syn4939916", ## locked
-    "syn7217928", ## large
-    "syn8016635", ## small
-    "syn11638893", ## locked
-    "syn11817821", ## large
-    "syn21641813", ## locked
-    "syn21642027", ## locked
-    "syn21650493", ## large
-    "syn21984813", ## large
-    "syn23639889", ## locked
-    "syn51133914", ## locked
-    "syn52740594", ## large
+    "syn27761862",  ## small project
+    "syn4939874",  ## large project
+    "syn4939876",  ## locked
+    "syn4939906",  ## small
+    "syn4939916",  ## locked
+    "syn7217928",  ## large
+    "syn8016635",  ## small
+    "syn11638893",  ## locked
+    "syn11817821",  ## large
+    "syn21641813",  ## locked
+    "syn21642027",  ## locked
+    "syn21650493",  ## large
+    "syn21984813",  ## large
+    "syn23639889",  ## locked
+    "syn51133914",  ## locked
+    "syn52740594",  ## large
 ]
+
 
 def train_embedding_model(
     resource_dir=RESOURCE_DIR,
     model_name="TransE",
     epochs=100,
     save=True,
-    save_path="dglink/graph_embedding/embedding_test",
+    save_path="dglink/applications/project_similarity/embedding_test",
 ):
     """Trains a network embedding model with the PyKEEN pipeline. Return the model and entity_to_id mapping"""
     ## split the dataset
     # tf = TriplesFactory.from_path(edge_path)
-    edge_path = f'{resource_dir}/non_related_projects_edges.tsv'
+    edge_path = f"{resource_dir}/non_related_projects_edges.tsv"
     triples = load_triples(path=edge_path, column_remapping=(0, 2, 1))
     tf = TriplesFactory.from_labeled_triples(triples[1:])  ## drop header
     training, testing = tf.split()
@@ -62,7 +64,7 @@ def train_embedding_model(
     return result.model, result.training.entity_to_id
 
 
-def load_entity_to_id(save_path="dglink/graph_embedding/embedding_test"):
+def load_entity_to_id(save_path="dglink/applications/project_similarity/embedding_test"):
     """reads in entity to id mapping as dictionary"""
     id_path = f"{save_path}/training_triples/entity_to_id.tsv.gz"
     entity_to_id = {}
@@ -74,7 +76,7 @@ def load_entity_to_id(save_path="dglink/graph_embedding/embedding_test"):
     return entity_to_id
 
 
-def load_embedding_model(save_path="dglink/graph_embedding/embedding_test"):
+def load_embedding_model(save_path="dglink/applications/project_similarity/embedding_test"):
     """loads embedding model and entity_to_id mapping"""
     model = torch.load(f"{save_path}/trained_model.pkl", weights_only=False)
     entity_to_id = load_entity_to_id(save_path=save_path)
@@ -100,9 +102,6 @@ def cosine_dist(a, b):
     return 1 - sim
 
 
-
-
-
 if __name__ == "__main__":
     train = False
     model_name = "RotatE"
@@ -115,10 +114,12 @@ if __name__ == "__main__":
         )
     else:
         model, entity_to_id = load_embedding_model(
-            save_path="dglink/graph_embedding/embedding_test"
+            save_path="dglink/applications/project_similarity/embedding_test"
         )
     res = []
-    related_project_edges_df = pd.read_csv(f"{RESOURCE_DIR}/related_project_edges.tsv", sep="\t")
+    related_project_edges_df = pd.read_csv(
+        f"{RESOURCE_DIR}/related_project_edges.tsv", sep="\t"
+    )
     non_related_edges_df = pd.read_csv(
         f"{RESOURCE_DIR}/non_related_projects_edges.tsv", sep="\t"
     )

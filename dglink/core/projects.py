@@ -20,7 +20,7 @@ def get_projects(
 ):
     logger.info("loading in project nodes")
     to_url = lambda x: (
-        f"{studies_base_url}/{x}" if studies_base_url is not None else ""
+        f"{studies_base_url}={x}" if studies_base_url is not None else ""
     )
     for project_id in tqdm.tqdm(project_ids):
         node_set.update_nodes(

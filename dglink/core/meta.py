@@ -35,6 +35,7 @@ def get_entities_from_meta(
                 node_attributes = {
                     "curie:ID": entry,
                     ":LABEL": field,
+                    "name" : entry,
                     "columns:string[]": "metadata",
                     "raw_texts:string[]": entry,
                     "source:string[]": "metadata",

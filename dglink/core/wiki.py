@@ -19,7 +19,7 @@ def get_entities_from_wiki(
     ## add a node for that wiki, and a link between the project and this wiki node.
     wiki_id = f"{study_wiki.ownerId}:Wiki"
     to_url = lambda x: (
-        f"{studies_base_url}/{x.ownerId}" if studies_base_url is not None else ""
+        f"{studies_base_url}={x.ownerId}" if studies_base_url is not None else ""
     )
     node_set.update_nodes(
         {

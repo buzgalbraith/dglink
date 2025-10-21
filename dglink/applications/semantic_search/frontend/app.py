@@ -16,11 +16,11 @@ def process_results(raw_results):
                 load = ast.literal_eval(ent.split(":", 1)[1].strip())
                 for key in load:
                     val = load[key]
-                    if (key.split(" ")[-1] == "iri") \
-                        or \
-                        (key.split(" ")[-1] == "project_url") \
-                        or \
-                        (key.split(" ")[-1] == "evidence"):
+                    if (
+                        (key.split(" ")[-1] == "iri")
+                        or (key.split(" ")[-1] == "study_url")
+                        or (key.split(" ")[-1] == "evidence")
+                    ):
                         processed_row.append(
                             {
                                 "text": f"{val}",
