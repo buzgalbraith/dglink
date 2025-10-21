@@ -7,7 +7,8 @@ from bioregistry import normalize_curie, get_bioregistry_iri
 from indra.ontology.bio import bio_ontology
 import tqdm
 import logging
-import os 
+import os
+
 logger = logging.getLogger(__name__)
 
 
@@ -71,7 +72,7 @@ def get_wikis(
     edge_set: EdgeSet,
     wiki_fields,
     studies_base_url,
-    write_set : bool = False
+    write_set: bool = False,
 ):
     logger.info("Getting project Wikis.")
     for project_id in tqdm.tqdm(project_ids):
@@ -85,11 +86,11 @@ def get_wikis(
         )
     if write_set:
         write_graph(
-            node_set=node_set, 
+            node_set=node_set,
             edge_set=edge_set,
             source_filter=True,
             strict=True,
-            source_name='wiki', 
-            resource_path=os.path.join(RESOURCE_PATH, 'artifacts')
+            source_name="wiki",
+            resource_path=os.path.join(RESOURCE_PATH, "artifacts"),
         )
     return node_set, edge_set

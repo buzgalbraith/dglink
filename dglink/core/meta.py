@@ -7,13 +7,19 @@ from bioregistry import normalize_curie, get_bioregistry_iri
 from indra.ontology.bio import bio_ontology
 import tqdm
 import logging
-import os 
+import os
+
 logger = logging.getLogger(__name__)
+
+
 def get_entities_from_meta(
-    study_metadata, ground_fields, unground_fields,  node_set: NodeSet, edge_set: EdgeSet,
+    study_metadata,
+    ground_fields,
+    unground_fields,
+    node_set: NodeSet,
+    edge_set: EdgeSet,
 ):
-    """parse entities from project metadata.
-    """
+    """parse entities from project metadata."""
     for field in ground_fields + unground_fields:
         if field in study_metadata.keys():
             field_val = (
@@ -31,7 +37,7 @@ def get_entities_from_meta(
                     ":LABEL": field,
                     "columns:string[]": "metadata",
                     "raw_texts:string[]": entry,
-                    "source:string[]" : "metadata"
+                    "source:string[]": "metadata",
                 }
                 if field in ground_fields:
                     ans = gilda.annotate(entry)
@@ -46,7 +52,7 @@ def get_entities_from_meta(
                             "iri": get_bioregistry_iri(nsid.db, nsid.id),
                             "raw_texts:string[]": entry,
                             "columns:string[]": "metadata",
-                            "source:string[]" : "metadata"
+                            "source:string[]": "metadata",
                         }
                         # edge_set.add((study_metadata.id, curie, f"has_{field}"))
                         edge_set.update_edges(
@@ -70,34 +76,32 @@ def get_entities_from_meta(
     return node_set, edge_set
 
 
-
 def get_meta(
     project_ids: list,
     node_set: NodeSet,
     edge_set: EdgeSet,
-    ground_field: list, 
+    ground_field: list,
     ungrounded_field: list,
-    write_set:bool = False
+    write_set: bool = False,
 ):
-    """pull all fields from a series of project meta data.
-    """
+    """pull all fields from a series of project meta data."""
     logger.info("starting meta data pull")
     for project_id in tqdm.tqdm(project_ids):
         study_metadata = syn.get(project_id)
         node_set, edge_set = get_entities_from_meta(
             study_metadata=study_metadata,
-            ground_fields=ground_field, 
+            ground_fields=ground_field,
             unground_fields=ungrounded_field,
             node_set=node_set,
-            edge_set=edge_set
+            edge_set=edge_set,
         )
     if write_set:
         write_graph(
-            node_set=node_set, 
+            node_set=node_set,
             edge_set=edge_set,
             strict=True,
             source_filter=True,
-            source_name='metadata',
-            resource_path=os.path.join(RESOURCE_PATH, 'artifacts')
+            source_name="metadata",
+            resource_path=os.path.join(RESOURCE_PATH, "artifacts"),
         )
     return node_set, edge_set

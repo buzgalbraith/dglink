@@ -8,8 +8,14 @@ from pathlib import Path
 from functools import lru_cache
 from indra.ontology.bio import bio_ontology
 from bioregistry import normalize_curie, get_bioregistry_iri
+import tqdm
 import gilda
-def get_project_files(project_syn_id,syn=syn ,file_types=FILE_TYPES):
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+def get_project_files(project_syn_id, syn=syn, file_types=FILE_TYPES):
     """
     returns a set of all files associated with a given synapse project id.
     """
@@ -26,6 +32,7 @@ def get_project_files(project_syn_id,syn=syn ,file_types=FILE_TYPES):
                 if os.path.splitext(filename[0])[1] in file_types:
                     project_files.add(filename)
     return project_files
+
 
 def filter_df(df, base_cols, nan_percentage=0.1, max_types=5):
     """filter the raw entity df removing columns with less than some percentage of entites found or more than some number of types"""
@@ -49,6 +56,7 @@ def filter_df(df, base_cols, nan_percentage=0.1, max_types=5):
     final = res.drop(columns=cols_to_drop)
     base_cols = [x for x in base_cols if f"{x}_type" in final.columns]
     return final, base_cols
+
 
 def get_frictionless_package(pth):
     pac = Package()
@@ -92,6 +100,7 @@ def get_frictionless_package(pth):
         res.schema = raw_schema
     return pac
 
+
 def frictionless_file_reader(obj, max_size_bytes=100 * 1024 * 1024):
     """
     reads in files from a synapse file object with frictionless. Returns files as a dictionary for working with sheets
@@ -105,16 +114,14 @@ def frictionless_file_reader(obj, max_size_bytes=100 * 1024 * 1024):
     pth = Path(obj.path)
     file_size = os.path.getsize(pth)
     if file_size > max_size_bytes:
-        print("file to large to read")
+        logger.info("file to large to read")
         return {}
     ## load file contents into frictionless package
     pack = get_frictionless_package(pth=pth)
     ## load frictionless package into dictionary of pandas data frames
     df_dict = {}
-    for res in pack.resources:        
-        df_dict[res.name] = pandas.DataFrame(
-            res.read_rows()
-        )  # stream rows directly
+    for res in pack.resources:
+        df_dict[res.name] = pandas.DataFrame(res.read_rows())  # stream rows directly
     return df_dict
 
 
@@ -151,7 +158,10 @@ def apply_ground(row):
         ) = cached_annotate(row[col], col)
     return pandas.Series(result)
 
-def extract_df_graph(df, cols, project_id, file_id, node_set: NodeSet, edge_set: EdgeSet):
+
+def extract_df_graph(
+    df, cols, project_id, file_id, node_set: NodeSet, edge_set: EdgeSet
+):
     """extract nodes and edges form df"""
     for _, row in df.iterrows():
         for col in cols:
@@ -166,7 +176,7 @@ def extract_df_graph(df, cols, project_id, file_id, node_set: NodeSet, edge_set:
                     str(row[f"{col}_column_name"]).replace('"', "").replace("'", "")
                 )
                 iri = str(row[f"{col}_iri"]).replace('"', "").replace("'", "")
-                attributes={
+                attributes = {
                     "curie:ID": entity,
                     ":LABEL": entity_type,
                     "name": entity_name,
@@ -174,21 +184,20 @@ def extract_df_graph(df, cols, project_id, file_id, node_set: NodeSet, edge_set:
                     "columns:string[]": column_name,
                     "iri": iri,
                     "file_id:string[]": file_id,
-                    "source:string[]" : 'experimental_data'
+                    "source:string[]": "experimental_data",
                 }
                 node_set.update_nodes(new_node=attributes)
                 edge_set.update_edges(
                     {
-                        {
-                            ":START_ID": project_id,
-                            ":END_ID": entity,
-                            ":TYPE": f"has_{entity_type}",
-                            "source:string[]": "experimental_data",
-                        }
+                        ":START_ID": project_id,
+                        ":END_ID": entity,
+                        ":TYPE": f"has_{entity_type}",
+                        "source:string[]": "experimental_data",
                     }
                 )
 
     return node_set, edge_set
+
 
 def check_df_readable(df, max_unnamed=2):
     """determine if a given data frame was correctly read in"""
@@ -204,7 +213,6 @@ def check_df_readable(df, max_unnamed=2):
     return can_read, df
 
 
-
 def load_file(syn_file_id, project_id):
     """
     Reads in the content of the file as a list of data frames to accommodate multiple sheets
@@ -212,24 +220,25 @@ def load_file(syn_file_id, project_id):
     try:
         obj = syn.get(syn_file_id)
     except:
-        return [ ] , [{
-                        "project_id": project_id,
-                        "file_id": "_",
-                        "file_path": str(syn_file_id),
-                        "can_read": False,
-                        "reason": "Locked",
-                        "sheet": "all",
-                    }]
+        return [], {
+            "project_id": project_id,
+            "file_id": "_",
+            "file_path": str(syn_file_id),
+            "can_read": False,
+            "reason": "Locked",
+            "sheet": "all",
+        }
     df_dict = frictionless_file_reader(obj)
     if len(df_dict) < 1:
-        return [] ,[ {
+        return [], {
             "project_id": project_id,
             "file_id": "_",
             "file_path": syn_file_id,
             "can_read": False,
             "reason": "Locked",
             "sheet": "all",
-        }]
+        }
+
     dfs = []
     read_states = []
     for sheet in df_dict:
@@ -251,10 +260,18 @@ def load_file(syn_file_id, project_id):
         dfs.append(df)
     return dfs, read_states
 
-def process_project(project_files, project_id, node_set:NodeSet, edge_set:EdgeSet, cols_read:list = [], files_read:list = []):
-    for sny_file_id in project_files:
+
+def process_project(
+    project_files,
+    project_id,
+    node_set: NodeSet,
+    edge_set: EdgeSet,
+    cols_read: list = [],
+    files_read: list = [],
+):
+    for _, sny_file_id in tqdm.tqdm(project_files):
         dfs, read_states = load_file(syn_file_id=sny_file_id, project_id=project_id)
-        if len(dfs) < 1: 
+        if len(dfs) < 1:
             files_read.append(read_states)
         else:
             for df, read_state in zip(dfs, read_states):
@@ -265,50 +282,79 @@ def process_project(project_files, project_id, node_set:NodeSet, edge_set:EdgeSe
                     entity_df = df.apply(apply_ground, axis=1)
                     entity_df, base_cols = filter_df(entity_df, base_cols)
                     node_set, edge_set = extract_df_graph(
-                        entity_df, base_cols, project_id, read_state[1], nodes=node_set, edge_set=edge_set
+                        entity_df,
+                        base_cols,
+                        project_id,
+                        read_state["file_id"],
+                        node_set=node_set,
+                        edge_set=edge_set,
                     )
                     for col in base_cols:
                         cols_read.append(
                             {
                                 "project_id": project_id,
-                                "file_id":read_state[1],
-                                "file_path": read_state[2],
-                                "sheet": read_state[-1],
+                                "file_id": read_state["file_id"],
+                                "file_path": read_state["file_path"],
+                                "sheet": read_state["sheet"],
                                 "col": col,
                             }
                         )
     return node_set, edge_set, files_read, cols_read
 
 
-def get_experimental_data(project_ids: list, node_set:NodeSet, edge_set:EdgeSet, write_set:bool = True, write_reports:bool = True):
+def get_experimental_data(
+    project_ids: list,
+    node_set: NodeSet,
+    edge_set: EdgeSet,
+    write_set: bool = False,
+    write_reports: bool = True,
+    write_intermediate: bool = True,
+):
     """main loop for adding experimental data to KG"""
+    logger.info(f"Adding experimental data for {len(project_ids)} projects")
     files_read = []
     cols_read = []
-    for project_id in project_ids:
+    i = 1
+    for project_id in tqdm.tqdm(project_ids):
+
+        logger.info(
+            f"adding experimental data project {project_id}\n\
+                    This is project {i} out of {len(project_ids)+1} \n\
+                    There are {len(project_files)} total files to parse."
+        )
+        i = i + 1
         project_files = get_project_files(project_syn_id=project_id)
         node_set, edge_set, files_read, cols_read = process_project(
-            project_files=project_files, 
+            project_files=project_files,
             project_id=project_id,
-            node_set=node_set, 
-            edge_set=edge_set, 
-            files_read = files_read, 
-            cols_read = cols_read
+            node_set=node_set,
+            edge_set=edge_set,
+            files_read=files_read,
+            cols_read=cols_read,
         )
+        if write_intermediate:
+            write_graph(
+                node_set=node_set,
+                edge_set=edge_set,
+                source_filter=True,
+                strict=True,
+                source_name="experimental_data",
+                resource_path=os.path.join(RESOURCE_PATH, "artifacts"),
+            )
     files_df = pandas.DataFrame(data=files_read)
     cols_df = pandas.DataFrame(data=cols_read)
     ## write a sub-graph with just experimental data
     if write_set:
         write_graph(
-            node_set=node_set, 
+            node_set=node_set,
             edge_set=edge_set,
             source_filter=True,
             strict=True,
-            source_name='experimental_data',
-            resource_path=os.path.join(RESOURCE_PATH, 'artifacts')
+            source_name="experimental_data",
+            resource_path=os.path.join(RESOURCE_PATH, "artifacts"),
         )
     if write_reports:
         files_df.to_csv("file_report.tsv", sep="\t", index=False)
         cols_df.to_csv("col_report.tsv", sep="\t", index=False)
-
 
     return node_set, edge_set, [files_df, cols_df]

@@ -35,7 +35,7 @@ def get_all_nf_studies():
     return pandas.read_csv(nf_studies_path, sep="\t")["studyId"].to_list()
 
 
-def get_publications(node_set: NodeSet, edge_set: EdgeSet, write_set:bool = False):
+def get_publications(node_set: NodeSet, edge_set: EdgeSet, write_set: bool = False):
     """pulls nodes for publications and adds edges from them to related studies from NF Data Portal"""
     query = syn.tableQuery("SELECT * FROM syn16857542")
     df = query.asDataFrame()
@@ -63,14 +63,15 @@ def get_publications(node_set: NodeSet, edge_set: EdgeSet, write_set:bool = Fals
             )
     if write_set:
         write_graph(
-            node_set=node_set, 
+            node_set=node_set,
             edge_set=edge_set,
             source_filter=True,
             strict=True,
-            source_name='publications',
-            resource_path=os.path.join(RESOURCE_PATH, 'artifacts')
+            source_name="publications",
+            resource_path=os.path.join(RESOURCE_PATH, "artifacts"),
         )
     return node_set, edge_set
+
 
 def get_tool_nodes(node_set: NodeSet):
     """returns a set with all tool nodes and a mapping from any name (or synonym) to its curie"""
@@ -93,8 +94,8 @@ def get_tool_nodes(node_set: NodeSet):
                 "curie:ID": rrid,
                 ":LABEL": "tool",
                 "name": row.resourceName,
-                "tool_type": row.resourceType, 
-                'iri' : iri,
+                "tool_type": row.resourceType,
+                "iri": iri,
                 "source:string[]": "tools",
             },
         )
@@ -105,7 +106,8 @@ def get_tool_nodes(node_set: NodeSet):
 
     return node_set, name_to_rid
 
-def get_tool_edges(project_ids: list, name_to_rid: dict, edge_set:EdgeSet):
+
+def get_tool_edges(project_ids: list, name_to_rid: dict, edge_set: EdgeSet):
     """parse file meta data for each project in a list of projects, to extract links between tools and projects.
     Simply checks if the name or (or synonym) of each tool is in the file individualID or any specimenID.
     """
@@ -136,18 +138,23 @@ def get_tool_edges(project_ids: list, name_to_rid: dict, edge_set:EdgeSet):
                 )
     return edge_set
 
-def get_tools(node_set:NodeSet, edge_set:EdgeSet, project_ids : list, write_set : bool = False ):
+
+def get_tools(
+    node_set: NodeSet, edge_set: EdgeSet, project_ids: list, write_set: bool = False
+):
     logger.info("Getting nodes for NF Data Portal tools")
     node_set, name_to_rid = get_tool_nodes(node_set=node_set)
     logger.info("Searching project metadata for NF Data Portal tools")
-    edge_set = get_tool_edges(project_ids=project_ids, edge_set=edge_set, name_to_rid=name_to_rid)
+    edge_set = get_tool_edges(
+        project_ids=project_ids, edge_set=edge_set, name_to_rid=name_to_rid
+    )
     if write_set:
         write_graph(
-            node_set=node_set, 
+            node_set=node_set,
             edge_set=edge_set,
             source_filter=True,
             strict=True,
-            source_name='tools',
-            resource_path=os.path.join(RESOURCE_PATH, 'artifacts')
+            source_name="tools",
+            resource_path=os.path.join(RESOURCE_PATH, "artifacts"),
         )
     return node_set, edge_set

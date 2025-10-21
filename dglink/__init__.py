@@ -4,6 +4,7 @@ from .core.utils import load_graph, write_graph, write_graph_and_artifacts_defau
 from .core.wiki import get_wikis
 from .core.meta import get_meta
 from .core.projects import get_projects
+from .core.experimental_data import get_experimental_data
 import logging
 
 logging.basicConfig(

@@ -37,10 +37,10 @@ FILE_TYPES = [
 
 
 RESOURCE_TYPES = [
-    'metadata',
-    'projects',
-    'publications',
-    'wiki',
-    'tools',
-    'experimental_data'
+    "metadata",
+    "projects",
+    "publications",
+    "wiki",
+    "tools",
+    "experimental_data",
 ]
