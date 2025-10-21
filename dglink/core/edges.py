@@ -4,7 +4,9 @@ from dglink.core.constants import EDGE_ATTRIBUTES
 
 
 class Edge:
-    def __init__(self, attribute_names: list = EDGE_ATTRIBUTES, attributes: dict = None):
+    def __init__(
+        self, attribute_names: list = EDGE_ATTRIBUTES, attributes: dict = None
+    ):
         if attribute_names is not None:
             self.attribute_names = attribute_names
             self.attributes = {attribute: "" for attribute in self.attribute_names}
@@ -45,7 +47,10 @@ class Edge:
 
 class EdgeSet:
     def __init__(
-        self, edge_set_name: str = "", edge_type: str = "", attributes: list = EDGE_ATTRIBUTES
+        self,
+        edge_set_name: str = "",
+        edge_type: str = "",
+        attributes: list = EDGE_ATTRIBUTES,
     ):
         self.edge_set_name = edge_set_name
         self.path = ""
@@ -65,12 +70,12 @@ class EdgeSet:
             rep += f"{edge}:{str(self.edges[edge])}\n"
         return rep
 
-    def update_edges(self, new_edge:dict, new_edge_id = None):
+    def update_edges(self, new_edge: dict, new_edge_id=None):
         self.set_attributes = [x for x in self.attributes if "string[]" in x]
-        new_edge_id_1 = new_edge_id or new_edge.get(':START_ID', 'no_start')
-        new_edge_id_2 = new_edge_id or new_edge.get(':END_ID', 'no_end')
-        new_edge_id_3 = new_edge_id or new_edge.get(':TYPE', 'no_type')
-        new_edge_id = f'{new_edge_id_1}_{new_edge_id_2}:{new_edge_id_3}' or new_edge_id
+        new_edge_id_1 = new_edge_id or new_edge.get(":START_ID", "no_start")
+        new_edge_id_2 = new_edge_id or new_edge.get(":END_ID", "no_end")
+        new_edge_id_3 = new_edge_id or new_edge.get(":TYPE", "no_type")
+        new_edge_id = f"{new_edge_id_1}_{new_edge_id_2}:{new_edge_id_3}" or new_edge_id
         if new_edge_id in self.edges:
             for attribute in self.set_attributes:
                 attr_val = new_edge.get(attribute, "")
@@ -84,6 +89,9 @@ class EdgeSet:
                     self.edges[new_edge_id][attribute] = attr_val
                 else:
                     if attr_val != "":
+                        attr_val = (
+                            set([attr_val]) if type(attr_val) == str else attr_val
+                        )
                         self.edges[new_edge_id][attribute] = set(attr_val)
                     else:
                         self.edges[new_edge_id][attribute] = set()
@@ -101,8 +109,8 @@ class EdgeSet:
                 head = row.iloc[0]
                 tail = row.iloc[1]
                 relation = row.iloc[2]
-                edge_id = f'{head}_{tail}_{relation}'
-                self.edges[edge_id] = Edge(attribute_names=self.attributes)
+                edge_id = f"{head}_{tail}_{relation}"
+                self.edges[edge_id] = dict()
                 for i, attribute in enumerate(self.attributes):
                     val = row.iloc[i]
                     if ":string[]" in attribute:

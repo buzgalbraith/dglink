@@ -1,4 +1,6 @@
-NF_STUDIES_BASE_URL = "https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId"
+NF_STUDIES_BASE_URL = (
+    "https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId"
+)
 GROUND_FIELDS = [
     "manifestation",
     "diseaseFocus",

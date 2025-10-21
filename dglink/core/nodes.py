@@ -4,7 +4,9 @@ from dglink.core.constants import NODE_ATTRIBUTES
 
 
 class Node:
-    def __init__(self, attribute_names: list = NODE_ATTRIBUTES, attributes: dict = None):
+    def __init__(
+        self, attribute_names: list = NODE_ATTRIBUTES, attributes: dict = None
+    ):
         if attribute_names is not None:
             self.attribute_names = attribute_names
             self.attributes = {attribute: "" for attribute in self.attribute_names}
@@ -45,7 +47,10 @@ class Node:
 
 class NodeSet:
     def __init__(
-        self, node_set_name: str = "", node_type: str = "", attributes: list = NODE_ATTRIBUTES
+        self,
+        node_set_name: str = "",
+        node_type: str = "",
+        attributes: list = NODE_ATTRIBUTES,
     ):
         self.node_set_name = node_set_name
         self.path = ""
@@ -65,9 +70,9 @@ class NodeSet:
             rep += f"{node}:{str(self.nodes[node])}\n"
         return rep
 
-    def update_nodes(self, new_node:dict, new_node_id = None):
+    def update_nodes(self, new_node: dict, new_node_id=None):
         self.set_attributes = [x for x in self.attributes if "string[]" in x]
-        new_node_id = new_node_id or new_node.get('curie:ID', 'no_id')
+        new_node_id = new_node_id or new_node.get("curie:ID", "no_id")
         if new_node_id in self.nodes:
             for attribute in self.set_attributes:
                 attr_val = new_node.get(attribute, "")
@@ -81,7 +86,9 @@ class NodeSet:
                     self.nodes[new_node_id][attribute] = attr_val
                 else:
                     if attr_val != "":
-                        attr_val = set([attr_val]) if type(attr_val) == str else attr_val
+                        attr_val = (
+                            set([attr_val]) if type(attr_val) == str else attr_val
+                        )
                         self.nodes[new_node_id][attribute] = attr_val
                     else:
                         self.nodes[new_node_id][attribute] = set()
@@ -97,13 +104,12 @@ class NodeSet:
             # set index as first col assuming that is the id
             for _, row in df.iterrows():
                 curie = row.iloc[0]
-                self.nodes[curie] = Node(attribute_names=self.attributes)
+                self.nodes[curie] = dict()
                 for i, attribute in enumerate(self.attributes):
                     val = row.iloc[i]
                     if ":string[]" in attribute:
                         val = set(str(val).replace('"', "").replace("'", "").split(";"))
                     self.nodes[curie][attribute] = val
-        
 
     def write_node_set(self, path):
         with open(path, "w") as f:

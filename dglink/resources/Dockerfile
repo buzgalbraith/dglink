@@ -26,16 +26,13 @@ RUN wget https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/downloa
 RUN echo "dbms.security.procedures.unrestricted=apoc.*" >> /etc/neo4j/neo4j.conf
 RUN echo "apoc.export.file.enabled=true" >> /etc/neo4j/neo4j.conf
 
-COPY entity_nodes.tsv /sw/entity_nodes.tsv
-COPY project_nodes.tsv /sw/project_nodes.tsv
-COPY edges.tsv /sw/edges.tsv
+COPY graph /sw/
 # Ingest graph content into neo4j
 RUN sed -i 's/#dbms.default_listen_address/dbms.default_listen_address/' /etc/neo4j/neo4j.conf
 RUN sed -i 's/#dbms.security.auth_enabled/dbms.security.auth_enabled/' /etc/neo4j/neo4j.conf
 RUN neo4j-admin import --delimiter='TAB' --skip-duplicate-nodes=true --skip-bad-relationships=true \
     --relationships /sw/edges.tsv \
-    --nodes /sw/entity_nodes.tsv \
-    --nodes /sw/project_nodes.tsv 
+    --nodes /sw/nodes.tsv 
 ENV DOCKERIZED="TRUE"
 ENV NEO4J_URL="bolt://localhost:7687"
 
