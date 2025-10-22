@@ -38,22 +38,24 @@ if __name__ == "__main__":
         node_set=node_set,
         edge_set=edge_set,
         studies_base_url=NF_STUDIES_BASE_URL,
+        write_set=True
     )
 
-    # # # 3. parse the project wikis
+    # # 3. parse the project wikis
     node_set, edge_set = get_wikis(
         node_set=node_set,
         edge_set=edge_set,
         project_ids=projects_ids,
         wiki_fields=WIKI_FIELDS,
         studies_base_url=NF_STUDIES_BASE_URL,
+        write_set=True
     )
-    # # 4. parse the nf data portal publications
-    node_set, edge_set = get_publications(node_set=node_set, edge_set=edge_set)
+    # 4. parse the nf data portal publications
+    node_set, edge_set = get_publications(node_set=node_set, edge_set=edge_set, write_set=True)
     # # 5. get tool edges
-    # logger.info("Adding NF Data Portal Tools registry to KG")
+    logger.info("Adding NF Data Portal Tools registry to KG")
     node_set, edge_set = get_tools(
-        node_set=node_set, edge_set=edge_set, project_ids=projects_ids[:5]
+        node_set=node_set, edge_set=edge_set, project_ids=projects_ids, write_set=True
     )
     node_set, edge_set = get_meta(
         project_ids=projects_ids,
@@ -61,6 +63,7 @@ if __name__ == "__main__":
         edge_set=edge_set,
         ground_field=GROUND_FIELDS,
         ungrounded_field=UNGROUNDED_FIELDS,
+        write_set=True
     )
     # load in experimental data
     node_set, edge_set, reports = get_experimental_data(
@@ -88,6 +91,7 @@ if __name__ == "__main__":
         node_set=node_set,
         edge_set=edge_set,
         write_intermediate=True,
+        write_set=True
     )
     # 5. write the graph for neo4j reading
     write_graph_and_artifacts_default(

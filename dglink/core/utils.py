@@ -161,23 +161,23 @@ def write_graph_and_artifacts_default(
 
 
 def merge_resource_sets(
-    resource_path: str = RESOURCE_PATH, write_resource: bool = True
+    artifacts_path: str = os.path.join(RESOURCE_PATH, 'artifacts'), write_resource: bool = True
 ):
     """merges all resource sets saved at a given path"""
-    resource_files = os.listdir(resource_path)
+    resource_files = os.listdir(artifacts_path)
     node_sets = filter(lambda x: x.startswith("nodes"), resource_files)
     edge_sets = filter(lambda x: x.startswith("edges"), resource_files)
     full_node_set = NodeSet()
     full_edge_set = EdgeSet()
     for node_path in node_sets:
         node_set = NodeSet()
-        node_set.load_node_set(os.path.join(resource_path, node_path))
+        node_set.load_node_set(os.path.join(artifacts_path, node_path))
         for node_id in node_set.nodes:
             if node_id not in full_node_set.nodes:
                 full_node_set.update_nodes(node_set.nodes[node_id])
     for edge_path in edge_sets:
         edge_set = EdgeSet()
-        edge_set.load_edge_set(os.path.join(resource_path, edge_path))
+        edge_set.load_edge_set(os.path.join(artifacts_path, edge_path))
         for edge_id in edge_set.edges:
             if edge_id not in full_edge_set.edges:
                 full_edge_set.update_edges(edge_set.edges[edge_id])
