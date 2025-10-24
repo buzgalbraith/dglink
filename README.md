@@ -1,5 +1,5 @@
 # DGLink
-DGLink introducies semantic interoperability within data portals through automated metadata extraction and knowledge graph construction. DGLink connects data semantically within a data portal and maps data to external knowledge to enable knowledge-driven data interpretation and discovery.
+DGLink introduces semantic interoperability within data portals through automated metadata extraction and knowledge graph construction. DGLink connects data semantically within a data portal and maps data to external knowledge to enable knowledge-driven data interpretation and discovery.
 
 ## Structure 
 1. `dglink/kg_construction` - for programmatically building the knowledge graph from Synapse data. 
