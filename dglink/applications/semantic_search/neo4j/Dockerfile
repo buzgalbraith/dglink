@@ -32,7 +32,8 @@ RUN sed -i 's/#dbms.default_listen_address/dbms.default_listen_address/' /etc/ne
 RUN sed -i 's/#dbms.security.auth_enabled/dbms.security.auth_enabled/' /etc/neo4j/neo4j.conf
 RUN neo4j-admin import --delimiter='TAB' --skip-duplicate-nodes=true --skip-bad-relationships=true \
     --relationships /sw/edges.tsv \
-    --nodes /sw/nodes.tsv 
+    --nodes /sw/nodes.tsv
+
 ENV DOCKERIZED="TRUE"
 ENV NEO4J_URL="bolt://localhost:7687"
 
