@@ -21,7 +21,8 @@ dependencies = [
 dev = [
 	'ipdb',
 	'jedi',
-    'black',
+	'black',
+	'pylint',
 ]
 graph_embedding = [
     'pykeen'

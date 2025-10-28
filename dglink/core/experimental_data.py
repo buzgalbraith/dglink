@@ -11,13 +11,16 @@ from bioregistry import normalize_curie, get_bioregistry_iri
 import tqdm
 import gilda
 import logging
+from typing import Union
+
 
 logger = logging.getLogger(__name__)
 
 
-def get_project_files(project_syn_id, syn=syn, file_types=FILE_TYPES):
+def get_project_files(project_syn_id, syn=syn, file_types:Union[list, None]=FILE_TYPES):
     """
     returns a set of all files associated with a given synapse project id.
+    By default just parses tabular files, if file_types is set to None, parses all files
     """
     project_files = set()
     for _, _, filenames in walk(
@@ -29,9 +32,13 @@ def get_project_files(project_syn_id, syn=syn, file_types=FILE_TYPES):
     ):
         if len(filenames) > 0:
             for filename in filenames:
-                if os.path.splitext(filename[0])[1] in file_types:
+                if file_types is not None:
+                    if os.path.splitext(filename[0])[1] in file_types:
+                        project_files.add(filename)
+                else:
                     project_files.add(filename)
     return project_files
+
 
 
 def filter_df(df, base_cols, nan_percentage=0.1, max_types=5):
