@@ -5,6 +5,7 @@ import synapseclient
 syn = synapseclient.login()
 DGLINK_CACHE = Path.joinpath(Path(os.getenv("HOME")), ".dglink")
 RESOURCE_PATH = "dglink/resources/graph/"
+REPORT_PATH = "dglink/resources/reports/"
 SEMANTIC_SEARCH_RESOURCE_PATH = "dglink/applications/semantic_search/neo4j/graph"
 NODE_ATTRIBUTES = [
     "curie:ID",

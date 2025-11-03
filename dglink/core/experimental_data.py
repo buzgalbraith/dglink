@@ -1,5 +1,5 @@
 from dglink import NodeSet, EdgeSet, write_graph
-from dglink.core.constants import syn, FILE_TYPES, RESOURCE_PATH
+from dglink.core.constants import syn, FILE_TYPES, RESOURCE_PATH, REPORT_PATH
 from synapseutils import walk
 import os
 from frictionless import Schema, Resource, formats, Package
@@ -360,7 +360,8 @@ def get_experimental_data(
             resource_path=os.path.join(RESOURCE_PATH, "artifacts"),
         )
     if write_reports:
-        files_df.to_csv("file_report.tsv", sep="\t", index=False)
-        cols_df.to_csv("col_report.tsv", sep="\t", index=False)
+        os.makedirs(REPORT_PATH, exist_ok=True)
+        files_df.to_csv(os.path.join(REPORT_PATH,"file_report.tsv"), sep="\t", index=False)
+        cols_df.to_csv(os.path.join(REPORT_PATH,"col_report.tsv"), sep="\t", index=False)
 
     return node_set, edge_set, [files_df, cols_df]
