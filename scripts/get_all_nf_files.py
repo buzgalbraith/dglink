@@ -1,3 +1,6 @@
+"""
+Gets a list of all files from the NF data portal and their extensions.
+"""
 from dglink.core.experimental_data import get_project_files
 from dglink.portals.nf_data_portal import get_all_nf_studies
 from synapseutils import walk
