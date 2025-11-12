@@ -2,8 +2,8 @@
 Gets a list of all files from the NF data portal and their extensions.
 """
 from dglink.core.experimental_data import get_project_files
+from dglink.core.constants import REPORT_PATH
 from dglink.portals.nf_data_portal import get_all_nf_studies
-from synapseutils import walk
 import os
 import pandas
 import tqdm
@@ -26,4 +26,5 @@ if __name__ == "__main__":
             )
     ## write to tsv
     files_df = pandas.DataFrame.from_records(all_files)
-    files_df.to_csv("file_types.tsv", sep="\t", index=False)
+    os.makedirs(REPORT_PATH, exist_ok=True)
+    files_df.to_csv(os.path.join(REPORT_PATH, "file_type_report.tsv"), sep="\t", index=False)
