@@ -129,6 +129,6 @@ class EdgeSet:
                             val = list(val)[:20]  ## limit max number of elements to 20
                         val = f'"{";".join(val)}"'
                     ## take out any weird line breaks
-                    val = val if type(val) == str else str(type)
+                    val = val if type(val) == str else str(val)
                     write_str += val.replace("\n", "") + "\t"
                 f.write(write_str[:-1] + "\n")
