@@ -1,0 +1,1 @@
+:START_ID	:END_ID	:TYPE	source:string[]	jacquard_score	score_cutoff	intersection_score	union_score	shared_edges:string[]	head_only_edges:string[]	tail_only_edges:string[]	edge_weights:string[]

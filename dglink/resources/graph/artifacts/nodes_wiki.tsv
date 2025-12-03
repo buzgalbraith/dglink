@@ -1,0 +1,1465 @@
+curie:ID	:LABEL	name	raw_texts:string[]	columns:string[]	iri	file_id:string[]	tool_type	DOI	source:string[]	study_url
+syn2343195:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn2343195
+mesh:D012106	other	Research	"research;Research;RESEARCH"	"wiki"	https://bioregistry.io/mesh:D012106	""			"wiki"	
+mesh:D030342	disease	Genetic Diseases, Inborn	"genetic diseases;genetic disease;genetic disorders;genetic disorder;inherited disease;hereditary diseases"	"wiki"	https://bioregistry.io/mesh:D030342	""			"wiki"	
+mesh:D014937	other	Work	"work;Work"	"wiki"	https://bioregistry.io/mesh:D014937	""			"wiki"	
+mesh:D006040	other	Goals	"Goals;goals;goal"	"wiki"	https://bioregistry.io/mesh:D006040	""			"wiki"	
+mesh:D015507	small_molecule	Drugs, Investigational	"Investigational New Drug"	"wiki"	https://bioregistry.io/mesh:D015507	""			"wiki"	
+mesh:D005582	other	Foundations	"Foundation;foundation"	"wiki"	https://bioregistry.io/mesh:D005582	""			"wiki"	
+mesh:D004353	experimental_factor	Drug Evaluation, Preclinical	"Drug Screening;Drug Screenings;drug screenings;drug screening"	"wiki"	https://bioregistry.io/mesh:D004353	""			"wiki"	
+chebi:61115	small_molecule	EC 3.5.1.98 (histone deacetylase) inhibitor	"HDAC inhibitors"	"wiki"	https://bioregistry.io/chebi:61115	""			"wiki"	
+efo:0002887	experimental_factor	mouse cell line	"mouse cell line"	"wiki"	https://bioregistry.io/efo:0002887	""			"wiki"	
+mesh:D007990	other	Libraries	"libraries;Library;library"	"wiki"	https://bioregistry.io/mesh:D007990	""			"wiki"	
+hp:5200134	disease	Jumping	"Jumping"	"wiki"	https://bioregistry.io/hp:5200134	""			"wiki"	
+mesh:D002869	disease	Chromosome Aberrations	"chromosomal aberrations;chromosomal abnormalities"	"wiki"	https://bioregistry.io/mesh:D002869	""			"wiki"	
+mesh:D005727	anatomical_region	Ganglia, Spinal	"dorsal root ganglia;dorsal root ganglion"	"wiki"	https://bioregistry.io/mesh:D005727	""			"wiki"	
+chebi:35222	small_molecule	inhibitor	"inhibitors;Inhibitors"	"wiki"	https://bioregistry.io/chebi:35222	""			"wiki"	
+syn4939872:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939872
+mesh:D013812	experimental_factor	Therapeutics	"treatments;Therapies;Treatments;therapies;Therapeutics;therapeutic;Therapy;therapeutics;therapy;Therapeutic"	"wiki"	https://bioregistry.io/mesh:D013812	""			"wiki"	
+mesh:D034742	other	Electronic Mail	"E-mail;email;Email"	"wiki"	https://bioregistry.io/mesh:D034742	""			"wiki"	
+chebi:59163	small_molecule	biomarker	"biomarker;biomarkers;biological markers;Biomarker;Biomarkers"	"wiki"	https://bioregistry.io/chebi:59163	""			"wiki"	
+mesh:D016372	small_molecule	RNA, Antisense	"Antisense RNA"	"wiki"	https://bioregistry.io/mesh:D016372	""			"wiki"	
+efo:0004445	experimental_factor	cohort	"cohort"	"wiki"	https://bioregistry.io/efo:0004445	""			"wiki"	
+mesh:D016019	experimental_factor	Survival Analysis	"survival analysis"	"wiki"	https://bioregistry.io/mesh:D016019	""			"wiki"	
+mesh:D009837	disease	Oligodendroglioma	"MOA"	"wiki"	https://bioregistry.io/mesh:D009837	""			"wiki"	
+hgnc:22432	human_gene_protein	CYREN	"MRI"	"wiki"	https://bioregistry.io/hgnc:22432	""			"wiki"	
+mesh:D008854	experimental_factor	Microscopy, Electron	"electron microscopy;Electron Microscopy"	"wiki"	https://bioregistry.io/mesh:D008854	""			"wiki"	
+go:0030424	cellular_location	axon	"axons;axon"	"wiki"	https://bioregistry.io/go:0030424	""			"wiki"	
+mesh:D010641	biological_process	Phenotype	"Phenotype;phenotypes;phenotype"	"wiki"	https://bioregistry.io/mesh:D010641	""			"wiki"	
+mesh:D006653	other	Histology	"histology;Histology"	"wiki"	https://bioregistry.io/mesh:D006653	""			"wiki"	
+mesh:D010599	biological_process	Pharmacokinetics	"Pharmacokinetics;pharmacokinetics"	"wiki"	https://bioregistry.io/mesh:D010599	""			"wiki"	
+syn4939874:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939874
+efo:0002751	experimental_factor	benign	"benign"	"wiki"	https://bioregistry.io/efo:0002751	""			"wiki"	
+hp:0000006	disease	Autosomal dominant inheritance	"autosomal dominant"	"wiki"	https://bioregistry.io/hp:0000006	""			"wiki"	
+mesh:D016514	biological_process	Genes, Neurofibromatosis 1	"NF1 Gene;Nf1 gene;NF1 gene;NF1 genes"	"wiki"	https://bioregistry.io/mesh:D016514	""			"wiki"	
+go:0090399	biological_process	replicative senescence	"replicative senescence"	"wiki"	https://bioregistry.io/go:0090399	""			"wiki"	
+mesh:D012371	other	Robotics	"robotics"	"wiki"	https://bioregistry.io/mesh:D012371	""			"wiki"	
+mesh:D004777	biological_process	Environment	"environment"	"wiki"	https://bioregistry.io/mesh:D004777	""			"wiki"	
+hp:5200049	disease	Atypical sorting	"ORDERING"	"wiki"	https://bioregistry.io/hp:5200049	""			"wiki"	
+mesh:D000054	biological_process	Acceleration	"Acceleration"	"wiki"	https://bioregistry.io/mesh:D000054	""			"wiki"	
+syn4939876:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939876
+mesh:D023361	other	Validation Study	"Validation Studies"	"wiki"	https://bioregistry.io/mesh:D023361	""			"wiki"	
+mesh:D004338	small_molecule	Drug Combinations	"drug combination;drug combinations"	"wiki"	https://bioregistry.io/mesh:D004338	""			"wiki"	
+chebi:53233	small_molecule	3-(4,5-dimethylthiazol-2-yl)-2,5-diphenyltetrazolium bromide	"MTT;3-(4,5-dimethylthiazol-2-yl)-2,5-diphenyltetrazolium bromide"	"wiki"	https://bioregistry.io/chebi:53233	""			"wiki"	
+mesh:D010673	disease	Pheochromocytoma	"pheochromocytoma"	"wiki"	https://bioregistry.io/mesh:D010673	""			"wiki"	
+syn4939878:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939878
+mesh:D006262	other	Health	"Health;health"	"wiki"	https://bioregistry.io/mesh:D006262	""			"wiki"	
+mesh:D010361	other	Patients	"patient-;Patient;patient"	"wiki"	https://bioregistry.io/mesh:D010361	""			"wiki"	
+chebi:32866	small_molecule	L-prolino group	"PRO"	"wiki"	https://bioregistry.io/chebi:32866	""			"wiki"	
+chebi:33395	small_molecule	mendelevium atom	"MD"	"wiki"	https://bioregistry.io/chebi:33395	""			"wiki"	
+mesh:C041626	small_molecule	5,10-dihydro-5-methylphenazine	"MPH"	"wiki"	https://bioregistry.io/mesh:C041626	""			"wiki"	
+efo:0009736	experimental_factor	principal investigator	"Principal Investigator;Principal Investigators"	"wiki"	https://bioregistry.io/efo:0009736	""			"wiki"	
+mesh:D010290	other	Parents	"parent;parents"	"wiki"	https://bioregistry.io/mesh:D010290	""			"wiki"	
+efo:0000246	experimental_factor	age	"ages"	"wiki"	https://bioregistry.io/efo:0000246	""			"wiki"	
+mesh:D000293	other	Adolescent	"adolescent;adolescents;Adolescents"	"wiki"	https://bioregistry.io/mesh:D000293	""			"wiki"	
+mesh:D055815	other	Young Adult	"Young Adults;young adult;young adults"	"wiki"	https://bioregistry.io/mesh:D055815	""			"wiki"	
+mesh:D016430	other	Clinical Trial	"clinical trial;Clinical Trial;Clinical trials;clinical trials;intervention studies;Clinical Trials"	"wiki"	https://bioregistry.io/mesh:D016430	""			"wiki"	
+efo:0007056	experimental_factor	clinical treatment	"clinical treatment;Clinical Treatment;clinical treatments"	"wiki"	https://bioregistry.io/efo:0007056	""			"wiki"	
+efo:0022463	experimental_factor	CBA	"CB"	"wiki"	https://bioregistry.io/efo:0022463	""			"wiki"	
+hgnc:6116	human_gene_protein	IRF1	"Mar"	"wiki"	https://bioregistry.io/hgnc:6116	""			"wiki"	
+go:0140602	cellular_location	nucleolar peripheral inclusion body	"Nurs"	"wiki"	https://bioregistry.io/go:0140602	""			"wiki"	
+syn4939880:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939880
+mesh:D000071066	experimental_factor	Patient Reported Outcome Measures	"patient- reported outcome measures;Patient Reported Outcome Measure"	"wiki"	https://bioregistry.io/mesh:D000071066	""			"wiki"	
+doid:0060085	disease	organ system benign neoplasm	"benign tumor;benign tumors;benign tumours"	"wiki"	https://bioregistry.io/doid:0060085	""			"wiki"	
+mesh:D013502	other	General Surgery	"surgery;Surgery"	"wiki"	https://bioregistry.io/mesh:D013502	""			"wiki"	
+mesh:D000339	other	Affect	"affects;affect"	"wiki"	https://bioregistry.io/mesh:D000339	""			"wiki"	
+mesh:D020486	other	Manuscript	"manuscripts;manuscript;Manuscript;Manuscripts"	"wiki"	https://bioregistry.io/mesh:D020486	""			"wiki"	
+syn4939884:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939884
+mesh:D003013	organism	Clostridium	"Clostridium"	"wiki"	https://bioregistry.io/mesh:D003013	""			"wiki"	
+doid:0080690	disease	RASopathy	"RASopathy"	"wiki"	https://bioregistry.io/doid:0080690	""			"wiki"	
+mesh:D009386	disease	Neoplastic Syndromes, Hereditary	"hereditary cancer syndromes;hereditary cancer syndrome"	"wiki"	https://bioregistry.io/mesh:D009386	""			"wiki"	
+mesh:D009154	biological_process	Mutation	"Mutation;mutation;Mutations;mutations"	"wiki"	https://bioregistry.io/mesh:D009154	""			"wiki"	
+mesh:D016147	biological_process	Genes, Tumor Suppressor	"tumor suppressor gene;tumor suppressor genes"	"wiki"	https://bioregistry.io/mesh:D016147	""			"wiki"	
+fplx:GAP	protein_family_complex	GAP	"gap;GTPase-activating protein;GTPase Activating Protein;GAP"	"wiki"	https://bioregistry.io/fplx:GAP	""			"wiki"	
+mesh:D006868	biological_process	Hydrolysis	"hydrolysis"	"wiki"	https://bioregistry.io/mesh:D006868	""			"wiki"	
+chebi:17552	small_molecule	GDP	"GDP"	"wiki"	https://bioregistry.io/chebi:17552	""			"wiki"	
+efo:0002752	experimental_factor	aggressive	"aggressive"	"wiki"	https://bioregistry.io/efo:0002752	""			"wiki"	
+mesh:D002423	experimental_factor	Cause of Death	"cause of death"	"wiki"	https://bioregistry.io/mesh:D002423	""			"wiki"	
+mesh:D019368	other	Nature	"Nature;nature"	"wiki"	https://bioregistry.io/mesh:D019368	""			"wiki"	
+mesh:D015994	experimental_factor	Incidence	"incidence"	"wiki"	https://bioregistry.io/mesh:D015994	""			"wiki"	
+mesh:D009362	disease	Neoplasm Metastasis	"metastases;tumor metastasis"	"wiki"	https://bioregistry.io/mesh:D009362	""			"wiki"	
+mesh:D000072258	biological_process	Tumor Hypoxia	"tumor hypoxia"	"wiki"	https://bioregistry.io/mesh:D000072258	""			"wiki"	
+go:0070265	unknown	no_name_found	"necrosis"	"wiki"	https://bioregistry.io/go:0070265	""			"wiki"	
+mesh:D008833	biological_process	Microcirculation	"microcirculation"	"wiki"	https://bioregistry.io/mesh:D008833	""			"wiki"	
+mesh:D013170	anatomical_region	Spores	"Spore;spores;SPORE"	"wiki"	https://bioregistry.io/mesh:D013170	""			"wiki"	
+mesh:D012449	other	Safety	"Safety;safety"	"wiki"	https://bioregistry.io/mesh:D012449	""			"wiki"	
+efo:0004020	experimental_factor	transgenic	"transgenic"	"wiki"	https://bioregistry.io/efo:0004020	""			"wiki"	
+efo:0011061	experimental_factor	toxicity	"toxicity"	"wiki"	https://bioregistry.io/efo:0011061	""			"wiki"	
+chebi:34922	small_molecule	picloram	"Pathway;access;Access;pathway"	"wiki"	https://bioregistry.io/chebi:34922	""			"wiki"	
+mesh:D017321	experimental_factor	Clinical Trials, Phase I as Topic	"phase 1 clinical trial"	"wiki"	https://bioregistry.io/mesh:D017321	""			"wiki"	
+efo:0010246	experimental_factor	recurrent	"recurrent"	"wiki"	https://bioregistry.io/efo:0010246	""			"wiki"	
+mesh:D001691	experimental_factor	Biological Therapy	"biologic therapy"	"wiki"	https://bioregistry.io/mesh:D001691	""			"wiki"	
+chebi:35610	small_molecule	antineoplastic agent	"anti-neoplastic;antineoplastic;anticancer agents;antineoplastic agents;anti-cancer agents"	"wiki"	https://bioregistry.io/chebi:35610	""			"wiki"	
+syn4939888:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939888
+chebi:32865	small_molecule	L-prolyl group	"PROs"	"wiki"	https://bioregistry.io/chebi:32865	""			"wiki"	
+mesh:D013016	biological_process	Sound	"sounds;sound"	"wiki"	https://bioregistry.io/mesh:D013016	""			"wiki"	
+mesh:D019484	other	Address	"addresses;Address;address"	"wiki"	https://bioregistry.io/mesh:D019484	""			"wiki"	
+mesh:D011594	other	Psychometrics	"psychometric"	"wiki"	https://bioregistry.io/mesh:D011594	""			"wiki"	
+efo:0011014	experimental_factor	health-related quality of life measurement	"HRQOL"	"wiki"	https://bioregistry.io/efo:0011014	""			"wiki"	
+efo:0003843	experimental_factor	pain	"pain"	"wiki"	https://bioregistry.io/efo:0003843	""			"wiki"	
+go:1990413	cellular_location	eyespot apparatus	"stigma"	"wiki"	https://bioregistry.io/go:1990413	""			"wiki"	
+mesh:D014831	biological_process	Voice	"voice"	"wiki"	https://bioregistry.io/mesh:D014831	""			"wiki"	
+mesh:D008091	other	Literature	"literature"	"wiki"	https://bioregistry.io/mesh:D008091	""			"wiki"	
+mesh:D016454	other	Review	"Review;review"	"wiki"	https://bioregistry.io/mesh:D016454	""			"wiki"	
+syn4939890:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939890
+mesh:D000328	other	Adult	"Adults"	"wiki"	https://bioregistry.io/mesh:D000328	""			"wiki"	
+hp:0012828	disease	Severe	"severe"	"wiki"	https://bioregistry.io/hp:0012828	""			"wiki"	
+mesh:D009017	experimental_factor	Morbidity	"morbidities;morbidity"	"wiki"	https://bioregistry.io/mesh:D009017	""			"wiki"	
+go:0008219	biological_process	cell death	"death"	"wiki"	https://bioregistry.io/go:0008219	""			"wiki"	
+mesh:D004328	other	Drive	"drives;Drive;drive"	"wiki"	https://bioregistry.io/mesh:D004328	""			"wiki"	
+mesh:D042783	anatomical_region	Endothelial Cells	"endothelial cells;endothelial cell"	"wiki"	https://bioregistry.io/mesh:D042783	""			"wiki"	
+mesh:D020196	disease	Trauma, Nervous System	"nerve injury"	"wiki"	https://bioregistry.io/mesh:D020196	""			"wiki"	
+mesh:D007107	anatomical_region	Immune System	"immune system;immune systems"	"wiki"	https://bioregistry.io/mesh:D007107	""			"wiki"	
+mesh:D013601	anatomical_region	T-Lymphocytes	"T-cells"	"wiki"	https://bioregistry.io/mesh:D013601	""			"wiki"	
+mesh:D001808	anatomical_region	Blood Vessels	"blood vessels;blood vessel;Blood vessels"	"wiki"	https://bioregistry.io/mesh:D001808	""			"wiki"	
+efo:0001461	experimental_factor	control	"controlled;controlling"	"wiki"	https://bioregistry.io/efo:0001461	""			"wiki"	
+chebi:50906	small_molecule	role	"roles"	"wiki"	https://bioregistry.io/chebi:50906	""			"wiki"	
+mesh:D063646	disease	Carcinogenesis	"oncogenesis;tumorigenesis;Oncogenesis"	"wiki"	https://bioregistry.io/mesh:D063646	""			"wiki"	
+hp:0025297	disease	Prolonged	"prolonged"	"wiki"	https://bioregistry.io/hp:0025297	""			"wiki"	
+mesh:D017933	anatomical_region	Peripheral Nervous System	"peripheral nervous system"	"wiki"	https://bioregistry.io/mesh:D017933	""			"wiki"	
+syn4939892:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939892
+efo:0020001	experimental_factor	drug resistance	"drug resistance;Drug Resistance"	"wiki"	https://bioregistry.io/efo:0020001	""			"wiki"	
+mesh:D004358	experimental_factor	Drug Therapy	"pharmacotherapy;chemotherapy;drug therapies;drug therapy;chemotherapies"	"wiki"	https://bioregistry.io/mesh:D004358	""			"wiki"	
+efo:0004134	experimental_factor	tumor size	"tumor size"	"wiki"	https://bioregistry.io/efo:0004134	""			"wiki"	
+mesh:D007753	other	Laboratories	"laboratories;laboratory;Laboratory"	"wiki"	https://bioregistry.io/mesh:D007753	""			"wiki"	
+mesh:D058990	experimental_factor	Molecular Targeted Therapy	"targeted molecular therapy"	"wiki"	https://bioregistry.io/mesh:D058990	""			"wiki"	
+mesh:D014556	anatomical_region	Urine	"urine"	"wiki"	https://bioregistry.io/mesh:D014556	""			"wiki"	
+mesh:D010209	other	Paper	"paper"	"wiki"	https://bioregistry.io/mesh:D010209	""			"wiki"	
+syn4939894:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939894
+doid:1319	disease	brain cancer	"brain tumors;brain tumor"	"wiki"	https://bioregistry.io/doid:1319	""			"wiki"	
+go:0007601	biological_process	visual perception	"vision"	"wiki"	https://bioregistry.io/go:0007601	""			"wiki"	
+mesh:D012306	experimental_factor	Risk	"risks;risk"	"wiki"	https://bioregistry.io/mesh:D012306	""			"wiki"	
+mesh:D014792	experimental_factor	Visual Acuity	"visual acuity"	"wiki"	https://bioregistry.io/mesh:D014792	""			"wiki"	
+mesh:D009361	disease	Neoplasm Invasiveness	"invasion;infiltration;invasiveness"	"wiki"	https://bioregistry.io/mesh:D009361	""			"wiki"	
+mesh:D014795	anatomical_region	Visual Pathways	"visual pathway"	"wiki"	https://bioregistry.io/mesh:D014795	""			"wiki"	
+mesh:D056324	experimental_factor	Diffusion Tensor Imaging	"Diffusion Tensor Imaging"	"wiki"	https://bioregistry.io/mesh:D056324	""			"wiki"	
+mesh:D008280	other	Magnetics	"Magnetic;magnetic"	"wiki"	https://bioregistry.io/mesh:D008280	""			"wiki"	
+mesh:D009038	biological_process	Motion	"motion"	"wiki"	https://bioregistry.io/mesh:D009038	""			"wiki"	
+mesh:D000074286	experimental_factor	Preliminary Data	"preliminary data;Preliminary data;Preliminary Data"	"wiki"	https://bioregistry.io/mesh:D000074286	""			"wiki"	
+mesh:D011827	biological_process	Radiation	"radiation;radiations"	"wiki"	https://bioregistry.io/mesh:D011827	""			"wiki"	
+mesh:D000465	biological_process	Algorithms	"algorithm;algorithms"	"wiki"	https://bioregistry.io/mesh:D000465	""			"wiki"	
+mesh:D012016	experimental_factor	Reference Values	"normal values"	"wiki"	https://bioregistry.io/mesh:D012016	""			"wiki"	
+hp:0032322	disease	Healthy	"healthy"	"wiki"	https://bioregistry.io/hp:0032322	""			"wiki"	
+syn4939896:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939896
+mesh:D059350	disease	Chronic Pain	"chronic pain;Chronic  Pain"	"wiki"	https://bioregistry.io/mesh:D059350	""			"wiki"	
+hp:0040282	disease	Frequent	"frequent"	"wiki"	https://bioregistry.io/hp:0040282	""			"wiki"	
+mesh:D019359	other	Knowledge	"knowledge;Knowledge"	"wiki"	https://bioregistry.io/mesh:D019359	""			"wiki"	
+mesh:D000083626	other	Psychosocial Intervention	"psychosocial interventions;psychological intervention"	"wiki"	https://bioregistry.io/mesh:D000083626	""			"wiki"	
+mesh:D064869	other	Acceptance and Commitment Therapy	"Acceptance and Commitment Therapy"	"wiki"	https://bioregistry.io/mesh:D064869	""			"wiki"	
+mesh:D006339	experimental_factor	Heart Rate	"heart rate"	"wiki"	https://bioregistry.io/mesh:D006339	""			"wiki"	
+mesh:D003863	other	Depression	"depression"	"wiki"	https://bioregistry.io/mesh:D003863	""			"wiki"	
+mesh:D001008	other	Anxiety Disorders	"anxiety"	"wiki"	https://bioregistry.io/mesh:D001008	""			"wiki"	
+mesh:D004562	experimental_factor	Electrocardiography	"electrocardiogram"	"wiki"	https://bioregistry.io/mesh:D004562	""			"wiki"	
+chebi:70255	small_molecule	(-)-epicatechin-3-O-gallate	"ECG"	"wiki"	https://bioregistry.io/chebi:70255	""			"wiki"	
+mesh:D011642	other	Publications	"Publication;publications;publication"	"wiki"	https://bioregistry.io/mesh:D011642	""			"wiki"	
+mesh:D020504	other	Abstracts	"Abstract;ABSTRACT;abstract"	"wiki"	https://bioregistry.io/mesh:D020504	""			"wiki"	
+syn4939902:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939902
+doid:962	disease	neurofibroma	"nerve sheath tumors"	"wiki"	https://bioregistry.io/doid:962	""			"wiki"	
+mesh:D023421	experimental_factor	Models, Animal	"animal models;Animal Models;animal model"	"wiki"	https://bioregistry.io/mesh:D023421	""			"wiki"	
+hp:0020034	disease	Diffuse	"diffuse"	"wiki"	https://bioregistry.io/hp:0020034	""			"wiki"	
+syn4939904:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939904
+mesh:D010338	other	Pathology, Clinical	"clinical pathology"	"wiki"	https://bioregistry.io/mesh:D010338	""			"wiki"	
+go:0042552	biological_process	myelination	"myelination"	"wiki"	https://bioregistry.io/go:0042552	""			"wiki"	
+hgnc:39561	human_gene_other	GBP1P1	"limit"	"wiki"	https://bioregistry.io/hgnc:39561	""			"wiki"	
+go:0014010	biological_process	Schwann cell proliferation	"Schwann cell proliferation"	"wiki"	https://bioregistry.io/go:0014010	""			"wiki"	
+efo:0002954	experimental_factor	differentiated	"Differentiated;differentiated"	"wiki"	https://bioregistry.io/efo:0002954	""			"wiki"	
+mesh:D004798	human_gene_protein	Enzymes	"enzyme;enzymes"	"wiki"	https://bioregistry.io/mesh:D004798	""			"wiki"	
+mesh:D043425	human_gene_protein	Glutamate Carboxypeptidase II	"Glutamate Carboxypeptidase II"	"wiki"	https://bioregistry.io/mesh:D043425	""			"wiki"	
+efo:0009656	experimental_factor	neoplastic sample	"tumor samples"	"wiki"	https://bioregistry.io/efo:0009656	""			"wiki"	
+syn4939906:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939906
+mesh:D019021	other	Natural History	"Natural History;natural history"	"wiki"	https://bioregistry.io/mesh:D019021	""			"wiki"	
+chebi:78059	small_molecule	food additive carrier	"carrier;carriers"	"wiki"	https://bioregistry.io/chebi:78059	""			"wiki"	
+chebi:5133	small_molecule	fluthiacet-methyl	"action"	"wiki"	https://bioregistry.io/chebi:5133	""			"wiki"	
+syn4939908:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939908
+hp:0100698	disease	Subcutaneous neurofibroma	"subcutaneous neurofibromas"	"wiki"	https://bioregistry.io/hp:0100698	""			"wiki"	
+efo:0005847	experimental_factor	increased risk	"increased risk"	"wiki"	https://bioregistry.io/efo:0005847	""			"wiki"	
+chebi:137114	small_molecule	bromodomain-containing protein 4 inhibitor	"BRD4 inhibitors;BRD4 Inhibitors;bRD4 inhibitor;BRD4 inhibitor"	"wiki"	https://bioregistry.io/chebi:137114	""			"wiki"	
+mesh:D013602	anatomical_region	T-Lymphocytes, Cytotoxic	"cytotoxic T-cells"	"wiki"	https://bioregistry.io/mesh:D013602	""			"wiki"	
+mesh:D022423	anatomical_region	Myeloid Cells	"myeloid cells"	"wiki"	https://bioregistry.io/mesh:D022423	""			"wiki"	
+mesh:D064591	anatomical_region	Allografts	"allograft"	"wiki"	https://bioregistry.io/mesh:D064591	""			"wiki"	
+syn4939910:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939910
+hp:0000997	disease	Axillary freckling	"axillary freckling"	"wiki"	https://bioregistry.io/hp:0000997	""			"wiki"	
+go:0001897	biological_process	cytolysis by symbiont of host cells	"pathogenesis"	"wiki"	https://bioregistry.io/go:0001897	""			"wiki"	
+mesh:D009432	anatomical_region	Neural Crest	"Neural crest;Neural Crest;neural crest"	"wiki"	https://bioregistry.io/mesh:D009432	""			"wiki"	
+mesh:D008648	anatomical_region	Mesoderm	"mesoderm"	"wiki"	https://bioregistry.io/mesh:D008648	""			"wiki"	
+mesh:D001503	organism	Ursidae	"bear"	"wiki"	https://bioregistry.io/mesh:D001503	""			"wiki"	
+mesh:D020476	other	Exhibition	"exhibit"	"wiki"	https://bioregistry.io/mesh:D020476	""			"wiki"	
+mesh:D010524	disease	Peripheral Nervous System Neoplasms	"tumor of the peripheral nervous system;Peripheral nerve tumors;peripheral nervous system tumors;peripheral nerve tumors;peripheral nerve tumor"	"wiki"	https://bioregistry.io/mesh:D010524	""			"wiki"	
+mesh:D018450	disease	Disease Progression	"disease progression"	"wiki"	https://bioregistry.io/mesh:D018450	""			"wiki"	
+mesh:D000715	other	Anatomy	"anatomy"	"wiki"	https://bioregistry.io/mesh:D000715	""			"wiki"	
+efo:0030070	experimental_factor	copy number gain	"copy number gains"	"wiki"	https://bioregistry.io/efo:0030070	""			"wiki"	
+chebi:90199	small_molecule	c-Met tyrosine kinase inhibitor	"MET inhibitor"	"wiki"	https://bioregistry.io/chebi:90199	""			"wiki"	
+efo:0001794	experimental_factor	submitted	"submitted"	"wiki"	https://bioregistry.io/efo:0001794	""			"wiki"	
+syn4939912:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939912
+mesh:D032882	other	Comprehension	"Understanding;understanding"	"wiki"	https://bioregistry.io/mesh:D032882	""			"wiki"	
+mesh:D036301	other	Qualitative Research	"QUALITATIVE RESEARCH;Qualitative Research"	"wiki"	https://bioregistry.io/mesh:D036301	""			"wiki"	
+mesh:D005246	other	Feedback	"feedback"	"wiki"	https://bioregistry.io/mesh:D005246	""			"wiki"	
+mesh:D019519	other	Poster	"posters;Poster"	"wiki"	https://bioregistry.io/mesh:D019519	""			"wiki"	
+chebi:222606	small_molecule	Austin	"Austin"	"wiki"	https://bioregistry.io/chebi:222606	""			"wiki"	
+syn4939914:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939914
+go:0021554	biological_process	optic nerve development	"optic nerve development"	"wiki"	https://bioregistry.io/go:0021554	""			"wiki"	
+mesh:D009900	anatomical_region	Optic Nerve	"optic nerve;optic nerves;Optic Nerve"	"wiki"	https://bioregistry.io/mesh:D009900	""			"wiki"	
+mesh:D012165	anatomical_region	Retinal Ganglion Cells	"retinal ganglion cells;retinal ganglion cell;Retinal ganglion cells"	"wiki"	https://bioregistry.io/mesh:D012165	""			"wiki"	
+hp:0040078	disease	Axonal degeneration	"axonal degeneration"	"wiki"	https://bioregistry.io/hp:0040078	""			"wiki"	
+hgnc:1788	human_gene_protein	CDKN2B	"P15"	"wiki"	https://bioregistry.io/hgnc:1788	""			"wiki"	
+mesh:D009035	other	Mothers	"mothers"	"wiki"	https://bioregistry.io/mesh:D009035	""			"wiki"	
+efo:0002948	experimental_factor	postnatal	"postnatal"	"wiki"	https://bioregistry.io/efo:0002948	""			"wiki"	
+go:0007567	biological_process	parturition	"births;birth"	"wiki"	https://bioregistry.io/go:0007567	""			"wiki"	
+syn4939916:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939916
+efo:0007557	experimental_factor	secondary high content screen	"secondary screen;secondary screening;Secondary Screening"	"wiki"	https://bioregistry.io/efo:0007557	""			"wiki"	
+mesh:D010969	small_molecule	Plastics	"plastic"	"wiki"	https://bioregistry.io/mesh:D010969	""			"wiki"	
+syn4939918:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4939918
+go:0030154	biological_process	cell differentiation	"Differentiation;differentiation"	"wiki"	https://bioregistry.io/go:0030154	""			"wiki"	
+mesh:D012584	anatomical_region	Sciatic Nerve	"sciatic nerves;sciatic nerve"	"wiki"	https://bioregistry.io/mesh:D012584	""			"wiki"	
+mesh:D000081122	biological_process	Epigenome	"methylome"	"wiki"	https://bioregistry.io/mesh:D000081122	""			"wiki"	
+mesh:D059467	biological_process	Transcriptome	"transcriptome"	"wiki"	https://bioregistry.io/mesh:D059467	""			"wiki"	
+mesh:D005838	biological_process	Genotype	"genotypes"	"wiki"	https://bioregistry.io/mesh:D005838	""			"wiki"	
+mesh:D000094363	biological_process	Epigenetic Memory	"epigenetic memory"	"wiki"	https://bioregistry.io/mesh:D000094363	""			"wiki"	
+syn4984604:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn4984604
+mesh:D018070	other	Biological Specimen Banks	"biobank;Biobank"	"wiki"	https://bioregistry.io/mesh:D018070	""			"wiki"	
+mesh:D010820	other	Physicians	"physicians"	"wiki"	https://bioregistry.io/mesh:D010820	""			"wiki"	
+syn5562324:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn5562324
+mesh:D014495	other	Universities	"University"	"wiki"	https://bioregistry.io/mesh:D014495	""			"wiki"	
+hp:0030645	disease	Central	"Central;central"	"wiki"	https://bioregistry.io/hp:0030645	""			"wiki"	
+mesh:D005431	other	Florida	"Florida"	"wiki"	https://bioregistry.io/mesh:D005431	""			"wiki"	
+efo:0000544	experimental_factor	infection	"infection;infections"	"wiki"	https://bioregistry.io/efo:0000544	""			"wiki"	
+mesh:D000256	organism	Adenoviridae	"adenovirus"	"wiki"	https://bioregistry.io/mesh:D000256	""			"wiki"	
+syn5610418:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn5610418
+fplx:TAB	protein_family_complex	TAB	"tab"	"wiki"	https://bioregistry.io/fplx:TAB	""			"wiki"	
+mesh:D008910	other	Minnesota	"Minnesota"	"wiki"	https://bioregistry.io/mesh:D008910	""			"wiki"	
+syn5698493:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn5698493
+syn6633069:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn6633069
+syn7217928:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn7217928
+hgnc:29546	human_gene_protein	SH3YL1	"Ray"	"wiki"	https://bioregistry.io/hgnc:29546	""			"wiki"	
+go:0030574	biological_process	collagen catabolic process	"collagen degradation"	"wiki"	https://bioregistry.io/go:0030574	""			"wiki"	
+efo:0001796	experimental_factor	published	"published"	"wiki"	https://bioregistry.io/efo:0001796	""			"wiki"	
+hgnc:5318	human_gene_protein	TNC	"Tenascin-C;tenascin-C;Ji"	"wiki"	https://bioregistry.io/hgnc:5318	""			"wiki"	
+fplx:Protease	protein_family_complex	Protease	"proteases;protease"	"wiki"	https://bioregistry.io/fplx:Protease	""			"wiki"	
+go:0001525	biological_process	angiogenesis	"angiogenesis"	"wiki"	https://bioregistry.io/go:0001525	""			"wiki"	
+chebi:33232	small_molecule	application	"application;Application"	"wiki"	https://bioregistry.io/chebi:33232	""			"wiki"	
+syn7217935:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn7217935
+hgnc:17057	human_gene_protein	CARD8	"cardinal"	"wiki"	https://bioregistry.io/hgnc:17057	""			"wiki"	
+efo:0007834	experimental_factor	liver dysplastic nodule	"DNs;DN"	"wiki"	https://bioregistry.io/efo:0007834	""			"wiki"	
+hgnc:3240	human_gene_protein	EGR3	"pilot"	"wiki"	https://bioregistry.io/hgnc:3240	""			"wiki"	
+mesh:D034741	small_molecule	RNA, Small Interfering	"siRNA"	"wiki"	https://bioregistry.io/mesh:D034741	""			"wiki"	
+syn7217946:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn7217946
+mesh:D000383	other	Agriculture	"Farming"	"wiki"	https://bioregistry.io/mesh:D000383	""			"wiki"	
+go:0031012	cellular_location	extracellular matrix	"extracellular matrix;Extracellular Matrix;ECM"	"wiki"	https://bioregistry.io/go:0031012	""			"wiki"	
+mesh:D016326	human_gene_protein	Extracellular Matrix Proteins	"extracellular matrix proteins"	"wiki"	https://bioregistry.io/mesh:D016326	""			"wiki"	
+hp:0012825	disease	Mild	"mild"	"wiki"	https://bioregistry.io/hp:0012825	""			"wiki"	
+syn7231973:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn7231973
+efo:0002967	experimental_factor	pluripotent	"pluripotent"	"wiki"	https://bioregistry.io/efo:0002967	""			"wiki"	
+mesh:D017348	experimental_factor	Microscopy, Electron, Scanning Transmission	"Stem;stem"	"wiki"	https://bioregistry.io/mesh:D017348	""			"wiki"	
+mesh:D018740	biological_process	Genetic Heterogeneity	"genetic heterogeneity"	"wiki"	https://bioregistry.io/mesh:D018740	""			"wiki"	
+syn7239560:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn7239560
+syn8012530:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn8012530
+hgnc:8759	human_gene_protein	PDC	"PhD"	"wiki"	https://bioregistry.io/hgnc:8759	""			"wiki"	
+efo:0000397	experimental_factor	dermal neurofibroma	"dermal neurofibromas;Dermal neurofibromas;dermal neurofibroma"	"wiki"	https://bioregistry.io/efo:0000397	""			"wiki"	
+mesh:D011247	biological_process	Pregnancy	"pregnancy"	"wiki"	https://bioregistry.io/mesh:D011247	""			"wiki"	
+mesh:D016424	other	Overall	"overall;Overall"	"wiki"	https://bioregistry.io/mesh:D016424	""			"wiki"	
+go:0032259	biological_process	methylation	"methylation"	"wiki"	https://bioregistry.io/go:0032259	""			"wiki"	
+chebi:31292	small_molecule	bismuth subgallate	"Dermatol"	"wiki"	https://bioregistry.io/chebi:31292	""			"wiki"	
+mesh:D001706	experimental_factor	Biopsy	"biopsies"	"wiki"	https://bioregistry.io/mesh:D001706	""			"wiki"	
+mesh:D005823	other	Genetics	"Genetics;genetics"	"wiki"	https://bioregistry.io/mesh:D005823	""			"wiki"	
+syn8012599:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn8012599
+doid:0050736	disease	autosomal dominant disease	"autosomal dominant disease"	"wiki"	https://bioregistry.io/doid:0050736	""			"wiki"	
+mesh:D008967	other	Molecular Biology	"molecular biology"	"wiki"	https://bioregistry.io/mesh:D008967	""			"wiki"	
+mesh:D057895	biological_process	Haploinsufficiency	"haploinsufficiency"	"wiki"	https://bioregistry.io/mesh:D057895	""			"wiki"	
+mesh:D007196	other	Indiana	"Indiana"	"wiki"	https://bioregistry.io/mesh:D007196	""			"wiki"	
+hgnc:34499	human_gene_protein	SMIM10L2A	"led"	"wiki"	https://bioregistry.io/hgnc:34499	""			"wiki"	
+mesh:D014780	organism	Viruses	"virus;viruses"	"wiki"	https://bioregistry.io/mesh:D014780	""			"wiki"	
+mesh:D007267	experimental_factor	Injections	"injection;injections"	"wiki"	https://bioregistry.io/mesh:D007267	""			"wiki"	
+chebi:65207	small_molecule	vascular endothelial growth factor receptor antagonist	"VEGFR inhibitor"	"wiki"	https://bioregistry.io/chebi:65207	""			"wiki"	
+mesh:D000911	human_gene_protein	Antibodies, Monoclonal	"monoclonal antibody"	"wiki"	https://bioregistry.io/mesh:D000911	""			"wiki"	
+fplx:TGFBR	protein_family_complex	TGFBR	"TGF-β receptor"	"wiki"	https://bioregistry.io/fplx:TGFBR	""			"wiki"	
+efo:0002237	experimental_factor	MJ	"MJ"	"wiki"	https://bioregistry.io/efo:0002237	""			"wiki"	
+go:1990343	cellular_location	heterochromatin domain	"Hood"	"wiki"	https://bioregistry.io/go:1990343	""			"wiki"	
+efo:0001327	experimental_factor	A/J	"AJ"	"wiki"	https://bioregistry.io/efo:0001327	""			"wiki"	
+mesh:D020741	human_gene_protein	rho GTP-Binding Proteins	"Rho GTPase"	"wiki"	https://bioregistry.io/mesh:D020741	""			"wiki"	
+mesh:D001853	anatomical_region	Bone Marrow	"bone marrow"	"wiki"	https://bioregistry.io/mesh:D001853	""			"wiki"	
+chebi:49648	small_molecule	holmium atom	"Ho"	"wiki"	https://bioregistry.io/chebi:49648	""			"wiki"	
+hgnc:8573	human_gene_protein	PAEP	"GD;GDF"	"wiki"	https://bioregistry.io/hgnc:8573	""			"wiki"	
+syn8016577:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn8016577
+mesh:D003463	other	Cues	"cues"	"wiki"	https://bioregistry.io/mesh:D003463	""			"wiki"	
+mesh:D058628	anatomical_region	Myofibroblasts	"myofibroblasts"	"wiki"	https://bioregistry.io/mesh:D058628	""			"wiki"	
+mesh:D009940	anatomical_region	Organoids	"Organoid;organoids;organoid;Organoids"	"wiki"	https://bioregistry.io/mesh:D009940	""			"wiki"	
+syn8016599:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn8016599
+mesh:D014853	experimental_factor	Walkers	"Walker"	"wiki"	https://bioregistry.io/mesh:D014853	""			"wiki"	
+chebi:133305	small_molecule	sulfoxaflor	"transform"	"wiki"	https://bioregistry.io/chebi:133305	""			"wiki"	
+efo:0001661	experimental_factor	proximal	"proximal"	"wiki"	https://bioregistry.io/efo:0001661	""			"wiki"	
+mesh:D065026	other	Hope	"Hope;hope"	"wiki"	https://bioregistry.io/mesh:D065026	""			"wiki"	
+hgnc:7314	human_gene_other	MS	"MS"	"wiki"	https://bioregistry.io/hgnc:7314	""			"wiki"	
+hgnc:35944	human_gene_other	RPL29P31	"permit"	"wiki"	https://bioregistry.io/hgnc:35944	""			"wiki"	
+mesh:D020543	human_gene_protein	Proteome	"Proteome;proteome"	"wiki"	https://bioregistry.io/mesh:D020543	""			"wiki"	
+mesh:D003165	human_gene_protein	Complement System Proteins	"complement"	"wiki"	https://bioregistry.io/mesh:D003165	""			"wiki"	
+mesh:D010750	human_gene_protein	Phosphoproteins	"phosphoproteins"	"wiki"	https://bioregistry.io/mesh:D010750	""			"wiki"	
+mesh:D015153	experimental_factor	Blotting, Western	"western blotting"	"wiki"	https://bioregistry.io/mesh:D015153	""			"wiki"	
+mesh:D001288	other	Attention	"attention;Attention"	"wiki"	https://bioregistry.io/mesh:D001288	""			"wiki"	
+mesh:D013597	other	Systems Analysis	"systems analyses"	"wiki"	https://bioregistry.io/mesh:D013597	""			"wiki"	
+syn8016635:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn8016635
+efo:0009518	experimental_factor	complication	"complication"	"wiki"	https://bioregistry.io/efo:0009518	""			"wiki"	
+chebi:33250	small_molecule	atom	"elements;element"	"wiki"	https://bioregistry.io/chebi:33250	""			"wiki"	
+go:0043005	cellular_location	neuron projection	"nerve fibers;nerve fiber"	"wiki"	https://bioregistry.io/go:0043005	""			"wiki"	
+mesh:D011627	biological_process	Puberty	"puberty"	"wiki"	https://bioregistry.io/mesh:D011627	""			"wiki"	
+go:0042697	biological_process	menopause	"menopause"	"wiki"	https://bioregistry.io/go:0042697	""			"wiki"	
+efo:0000562	experimental_factor	labelling	"labeling"	"wiki"	https://bioregistry.io/efo:0000562	""			"wiki"	
+efo:0001656	experimental_factor	dorsal	"dorsal"	"wiki"	https://bioregistry.io/efo:0001656	""			"wiki"	
+mesh:D013126	anatomical_region	Spinal Nerve Roots	"spinal nerve roots;spinal nerve root"	"wiki"	https://bioregistry.io/mesh:D013126	""			"wiki"	
+efo:0004925	experimental_factor	tumor stage	"tumor stage"	"wiki"	https://bioregistry.io/efo:0004925	""			"wiki"	
+syn8016650:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn8016650
+fplx:RasGAP	protein_family_complex	RasGAP	"RAS-GAPs;RAS-GAP;Ras-GAP"	"wiki"	https://bioregistry.io/fplx:RasGAP	""			"wiki"	
+go:0009293	biological_process	transduction	"Transduction;transduction"	"wiki"	https://bioregistry.io/go:0009293	""			"wiki"	
+chebi:26806	small_molecule	succinate	"succinate"	"wiki"	https://bioregistry.io/chebi:26806	""			"wiki"	
+fplx:HIF1	protein_family_complex	HIF1	"HIF-1;HIF1"	"wiki"	https://bioregistry.io/fplx:HIF1	""			"wiki"	
+go:0006457	biological_process	protein folding	"chaperone activity"	"wiki"	https://bioregistry.io/go:0006457	""			"wiki"	
+chebi:36976	small_molecule	nucleotide	"nucleotides"	"wiki"	https://bioregistry.io/chebi:36976	""			"wiki"	
+mesh:D000092165	experimental_factor	Pharmacophore	"pharmacophore"	"wiki"	https://bioregistry.io/mesh:D000092165	""			"wiki"	
+syn9727752:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn9727752
+mesh:D012042	experimental_factor	Registries	"Registries;registries;Registry;registry"	"wiki"	https://bioregistry.io/mesh:D012042	""			"wiki"	
+mesh:D057890	other	Epigenomics	"epigenomic"	"wiki"	https://bioregistry.io/mesh:D057890	""			"wiki"	
+syn11374333:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn11374333
+mesh:D001695	other	Biology	"biology;Biology"	"wiki"	https://bioregistry.io/mesh:D001695	""			"wiki"	
+go:0006412	biological_process	translation	"translation;Translation"	"wiki"	https://bioregistry.io/go:0006412	""			"wiki"	
+mesh:D013781	other	Texas	"Texas"	"wiki"	https://bioregistry.io/mesh:D013781	""			"wiki"	
+mesh:D050498	biological_process	Live Birth	"live births"	"wiki"	https://bioregistry.io/mesh:D050498	""			"wiki"	
+mesh:D019683	biological_process	Penetrance	"penetrance"	"wiki"	https://bioregistry.io/mesh:D019683	""			"wiki"	
+hgnc:23115	human_gene_protein	EAF2	"traits"	"wiki"	https://bioregistry.io/hgnc:23115	""			"wiki"	
+chebi:133232	small_molecule	imazamox-ammonium	"beyond"	"wiki"	https://bioregistry.io/chebi:133232	""			"wiki"	
+go:0160025	biological_process	sensory perception of itch	"itching"	"wiki"	https://bioregistry.io/go:0160025	""			"wiki"	
+chebi:64857	small_molecule	cosmetic	"cosmetic"	"wiki"	https://bioregistry.io/chebi:64857	""			"wiki"	
+mesh:D059016	biological_process	Tumor Microenvironment	"Tumor Microenvironment;tumor micro-environment;tumor microenvironment"	"wiki"	https://bioregistry.io/mesh:D059016	""			"wiki"	
+mesh:D000300	other	Adoption	"adoption"	"wiki"	https://bioregistry.io/mesh:D000300	""			"wiki"	
+syn11374337:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn11374337
+fplx:Adaptor_protein	protein_family_complex	Adaptor_protein	"cap"	"wiki"	https://bioregistry.io/fplx:Adaptor_protein	""			"wiki"	
+hgnc:1020	human_gene_protein	BCS1L	"BCs"	"wiki"	https://bioregistry.io/hgnc:1020	""			"wiki"	
+chebi:35204	small_molecule	tracer	"tracer"	"wiki"	https://bioregistry.io/chebi:35204	""			"wiki"	
+mesh:D010336	other	Pathology	"pathology;Pathology;Pathologies"	"wiki"	https://bioregistry.io/mesh:D010336	""			"wiki"	
+mesh:D005602	other	France	"France"	"wiki"	https://bioregistry.io/mesh:D005602	""			"wiki"	
+syn11374339:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn11374339
+efo:0004422	experimental_factor	exome	"exome"	"wiki"	https://bioregistry.io/efo:0004422	""			"wiki"	
+mesh:D017423	experimental_factor	Sequence Analysis, RNA	"RNA sequence analysis"	"wiki"	https://bioregistry.io/mesh:D017423	""			"wiki"	
+efo:0010037	experimental_factor	INTACT	"intact"	"wiki"	https://bioregistry.io/efo:0010037	""			"wiki"	
+mesh:D059785	biological_process	Karyotype	"karyotype;karyotypes"	"wiki"	https://bioregistry.io/mesh:D059785	""			"wiki"	
+hgnc:30369	human_gene_protein	SAGE1	"SAGE;Sage"	"wiki"	https://bioregistry.io/hgnc:30369	""			"wiki"	
+syn11374341:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn11374341
+go:0006955	biological_process	immune response	"immunity;immune response;Immunity;immune responses"	"wiki"	https://bioregistry.io/go:0006955	""			"wiki"	
+hgnc:13890	human_gene_protein	ITCH	"itch"	"wiki"	https://bioregistry.io/hgnc:13890	""			"wiki"	
+mesh:D012816	disease	Signs and Symptoms	"Finding;finding;clinical finding;desc"	"wiki"	https://bioregistry.io/mesh:D012816	""			"wiki"	
+efo:0009903	experimental_factor	inflammatory disease	"inflammatory diseases"	"wiki"	https://bioregistry.io/efo:0009903	""			"wiki"	
+syn11374345:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn11374345
+mesh:D013577	disease	Syndrome	"Syndrome;syndromes;syndrome"	"wiki"	https://bioregistry.io/mesh:D013577	""			"wiki"	
+go:0043679	cellular_location	axon terminus	"nerve endings"	"wiki"	https://bioregistry.io/go:0043679	""			"wiki"	
+mesh:D017154	anatomical_region	Stromal Cells	"stromal cell;stromal cells"	"wiki"	https://bioregistry.io/mesh:D017154	""			"wiki"	
+mesh:D008283	other	Maintenance	"maintenance"	"wiki"	https://bioregistry.io/mesh:D008283	""			"wiki"	
+go:0007422	biological_process	peripheral nervous system development	"peripheral nervous system development"	"wiki"	https://bioregistry.io/go:0007422	""			"wiki"	
+mesh:D002490	anatomical_region	Central Nervous System	"CNS;central nervous system;central nervous systems"	"wiki"	https://bioregistry.io/mesh:D002490	""			"wiki"	
+mesh:D009836	anatomical_region	Oligodendroglia	"oligodendrocytes"	"wiki"	https://bioregistry.io/mesh:D009836	""			"wiki"	
+chebi:52290	small_molecule	mitogen	"Mitogen;mitogens"	"wiki"	https://bioregistry.io/chebi:52290	""			"wiki"	
+mesh:D020471	other	Collection	"collection;Collection"	"wiki"	https://bioregistry.io/mesh:D020471	""			"wiki"	
+mesh:C069856	small_molecule	TimeLine	"Timeline"	"wiki"	https://bioregistry.io/mesh:C069856	""			"wiki"	
+syn11374349:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn11374349
+mesh:D000066449	anatomical_region	Human Embryonic Stem Cells	"hESC;human embryonic stem cells;hESCs"	"wiki"	https://bioregistry.io/mesh:D000066449	""			"wiki"	
+mesh:D000483	biological_process	Alleles	"allele;alleles"	"wiki"	https://bioregistry.io/mesh:D000483	""			"wiki"	
+hgnc:37171	human_rna	LINC01194	"tag"	"wiki"	https://bioregistry.io/hgnc:37171	""			"wiki"	
+chebi:17891	small_molecule	donor	"Donor;donor"	"wiki"	https://bioregistry.io/chebi:17891	""			"wiki"	
+mesh:D039904	anatomical_region	Pluripotent Stem Cells	"pluripotent stem cells"	"wiki"	https://bioregistry.io/mesh:D039904	""			"wiki"	
+chebi:37577	small_molecule	heteroatomic molecular entity	"chemical compound"	"wiki"	https://bioregistry.io/chebi:37577	""			"wiki"	
+go:0014044	biological_process	Schwann cell development	"Schwann cell development"	"wiki"	https://bioregistry.io/go:0014044	""			"wiki"	
+syn11374353:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn11374353
+hp:0025204	disease	Triggered by	"triggered by"	"wiki"	https://bioregistry.io/hp:0025204	""			"wiki"	
+efo:0001426	experimental_factor	study design	"Study Design"	"wiki"	https://bioregistry.io/efo:0001426	""			"wiki"	
+hgnc:18799	human_gene_protein	DMAC2L	"FBs"	"wiki"	https://bioregistry.io/hgnc:18799	""			"wiki"	
+hgnc:16841	human_gene_protein	LITAF	"simple"	"wiki"	https://bioregistry.io/hgnc:16841	""			"wiki"	
+mesh:D014644	biological_process	Genetic Variation	"genetic variation;genetic diversity"	"wiki"	https://bioregistry.io/mesh:D014644	""			"wiki"	
+syn11374354:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn11374354
+hgnc:54217	human_rna	LINC02702	"laser"	"wiki"	https://bioregistry.io/hgnc:54217	""			"wiki"	
+mesh:D003890	experimental_factor	Desiccation	"desiccation"	"wiki"	https://bioregistry.io/mesh:D003890	""			"wiki"	
+mesh:D002921	anatomical_region	Cicatrix	"scarring"	"wiki"	https://bioregistry.io/mesh:D002921	""			"wiki"	
+go:0006306	biological_process	DNA methylation	"DNA methylation"	"wiki"	https://bioregistry.io/go:0006306	""			"wiki"	
+mesh:D005434	experimental_factor	Flow Cytometry	"flow cytometry"	"wiki"	https://bioregistry.io/mesh:D005434	""			"wiki"	
+efo:0008900	experimental_factor	RRBS	"RRBS"	"wiki"	https://bioregistry.io/efo:0008900	""			"wiki"	
+syn11374357:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn11374357
+mesh:D019477	other	Portrait	"portrait"	"wiki"	https://bioregistry.io/mesh:D019477	""			"wiki"	
+mesh:D000095902	other	Avatar	"avatars;avatar"	"wiki"	https://bioregistry.io/mesh:D000095902	""			"wiki"	
+mesh:D002017	other	Budgets	"budget"	"wiki"	https://bioregistry.io/mesh:D002017	""			"wiki"	
+syn11638893:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn11638893
+mesh:D012574	other	Schools	"school;School"	"wiki"	https://bioregistry.io/mesh:D012574	""			"wiki"	
+mesh:D008511	other	Medicine	"Medicine;medicine"	"wiki"	https://bioregistry.io/mesh:D008511	""			"wiki"	
+efo:0009744	experimental_factor	surgical resection	"surgical resection;Surgical resection-"	"wiki"	https://bioregistry.io/efo:0009744	""			"wiki"	
+mesh:D008957	experimental_factor	Models, Genetic	"genetic model;genetic models"	"wiki"	https://bioregistry.io/mesh:D008957	""			"wiki"	
+chebi:48120	small_molecule	anthracycline	"anthracyclines"	"wiki"	https://bioregistry.io/chebi:48120	""			"wiki"	
+syn11672851:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn11672851
+mesh:D000080911	other	Cheminformatics	"cheminformatics"	"wiki"	https://bioregistry.io/mesh:D000080911	""			"wiki"	
+mesh:D020478	other	Form	"forms"	"wiki"	https://bioregistry.io/mesh:D020478	""			"wiki"	
+mesh:D013329	biological_process	Structure-Activity Relationship	"structure activity relationships;structure-activity relationship;structure-activity relationships"	"wiki"	https://bioregistry.io/mesh:D013329	""			"wiki"	
+mesh:D000076722	experimental_factor	Drug Development	"drug development"	"wiki"	https://bioregistry.io/mesh:D000076722	""			"wiki"	
+mesh:D018806	experimental_factor	APACHE	"Apache"	"wiki"	https://bioregistry.io/mesh:D018806	""			"wiki"	
+syn11681835:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn11681835
+chebi:136604	small_molecule	cyclohexyl isocyanate	"Chi"	"wiki"	https://bioregistry.io/chebi:136604	""			"wiki"	
+go:0005575	cellular_location	cellular_component	"cellular component"	"wiki"	https://bioregistry.io/go:0005575	""			"wiki"	
+efo:1001968	experimental_factor	soft tissue sarcoma	"soft tissue sarcoma;soft tissue sarcomas"	"wiki"	https://bioregistry.io/efo:1001968	""			"wiki"	
+mesh:D001244	other	Association	"association;associations"	"wiki"	https://bioregistry.io/mesh:D001244	""			"wiki"	
+mesh:D011878	experimental_factor	Radiotherapy	"radiotherapy;Radiation therapy;radiation therapy"	"wiki"	https://bioregistry.io/mesh:D011878	""			"wiki"	
+go:0051726	biological_process	regulation of cell cycle	"tumor suppressor;tumor suppressors"	"wiki"	https://bioregistry.io/go:0051726	""			"wiki"	
+mesh:D013672	other	Technology	"Technology;technology"	"wiki"	https://bioregistry.io/mesh:D013672	""			"wiki"	
+chebi:85045	small_molecule	H3K27Me3	"H3K27me3"	"wiki"	https://bioregistry.io/chebi:85045	""			"wiki"	
+mesh:D015533	biological_process	Transcriptional Activation	"transcriptional activation"	"wiki"	https://bioregistry.io/mesh:D015533	""			"wiki"	
+hgnc:3490	human_gene_protein	ETV1	"ETV1"	"wiki"	https://bioregistry.io/hgnc:3490	""			"wiki"	
+mesh:D008611	other	Mentors	"mentors"	"wiki"	https://bioregistry.io/mesh:D008611	""			"wiki"	
+hp:0003745	disease	Sporadic	"sporadic"	"wiki"	https://bioregistry.io/hp:0003745	""			"wiki"	
+chebi:25434	small_molecule	bis(2-chloroethyl) sulfide	"lost"	"wiki"	https://bioregistry.io/chebi:25434	""			"wiki"	
+syn11817821:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn11817821
+efo:0001639	experimental_factor	cancer cell line	"cancer cell lines"	"wiki"	https://bioregistry.io/efo:0001639	""			"wiki"	
+mesh:D013334	other	Students	"students;Student"	"wiki"	https://bioregistry.io/mesh:D013334	""			"wiki"	
+mesh:D011786	other	Quality Control	"quality control"	"wiki"	https://bioregistry.io/mesh:D011786	""			"wiki"	
+efo:0007553	experimental_factor	high content screen of cells in treated with a compound library	"compound screens"	"wiki"	https://bioregistry.io/efo:0007553	""			"wiki"	
+mesh:D000078332	other	Data Analysis	"data analysis"	"wiki"	https://bioregistry.io/mesh:D000078332	""			"wiki"	
+syn17098100:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn17098100
+mesh:D008404	other	Massachusetts	"Massachusetts"	"wiki"	https://bioregistry.io/mesh:D008404	""			"wiki"	
+mesh:D006769	other	Hospitals, General	"General Hospital"	"wiki"	https://bioregistry.io/mesh:D006769	""			"wiki"	
+mesh:D009026	experimental_factor	Mortality	"mortality"	"wiki"	https://bioregistry.io/mesh:D009026	""			"wiki"	
+mesh:D000097188	experimental_factor	Radiomics	"radiomics;radiomic;Radiomics"	"wiki"	https://bioregistry.io/mesh:D000097188	""			"wiki"	
+efo:0030083	experimental_factor	clinical data	"clinical data"	"wiki"	https://bioregistry.io/efo:0030083	""			"wiki"	
+mesh:D012307	experimental_factor	Risk Factors	"Risk factors;risk factors"	"wiki"	https://bioregistry.io/mesh:D012307	""			"wiki"	
+mesh:D028744	other	Ethics Committees, Research	"IRB"	"wiki"	https://bioregistry.io/mesh:D028744	""			"wiki"	
+mesh:D006798	other	Housing	"housing"	"wiki"	https://bioregistry.io/mesh:D006798	""			"wiki"	
+chebi:30229	small_molecule	azanylylidene group	"N="	"wiki"	https://bioregistry.io/chebi:30229	""			"wiki"	
+syn17100988:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn17100988
+efo:0004335	experimental_factor	short-term memory	"working memory"	"wiki"	https://bioregistry.io/efo:0004335	""			"wiki"	
+go:0007612	biological_process	learning	"learning"	"wiki"	https://bioregistry.io/go:0007612	""			"wiki"	
+efo:0004350	experimental_factor	reasoning	"reasoning"	"wiki"	https://bioregistry.io/efo:0004350	""			"wiki"	
+mesh:D009682	experimental_factor	Magnetic Resonance Spectroscopy	"Magnetic Resonance Spectroscopy"	"wiki"	https://bioregistry.io/mesh:D009682	""			"wiki"	
+hgnc:2761	human_gene_protein	DEFA1	"MRS"	"wiki"	https://bioregistry.io/hgnc:2761	""			"wiki"	
+mesh:D065908	experimental_factor	Transcranial Direct Current Stimulation	"transcranial Direct Current Stimulation;tDCS"	"wiki"	https://bioregistry.io/mesh:D065908	""			"wiki"	
+mesh:D000068397	other	Clinical Study	"clinical studies;clinical study"	"wiki"	https://bioregistry.io/mesh:D000068397	""			"wiki"	
+mesh:D000368	other	Aged	"aged"	"wiki"	https://bioregistry.io/mesh:D000368	""			"wiki"	
+chebi:45615	small_molecule	salicylhydroxamic acid	"sham"	"wiki"	https://bioregistry.io/chebi:45615	""			"wiki"	
+mesh:D000087643	anatomical_region	Dorsolateral Prefrontal Cortex	"dorsolateral prefrontal cortex;DLPFC"	"wiki"	https://bioregistry.io/mesh:D000087643	""			"wiki"	
+mesh:D010296	anatomical_region	Parietal Lobe	"parietal cortex"	"wiki"	https://bioregistry.io/mesh:D010296	""			"wiki"	
+syn18904024:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn18904024
+mesh:D000045	organism	Acacia	"Acacia"	"wiki"	https://bioregistry.io/mesh:D000045	""			"wiki"	
+chebi:32386	small_molecule	linoleoyl group	"Lin"	"wiki"	https://bioregistry.io/chebi:32386	""			"wiki"	
+mesh:D057005	other	Bioengineering	"Biological Engineering;bioengineering"	"wiki"	https://bioregistry.io/mesh:D057005	""			"wiki"	
+mesh:D002140	other	California	"California"	"wiki"	https://bioregistry.io/mesh:D002140	""			"wiki"	
+mesh:D001671	other	Biochemistry	"Biochemistry"	"wiki"	https://bioregistry.io/mesh:D001671	""			"wiki"	
+mesh:D062346	other	Molecular Medicine	"Molecular Medicine"	"wiki"	https://bioregistry.io/mesh:D062346	""			"wiki"	
+mesh:D056344	other	Executive Function	"executive function"	"wiki"	https://bioregistry.io/mesh:D056344	""			"wiki"	
+go:0007268	biological_process	chemical synaptic transmission	"neurotransmission"	"wiki"	https://bioregistry.io/go:0007268	""			"wiki"	
+mesh:D066328	anatomical_region	Ventral Striatum	"ventral striatum"	"wiki"	https://bioregistry.io/mesh:D066328	""			"wiki"	
+hp:0002172	disease	Postural instability	"imbalance"	"wiki"	https://bioregistry.io/hp:0002172	""			"wiki"	
+mesh:D017557	anatomical_region	Ventral Tegmental Area	"ventral tegmental area"	"wiki"	https://bioregistry.io/mesh:D017557	""			"wiki"	
+hp:0012757	disease	Abnormal neuron morphology	"abnormal neuronal morphology"	"wiki"	https://bioregistry.io/hp:0012757	""			"wiki"	
+mesh:D059330	anatomical_region	GABAergic Neurons	"GABAergic neurons"	"wiki"	https://bioregistry.io/mesh:D059330	""			"wiki"	
+mesh:D009316	other	National Institutes of Health (U.S.)	"National Institutes of Health"	"wiki"	https://bioregistry.io/mesh:D009316	""			"wiki"	
+mesh:D009488	other	Neurosciences	"neuroscience;Neuroscience"	"wiki"	https://bioregistry.io/mesh:D009488	""			"wiki"	
+mesh:D012586	other	Science	"Science;science"	"wiki"	https://bioregistry.io/mesh:D012586	""			"wiki"	
+mesh:D004738	other	Engineering	"engineering;Engineering"	"wiki"	https://bioregistry.io/mesh:D004738	""			"wiki"	
+mesh:D002170	other	Canada	"Canada"	"wiki"	https://bioregistry.io/mesh:D002170	""			"wiki"	
+syn20608511:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn20608511
+go:0035282	biological_process	segmentation	"segmentation"	"wiki"	https://bioregistry.io/go:0035282	""			"wiki"	
+mesh:D008279	experimental_factor	Magnetic Resonance Imaging	"magnetic resonance imaging"	"wiki"	https://bioregistry.io/mesh:D008279	""			"wiki"	
+mesh:D047368	experimental_factor	Tumor Burden	"tumor load;tumor burden"	"wiki"	https://bioregistry.io/mesh:D047368	""			"wiki"	
+mesh:D000072177	other	Radiologists	"radiologists"	"wiki"	https://bioregistry.io/mesh:D000072177	""			"wiki"	
+syn20613866:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn20613866
+efo:0009642	experimental_factor	follow-up	"follow-up;follow up"	"wiki"	https://bioregistry.io/efo:0009642	""			"wiki"	
+mesh:D007938	disease	Leukemia	"leukemia"	"wiki"	https://bioregistry.io/mesh:D007938	""			"wiki"	
+mesh:D012495	other	San Francisco	"San Francisco"	"wiki"	https://bioregistry.io/mesh:D012495	""			"wiki"	
+mesh:D006761	other	Hospitals	"Hospital;hospital"	"wiki"	https://bioregistry.io/mesh:D006761	""			"wiki"	
+mesh:D009820	other	Ohio	"Ohio"	"wiki"	https://bioregistry.io/mesh:D009820	""			"wiki"	
+syn21355225:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21355225
+efo:0001738	experimental_factor	institution	"institution;Institution"	"wiki"	https://bioregistry.io/efo:0001738	""			"wiki"	
+mesh:C000724523	other	German people	"Germans"	"wiki"	https://bioregistry.io/mesh:C000724523	""			"wiki"	
+mesh:D009423	disease	Nervous System Neoplasms	"tumors of the nervous system"	"wiki"	https://bioregistry.io/mesh:D009423	""			"wiki"	
+mesh:D016364	biological_process	Reading Frames	"reading frame"	"wiki"	https://bioregistry.io/mesh:D016364	""			"wiki"	
+mesh:D016515	biological_process	Genes, Neurofibromatosis 2	"NF2 gene"	"wiki"	https://bioregistry.io/mesh:D016515	""			"wiki"	
+mesh:D020125	biological_process	Mutation, Missense	"missense mutations;missense mutation"	"wiki"	https://bioregistry.io/mesh:D020125	""			"wiki"	
+chebi:132554	small_molecule	oligomer	"oligomers"	"wiki"	https://bioregistry.io/chebi:132554	""			"wiki"	
+mesh:D060172	small_molecule	Morpholinos	"morpholino;Phosphorodiamidate morpholino oligomers;phosphorodiamidate morpholino oligomers"	"wiki"	https://bioregistry.io/mesh:D060172	""			"wiki"	
+go:0030036	biological_process	actin cytoskeleton organization	"actin cytoskeleton organization"	"wiki"	https://bioregistry.io/go:0030036	""			"wiki"	
+go:0051170	biological_process	import into nucleus	"nuclear translocation"	"wiki"	https://bioregistry.io/go:0051170	""			"wiki"	
+chebi:35371	small_molecule	lipooligosaccharide	"los"	"wiki"	https://bioregistry.io/chebi:35371	""			"wiki"	
+mesh:D027826	organism	Rosa	"Rose;Rosas"	"wiki"	https://bioregistry.io/mesh:D027826	""			"wiki"	
+syn21452685:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21452685
+syn21641813:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21641813
+mesh:D000407	other	Alabama	"Alabama"	"wiki"	https://bioregistry.io/mesh:D000407	""			"wiki"	
+mesh:D018389	small_molecule	Codon, Nonsense	"premature termination codons;premature termination codon;Nonsense codons;nonsense codons"	"wiki"	https://bioregistry.io/mesh:D018389	""			"wiki"	
+uniprot:P18502	nonhuman_gene_protein	P18502	"PTC"	"wiki"	https://bioregistry.io/uniprot:P18502	""			"wiki"	
+go:0000184	biological_process	nuclear-transcribed mRNA catabolic process, nonsense-mediated decay	"nonsense-mediated mRNA decay"	"wiki"	https://bioregistry.io/go:0000184	""			"wiki"	
+mesh:D003550	disease	Cystic Fibrosis	"cystic fibrosis;Cystic Fibrosis"	"wiki"	https://bioregistry.io/mesh:D003550	""			"wiki"	
+syn21641872:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21641872
+mesh:D016678	biological_process	Genome	"Genome"	"wiki"	https://bioregistry.io/mesh:D016678	""			"wiki"	
+mesh:D014411	anatomical_region	Neoplastic Stem Cells	"tumor initiating cells"	"wiki"	https://bioregistry.io/mesh:D014411	""			"wiki"	
+mesh:D001709	other	Biotechnology	"Biotechnology;biotechnologies"	"wiki"	https://bioregistry.io/mesh:D001709	""			"wiki"	
+syn21641876:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21641876
+mesh:D005815	biological_process	Genetic Code	"genetic code"	"wiki"	https://bioregistry.io/mesh:D005815	""			"wiki"	
+efo:0010216	experimental_factor	random	"random"	"wiki"	https://bioregistry.io/efo:0010216	""			"wiki"	
+mesh:C515878	small_molecule	ataluren	"ataluren"	"wiki"	https://bioregistry.io/mesh:C515878	""			"wiki"	
+mesh:D020388	disease	Muscular Dystrophy, Duchenne	"Duchenne muscular dystrophy;Duchenne Muscular Dystrophy"	"wiki"	https://bioregistry.io/mesh:D020388	""			"wiki"	
+syn21641931:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21641931
+mesh:D035843	other	Biomedical Research	"Biomedical Research"	"wiki"	https://bioregistry.io/mesh:D035843	""			"wiki"	
+chebi:50803	small_molecule	nanoparticle	"Nanoparticle;nanoparticles"	"wiki"	https://bioregistry.io/chebi:50803	""			"wiki"	
+mesh:D060825	other	Cognitive Dysfunction	"Cognitive impairments;cognitive impairment;cognitive deficits"	"wiki"	https://bioregistry.io/mesh:D060825	""			"wiki"	
+mesh:D050997	other	Nanomedicine	"nanomedicine"	"wiki"	https://bioregistry.io/mesh:D050997	""			"wiki"	
+syn21641945:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21641945
+go:0042245	biological_process	RNA repair	"RNA Repair;RNA repair"	"wiki"	https://bioregistry.io/go:0042245	""			"wiki"	
+mesh:D009613	other	Nobel Prize	"Nobel Prize"	"wiki"	https://bioregistry.io/mesh:D009613	""			"wiki"	
+mesh:D007438	biological_process	Introns	"intron"	"wiki"	https://bioregistry.io/mesh:D007438	""			"wiki"	
+mesh:D016808	organism	Tetrahymena thermophila	"Tetrahymena thermophila"	"wiki"	https://bioregistry.io/mesh:D016808	""			"wiki"	
+mesh:D020040	biological_process	Trans-Splicing	"trans-splicing"	"wiki"	https://bioregistry.io/mesh:D020040	""			"wiki"	
+mesh:D009136	disease	Muscular Dystrophies	"muscular dystrophy"	"wiki"	https://bioregistry.io/mesh:D009136	""			"wiki"	
+mesh:D000740	disease	Anemia	"anemia"	"wiki"	https://bioregistry.io/mesh:D000740	""			"wiki"	
+syn21641955:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21641955
+efo:0009428	experimental_factor	synthetic lethality	"Synthetic Lethality"	"wiki"	https://bioregistry.io/efo:0009428	""			"wiki"	
+hgnc:49404	human_rna	ERICD	"Eric"	"wiki"	https://bioregistry.io/hgnc:49404	""			"wiki"	
+mesh:D010297	other	Paris	"Paris"	"wiki"	https://bioregistry.io/mesh:D010297	""			"wiki"	
+syn21641985:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21641985
+mesh:D016335	biological_process	Zinc Fingers	"Zinc Finger"	"wiki"	https://bioregistry.io/mesh:D016335	""			"wiki"	
+mesh:D007596	anatomical_region	Joints	"joint"	"wiki"	https://bioregistry.io/mesh:D007596	""			"wiki"	
+syn21642010:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21642010
+mesh:D008131	other	London	"London"	"wiki"	https://bioregistry.io/mesh:D008131	""			"wiki"	
+mesh:D020029	biological_process	Base Pairing	"base pairing"	"wiki"	https://bioregistry.io/mesh:D020029	""			"wiki"	
+mesh:D005091	biological_process	Exons	"Exons"	"wiki"	https://bioregistry.io/mesh:D005091	""			"wiki"	
+mesh:D017421	experimental_factor	Sequence Analysis	"sequence analysis"	"wiki"	https://bioregistry.io/mesh:D017421	""			"wiki"	
+mesh:D004526	other	Efficiency	"efficiency"	"wiki"	https://bioregistry.io/mesh:D004526	""			"wiki"	
+syn21642027:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21642027
+mesh:D013552	organism	Swine	"Swine;swine"	"wiki"	https://bioregistry.io/mesh:D013552	""			"wiki"	
+mesh:D013556	organism	Swine, Miniature	"minipig"	"wiki"	https://bioregistry.io/mesh:D013556	""			"wiki"	
+hgnc:25676	human_gene_protein	GORAB	"go"	"wiki"	https://bioregistry.io/hgnc:25676	""			"wiki"	
+syn21650326:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21650326
+mesh:D000066829	biological_process	Neuroprotection	"neuroprotection;Neuroprotection"	"wiki"	https://bioregistry.io/mesh:D000066829	""			"wiki"	
+go:0031099	biological_process	regeneration	"regeneration;Regeneration"	"wiki"	https://bioregistry.io/go:0031099	""			"wiki"	
+mesh:D001900	other	Boston	"Boston"	"wiki"	https://bioregistry.io/mesh:D001900	""			"wiki"	
+mesh:D009274	other	Occupational Groups	"Personnel;personnel"	"wiki"	https://bioregistry.io/mesh:D009274	""			"wiki"	
+mesh:D001253	anatomical_region	Astrocytes	"astrocytes"	"wiki"	https://bioregistry.io/mesh:D001253	""			"wiki"	
+mesh:D009420	anatomical_region	Nervous System	"nervous systems;nervous system"	"wiki"	https://bioregistry.io/mesh:D009420	""			"wiki"	
+mesh:D017628	anatomical_region	Microglia	"microglia"	"wiki"	https://bioregistry.io/mesh:D017628	""			"wiki"	
+syn21650366:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21650366
+go:0031103	biological_process	axon regeneration	"axon regeneration;Axon regeneration;Axon Regeneration"	"wiki"	https://bioregistry.io/go:0031103	""			"wiki"	
+mesh:D001690	other	Biological Science Disciplines	"Life Science"	"wiki"	https://bioregistry.io/mesh:D001690	""			"wiki"	
+mesh:D012377	organism	Rodentia	"Rodent;rodents;rodent"	"wiki"	https://bioregistry.io/mesh:D012377	""			"wiki"	
+mesh:D020221	disease	Optic Nerve Injuries	"optic nerve injury"	"wiki"	https://bioregistry.io/mesh:D020221	""			"wiki"	
+hp:0011009	disease	Acute	"acute"	"wiki"	https://bioregistry.io/hp:0011009	""			"wiki"	
+mesh:D014947	disease	Wounds and Injuries	"trauma"	"wiki"	https://bioregistry.io/mesh:D014947	""			"wiki"	
+syn21650395:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21650395
+mesh:D014861	other	Washington	"Washington"	"wiki"	https://bioregistry.io/mesh:D014861	""			"wiki"	
+efo:1000107	experimental_factor	Benign Brain Neoplasm	"benign brain tumors"	"wiki"	https://bioregistry.io/efo:1000107	""			"wiki"	
+hgnc:1863	human_gene_protein	CES1	"Reh"	"wiki"	https://bioregistry.io/hgnc:1863	""			"wiki"	
+syn21650404:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21650404
+efo:0022481	experimental_factor	decreased risk	"protective"	"wiki"	https://bioregistry.io/efo:0022481	""			"wiki"	
+syn21650464:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21650464
+mesh:D020489	other	Outline	"outline;outlines"	"wiki"	https://bioregistry.io/mesh:D020489	""			"wiki"	
+syn21650476:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21650476
+efo:0009735	experimental_factor	co-investigator	"Co-investigator;Co-Investigator"	"wiki"	https://bioregistry.io/efo:0009735	""			"wiki"	
+mesh:D055351	anatomical_region	Retinal Neurons	"retinal neurons"	"wiki"	https://bioregistry.io/mesh:D055351	""			"wiki"	
+syn21650480:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21650480
+mesh:D014180	experimental_factor	Transplantation	"transplantation;Transplantation"	"wiki"	https://bioregistry.io/mesh:D014180	""			"wiki"	
+hp:0001138	disease	Optic neuropathy	"optic neuropathy"	"wiki"	https://bioregistry.io/hp:0001138	""			"wiki"	
+mesh:D008322	organism	Mammals	"mammals"	"wiki"	https://bioregistry.io/mesh:D008322	""			"wiki"	
+mesh:D019636	disease	Neurodegenerative Diseases	"neurodegenerative diseases"	"wiki"	https://bioregistry.io/mesh:D019636	""			"wiki"	
+hgnc:28835	human_gene_protein	IRGC	"iRGC"	"wiki"	https://bioregistry.io/hgnc:28835	""			"wiki"	
+mesh:D019737	anatomical_region	Transplants	"transplant;graft;transplants;grafts"	"wiki"	https://bioregistry.io/mesh:D019737	""			"wiki"	
+efo:0000532	experimental_factor	host	"host"	"wiki"	https://bioregistry.io/efo:0000532	""			"wiki"	
+syn21650484:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21650484
+mesh:D004423	anatomical_region	Ear	"ears;Ear"	"wiki"	https://bioregistry.io/mesh:D004423	""			"wiki"	
+mesh:D011323	organism	Primates	"primate;primates"	"wiki"	https://bioregistry.io/mesh:D011323	""			"wiki"	
+hgnc:5284	human_gene_protein	HTN3	"PB"	"wiki"	https://bioregistry.io/hgnc:5284	""			"wiki"	
+syn21650488:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21650488
+mesh:D003253	other	Consultants	"Consultant"	"wiki"	https://bioregistry.io/mesh:D003253	""			"wiki"	
+efo:0009739	experimental_factor	technician	"Technician"	"wiki"	https://bioregistry.io/efo:0009739	""			"wiki"	
+mesh:D009901	disease	Optic Nerve Diseases	"optic nerve disease"	"wiki"	https://bioregistry.io/mesh:D009901	""			"wiki"	
+syn21650493:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21650493
+mesh:D008824	other	Michigan	"Michigan"	"wiki"	https://bioregistry.io/mesh:D008824	""			"wiki"	
+mesh:D019574	disease	Optic Nerve Neoplasms	"optic nerve tumors"	"wiki"	https://bioregistry.io/mesh:D019574	""			"wiki"	
+syn21650499:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21650499
+mesh:D045888	disease	Ganglion Cysts	"ganglion"	"wiki"	https://bioregistry.io/mesh:D045888	""			"wiki"	
+mesh:D000663	organism	Amphibians	"amphibians"	"wiki"	https://bioregistry.io/mesh:D000663	""			"wiki"	
+mesh:D009457	anatomical_region	Neuroglia	"glial cells;glia;Glia;glia cell"	"wiki"	https://bioregistry.io/mesh:D009457	""			"wiki"	
+mesh:D015354	disease	Vision, Low	"impaired vision;visual impairment"	"wiki"	https://bioregistry.io/mesh:D015354	""			"wiki"	
+mesh:D005809	biological_process	Genes, Regulator	"regulatory genes;regulatory gene"	"wiki"	https://bioregistry.io/mesh:D005809	""			"wiki"	
+syn21984813:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn21984813
+hgnc:50866	human_rna	RNF217-AS1	"STL"	"wiki"	https://bioregistry.io/hgnc:50866	""			"wiki"	
+mesh:D014934	anatomical_region	Wood	"Wood"	"wiki"	https://bioregistry.io/mesh:D014934	""			"wiki"	
+hgnc:10627	human_gene_protein	CCL3	"Sci"	"wiki"	https://bioregistry.io/hgnc:10627	""			"wiki"	
+chebi:29312	small_molecule	sulfanyl	"SH"	"wiki"	https://bioregistry.io/chebi:29312	""			"wiki"	
+efo:0005318	experimental_factor	axial length measurement	"AL"	"wiki"	https://bioregistry.io/efo:0005318	""			"wiki"	
+syn22266552:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn22266552
+go:0044233	cellular_location	mitochondria-associated endoplasmic reticulum membrane	"mitochondria-associated membranes"	"wiki"	https://bioregistry.io/go:0044233	""			"wiki"	
+mesh:D007558	other	Italy	"Italy"	"wiki"	https://bioregistry.io/mesh:D007558	""			"wiki"	
+syn22266606:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn22266606
+mesh:D000013	disease	Congenital Abnormalities	"deformities"	"wiki"	https://bioregistry.io/mesh:D000013	""			"wiki"	
+go:0032045	protein_family_complex	guanyl-nucleotide exchange factor complex	"guanine nucleotide exchange factors"	"wiki"	https://bioregistry.io/go:0032045	""			"wiki"	
+fplx:GEF	protein_family_complex	GEF	"GEFs"	"wiki"	https://bioregistry.io/fplx:GEF	""			"wiki"	
+fplx:SOS	protein_family_complex	SOS	"SOS"	"wiki"	https://bioregistry.io/fplx:SOS	""			"wiki"	
+hp:0025153	disease	Transient	"transient"	"wiki"	https://bioregistry.io/hp:0025153	""			"wiki"	
+mesh:D019370	experimental_factor	Observation	"observation"	"wiki"	https://bioregistry.io/mesh:D019370	""			"wiki"	
+chebi:76932	small_molecule	pathway inhibitor	"pathway inhibitors"	"wiki"	https://bioregistry.io/chebi:76932	""			"wiki"	
+syn22267284:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn22267284
+go:0070085	biological_process	glycosylation	"glycosylation;Glycosylation"	"wiki"	https://bioregistry.io/go:0070085	""			"wiki"	
+chebi:506227	small_molecule	N-acetyl-D-glucosamine	"GlcNAc"	"wiki"	https://bioregistry.io/chebi:506227	""			"wiki"	
+go:0065007	biological_process	biological regulation	"biological regulation"	"wiki"	https://bioregistry.io/go:0065007	""			"wiki"	
+syn22267323:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn22267323
+go:0006541	biological_process	glutamine metabolic process	"glutamine metabolism;Glutamine metabolism"	"wiki"	https://bioregistry.io/go:0006541	""			"wiki"	
+mesh:D007484	other	Iowa	"Iowa"	"wiki"	https://bioregistry.io/mesh:D007484	""			"wiki"	
+mesh:D000076983	human_gene_protein	Histone Methyltransferases	"histone methyltransferase"	"wiki"	https://bioregistry.io/mesh:D000076983	""			"wiki"	
+efo:0000752	experimental_factor	metabolomic profiling	"metabolomic profiling"	"wiki"	https://bioregistry.io/efo:0000752	""			"wiki"	
+chebi:25212	small_molecule	metabolite	"metabolite"	"wiki"	https://bioregistry.io/chebi:25212	""			"wiki"	
+chebi:33292	small_molecule	fuel	"fuel"	"wiki"	https://bioregistry.io/chebi:33292	""			"wiki"	
+mesh:D012119	biological_process	Respiration	"respiration"	"wiki"	https://bioregistry.io/mesh:D012119	""			"wiki"	
+go:0006096	biological_process	glycolytic process	"glycolysis"	"wiki"	https://bioregistry.io/go:0006096	""			"wiki"	
+mesh:D008401	experimental_factor	Gas Chromatography-Mass Spectrometry	"GC-MS"	"wiki"	https://bioregistry.io/mesh:D008401	""			"wiki"	
+mesh:D055432	other	Metabolomics	"metabolomic"	"wiki"	https://bioregistry.io/mesh:D055432	""			"wiki"	
+syn22267330:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn22267330
+mesh:D006365	anatomical_region	Heel	"Heel"	"wiki"	https://bioregistry.io/mesh:D006365	""			"wiki"	
+mesh:D013022	other	South Carolina	"South Carolina"	"wiki"	https://bioregistry.io/mesh:D013022	""			"wiki"	
+go:0019722	biological_process	calcium-mediated signaling	"calcium-mediated signaling;calcium signaling"	"wiki"	https://bioregistry.io/go:0019722	""			"wiki"	
+chebi:26519	small_molecule	radical	"radical"	"wiki"	https://bioregistry.io/chebi:26519	""			"wiki"	
+mesh:D015996	experimental_factor	Survival Rate	"survival rate;survival rates"	"wiki"	https://bioregistry.io/mesh:D015996	""			"wiki"	
+chebi:35224	small_molecule	effector	"effector;Effector"	"wiki"	https://bioregistry.io/chebi:35224	""			"wiki"	
+fplx:CALM	protein_family_complex	CALM	"calmodulin;CaM"	"wiki"	https://bioregistry.io/fplx:CALM	""			"wiki"	
+syn22268639:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn22268639
+hgnc:30657	human_gene_protein	SLC50A1	"SCP"	"wiki"	https://bioregistry.io/hgnc:30657	""			"wiki"	
+mesh:D046228	experimental_factor	Microarray Analysis	"microarray analysis"	"wiki"	https://bioregistry.io/mesh:D046228	""			"wiki"	
+fplx:Purinergic_receptors	protein_family_complex	Purinergic_receptors	"purinergic receptor"	"wiki"	https://bioregistry.io/fplx:Purinergic_receptors	""			"wiki"	
+mesh:D018345	organism	Mice, Knockout	"knockout mice;knock-out mice"	"wiki"	https://bioregistry.io/mesh:D018345	""			"wiki"	
+go:0000165	biological_process	MAPK cascade	"MAPK signaling"	"wiki"	https://bioregistry.io/go:0000165	""			"wiki"	
+mesh:D007700	biological_process	Kinetics	"kinetics"	"wiki"	https://bioregistry.io/mesh:D007700	""			"wiki"	
+syn22268652:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn22268652
+fplx:TEAD	protein_family_complex	TEAD	"TEAD;Tead"	"wiki"	https://bioregistry.io/fplx:TEAD	""			"wiki"	
+mesh:D012420	biological_process	Running	"running"	"wiki"	https://bioregistry.io/mesh:D012420	""			"wiki"	
+mesh:D003056	anatomical_region	Cochlear Nerve	"cochlear nerve;auditory nerve;acoustic nerves;acoustic nerve"	"wiki"	https://bioregistry.io/mesh:D003056	""			"wiki"	
+hgnc:7650	human_gene_protein	NBL1	"Dan"	"wiki"	https://bioregistry.io/hgnc:7650	""			"wiki"	
+mesh:D005858	other	Germany	"Germany"	"wiki"	https://bioregistry.io/mesh:D005858	""			"wiki"	
+mesh:D010232	small_molecule	Paraffin	"paraffin"	"wiki"	https://bioregistry.io/mesh:D010232	""			"wiki"	
+hgnc:17936	human_gene_protein	PODXL2	"eg"	"wiki"	https://bioregistry.io/hgnc:17936	""			"wiki"	
+go:0060013	biological_process	righting reflex	"righting reflex"	"wiki"	https://bioregistry.io/go:0060013	""			"wiki"	
+syn22268689:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn22268689
+mesh:C069956	small_molecule	6-methoxypurine arabinoside	"Aram"	"wiki"	https://bioregistry.io/mesh:C069956	""			"wiki"	
+chebi:59348	small_molecule	alpha-D-Ko	"Ko"	"wiki"	https://bioregistry.io/chebi:59348	""			"wiki"	
+go:0000151	protein_family_complex	ubiquitin ligase complex	"ubiquitin ligase complex"	"wiki"	https://bioregistry.io/go:0000151	""			"wiki"	
+chebi:81767	small_molecule	imibenconazole	"manage"	"wiki"	https://bioregistry.io/chebi:81767	""			"wiki"	
+mesh:D008025	human_gene_protein	Ligases	"ligases;ligase"	"wiki"	https://bioregistry.io/mesh:D008025	""			"wiki"	
+go:0006508	biological_process	proteolysis	"proteolysis"	"wiki"	https://bioregistry.io/go:0006508	""			"wiki"	
+go:0031208	biological_process	POZ domain binding	"BTB domain"	"wiki"	https://bioregistry.io/go:0031208	""			"wiki"	
+chebi:24432	small_molecule	biological role	"biological functions"	"wiki"	https://bioregistry.io/chebi:24432	""			"wiki"	
+mesh:D001154	other	Art	"art"	"wiki"	https://bioregistry.io/mesh:D001154	""			"wiki"	
+go:0009056	biological_process	catabolic process	"Degradation;degradation"	"wiki"	https://bioregistry.io/go:0009056	""			"wiki"	
+hgnc:12098	human_rna	TRA-TGC7-1	"Tran"	"wiki"	https://bioregistry.io/hgnc:12098	""			"wiki"	
+chebi:184867	small_molecule	PA-PI	"Papi"	"wiki"	https://bioregistry.io/chebi:184867	""			"wiki"	
+syn22392179:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn22392179
+mesh:D013030	other	Spain	"Spain"	"wiki"	https://bioregistry.io/mesh:D013030	""			"wiki"	
+mesh:D000076942	other	Preprint	"preprint"	"wiki"	https://bioregistry.io/mesh:D000076942	""			"wiki"	
+hgnc:11369	human_gene_protein	STATH	"STR"	"wiki"	https://bioregistry.io/hgnc:11369	""			"wiki"	
+mesh:D002965	other	Classification	"classification;classifications"	"wiki"	https://bioregistry.io/mesh:D002965	""			"wiki"	
+mesh:D011003	biological_process	Ploidies	"ploidy"	"wiki"	https://bioregistry.io/mesh:D011003	""			"wiki"	
+syn23532255:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn23532255
+mesh:D000095962	other	Pre-Registration Publication	"Registered Reports"	"wiki"	https://bioregistry.io/mesh:D000095962	""			"wiki"	
+chebi:15379	small_molecule	dioxygen	"oxygen"	"wiki"	https://bioregistry.io/chebi:15379	""			"wiki"	
+mesh:D018832	human_gene_protein	Molecular Chaperones	"molecular chaperone"	"wiki"	https://bioregistry.io/mesh:D018832	""			"wiki"	
+fplx:ETC_complex_II	protein_family_complex	ETC_complex_II	"succinate dehydrogenase"	"wiki"	https://bioregistry.io/fplx:ETC_complex_II	""			"wiki"	
+go:0006099	biological_process	tricarboxylic acid cycle	"Krebs cycle"	"wiki"	https://bioregistry.io/go:0006099	""			"wiki"	
+go:0006119	biological_process	oxidative phosphorylation	"oxidative phosphorylation"	"wiki"	https://bioregistry.io/go:0006119	""			"wiki"	
+go:0002082	biological_process	regulation of oxidative phosphorylation	"OXPHOS"	"wiki"	https://bioregistry.io/go:0002082	""			"wiki"	
+mesh:D000970	small_molecule	Antineoplastic Agents	"anti-tumor drugs"	"wiki"	https://bioregistry.io/mesh:D000970	""			"wiki"	
+syn23532258:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn23532258
+mesh:D010148	disease	Pain, Intractable	"intractable pain"	"wiki"	https://bioregistry.io/mesh:D010148	""			"wiki"	
+mesh:D066246	human_gene_protein	ErbB Receptors	"ErbB receptor"	"wiki"	https://bioregistry.io/mesh:D066246	""			"wiki"	
+mesh:D000084582	anatomical_region	Tumor-Associated Macrophages	"tumor-associated macrophages"	"wiki"	https://bioregistry.io/mesh:D000084582	""			"wiki"	
+efo:0005762	experimental_factor	neuropathic pain	"neuropathic pain"	"wiki"	https://bioregistry.io/efo:0005762	""			"wiki"	
+fplx:ERBB	protein_family_complex	ERBB	"ErbB"	"wiki"	https://bioregistry.io/fplx:ERBB	""			"wiki"	
+syn23532271:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn23532271
+mesh:D003391	anatomical_region	Cranial Nerves	"cranial nerves"	"wiki"	https://bioregistry.io/mesh:D003391	""			"wiki"	
+mesh:D013116	anatomical_region	Spinal Cord	"spinal cord"	"wiki"	https://bioregistry.io/mesh:D013116	""			"wiki"	
+mesh:D018095	biological_process	Germ-Line Mutation	"germline mutations;germline mutation"	"wiki"	https://bioregistry.io/mesh:D018095	""			"wiki"	
+hp:0031375	disease	Refractory	"refractory"	"wiki"	https://bioregistry.io/hp:0031375	""			"wiki"	
+syn23532273:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn23532273
+go:0044351	biological_process	macropinocytosis	"macropinocytosis"	"wiki"	https://bioregistry.io/go:0044351	""			"wiki"	
+chebi:52211	small_molecule	physiological role	"physiological roles"	"wiki"	https://bioregistry.io/chebi:52211	""			"wiki"	
+chebi:33839	small_molecule	macromolecule	"macromolecules"	"wiki"	https://bioregistry.io/chebi:33839	""			"wiki"	
+mesh:C045540	small_molecule	fluorescein 5-isothiocyanate-Ficoll	"FITC-Ficoll"	"wiki"	https://bioregistry.io/mesh:C045540	""			"wiki"	
+chebi:24632	small_molecule	hydrocarbon	"hydrocarbon"	"wiki"	https://bioregistry.io/chebi:24632	""			"wiki"	
+hgnc:994	human_gene_protein	BCL2L11	"BIM"	"wiki"	https://bioregistry.io/hgnc:994	""			"wiki"	
+mesh:D055354	anatomical_region	Exosomes	"exosomes"	"wiki"	https://bioregistry.io/mesh:D055354	""			"wiki"	
+syn23639889:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn23639889
+chebi:34873	small_molecule	N-nitrosodiethylamine	"Dana"	"wiki"	https://bioregistry.io/chebi:34873	""			"wiki"	
+mesh:D049268	experimental_factor	Positron-Emission Tomography	"PET scans"	"wiki"	https://bioregistry.io/mesh:D049268	""			"wiki"	
+efo:0002693	experimental_factor	DNA-seq	"DNA sequencing"	"wiki"	https://bioregistry.io/efo:0002693	""			"wiki"	
+mesh:D011379	experimental_factor	Prognosis	"prognoses;prognosis"	"wiki"	https://bioregistry.io/mesh:D011379	""			"wiki"	
+mesh:D048788	biological_process	Growth and Development	"development and growth"	"wiki"	https://bioregistry.io/mesh:D048788	""			"wiki"	
+mesh:D045744	anatomical_region	Cell Line, Tumor	"tumor cell lines"	"wiki"	https://bioregistry.io/mesh:D045744	""			"wiki"	
+mesh:D004057	disease	Hyperostosis, Diffuse Idiopathic Skeletal	"dish"	"wiki"	https://bioregistry.io/mesh:D004057	""			"wiki"	
+syn23651168:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn23651168
+syn23651229:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn23651229
+mesh:D054547	other	National Cancer Institute (U.S.)	"National Cancer Institute"	"wiki"	https://bioregistry.io/mesh:D054547	""			"wiki"	
+mesh:D003430	experimental_factor	Cross-Sectional Studies	"cross-sectional study"	"wiki"	https://bioregistry.io/mesh:D003430	""			"wiki"	
+syn23662493:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn23662493
+mesh:D004797	experimental_factor	Enzyme-Linked Immunosorbent Assay	"ELISA"	"wiki"	https://bioregistry.io/mesh:D004797	""			"wiki"	
+chebi:60816	small_molecule	immunogen	"immunogen"	"wiki"	https://bioregistry.io/chebi:60816	""			"wiki"	
+go:0038045	protein_family_complex	large latent transforming growth factor-beta complex	"LLC"	"wiki"	https://bioregistry.io/go:0038045	""			"wiki"	
+mesh:D012680	experimental_factor	Sensitivity and Specificity	"sensitivity and specificity"	"wiki"	https://bioregistry.io/mesh:D012680	""			"wiki"	
+mesh:D018604	experimental_factor	Epitope Mapping	"epitope mapping"	"wiki"	https://bioregistry.io/mesh:D018604	""			"wiki"	
+syn23664726:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn23664726
+mesh:D012524	small_molecule	Sarin	"Sarin"	"wiki"	https://bioregistry.io/mesh:D012524	""			"wiki"	
+mesh:D017281	other	Cost of Illness	"disease burden"	"wiki"	https://bioregistry.io/mesh:D017281	""			"wiki"	
+mesh:D003062	small_molecule	Codon	"codon;codons"	"wiki"	https://bioregistry.io/mesh:D003062	""			"wiki"	
+mesh:D060045	biological_process	Genes, Modifier	"modifier gene;modifier genes"	"wiki"	https://bioregistry.io/mesh:D060045	""			"wiki"	
+syn24875850:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn24875850
+mesh:D007962	anatomical_region	Leukocytes	"leukocytes;leukocyte"	"wiki"	https://bioregistry.io/mesh:D007962	""			"wiki"	
+chebi:47867	small_molecule	indicator	"indicator"	"wiki"	https://bioregistry.io/chebi:47867	""			"wiki"	
+go:0008150	biological_process	biological_process	"biological process;biological processes"	"wiki"	https://bioregistry.io/go:0008150	""			"wiki"	
+mesh:D000073888	small_molecule	Cell-Free Nucleic Acids	"circulating nucleic acid"	"wiki"	https://bioregistry.io/mesh:D000073888	""			"wiki"	
+efo:0008479	experimental_factor	genomic DNA	"genomic DNA"	"wiki"	https://bioregistry.io/efo:0008479	""			"wiki"	
+hgnc:9753	human_gene_protein	QPCT	"QC"	"wiki"	https://bioregistry.io/hgnc:9753	""			"wiki"	
+chebi:28006	small_molecule	O,O-diethyl hydrogen thiophosphate	"detp"	"wiki"	https://bioregistry.io/chebi:28006	""			"wiki"	
+go:0000803	cellular_location	sex chromosome	"sex chromosomes"	"wiki"	https://bioregistry.io/go:0000803	""			"wiki"	
+mesh:D020641	biological_process	Polymorphism, Single Nucleotide	"SNPs"	"wiki"	https://bioregistry.io/mesh:D020641	""			"wiki"	
+chebi:167896	small_molecule	cytidylyl-(3'->5')-guanosine	"CpG"	"wiki"	https://bioregistry.io/chebi:167896	""			"wiki"	
+mesh:D016000	experimental_factor	Cluster Analysis	"clustering"	"wiki"	https://bioregistry.io/mesh:D016000	""			"wiki"	
+mesh:D009504	anatomical_region	Neutrophils	"neutrophils;neutrophil"	"wiki"	https://bioregistry.io/mesh:D009504	""			"wiki"	
+mesh:D009000	anatomical_region	Monocytes	"monocytes"	"wiki"	https://bioregistry.io/mesh:D009000	""			"wiki"	
+mesh:D007694	anatomical_region	Killer Cells, Natural	"natural killer cells;NK cells"	"wiki"	https://bioregistry.io/mesh:D007694	""			"wiki"	
+mesh:D008214	anatomical_region	Lymphocytes	"lymphocyte;lymphocytes"	"wiki"	https://bioregistry.io/mesh:D008214	""			"wiki"	
+syn25881328:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn25881328
+mesh:D001933	anatomical_region	Brain Stem	"brainstem"	"wiki"	https://bioregistry.io/mesh:D001933	""			"wiki"	
+hp:0010796	disease	Brainstem glioma	"brainstem glioma"	"wiki"	https://bioregistry.io/hp:0010796	""			"wiki"	
+efo:0001355	experimental_factor	infant	"infant"	"wiki"	https://bioregistry.io/efo:0001355	""			"wiki"	
+mesh:D001724	disease	Birth Weight	"birth weight"	"wiki"	https://bioregistry.io/mesh:D001724	""			"wiki"	
+mesh:D018811	other	Maternal Exposure	"maternal exposure"	"wiki"	https://bioregistry.io/mesh:D018811	""			"wiki"	
+mesh:D004032	biological_process	Diet	"diet"	"wiki"	https://bioregistry.io/mesh:D004032	""			"wiki"	
+chebi:80552	small_molecule	NPC	"NPC"	"wiki"	https://bioregistry.io/chebi:80552	""			"wiki"	
+go:0007420	biological_process	brain development	"brain development"	"wiki"	https://bioregistry.io/go:0007420	""			"wiki"	
+syn25961160:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn25961160
+mesh:D007597	other	Jordan	"Jordan"	"wiki"	https://bioregistry.io/mesh:D007597	""			"wiki"	
+chebi:60809	small_molecule	adjuvant	"adjuvant"	"wiki"	https://bioregistry.io/chebi:60809	""			"wiki"	
+mesh:D015513	human_gene_protein	Oncogene Proteins	"Oncoproteins;oncoprotein"	"wiki"	https://bioregistry.io/mesh:D015513	""			"wiki"	
+mesh:D012175	disease	Retinoblastoma	"retinoblastoma"	"wiki"	https://bioregistry.io/mesh:D012175	""			"wiki"	
+mesh:D006948	disease	Hyperkinesis	"hyperactivity"	"wiki"	https://bioregistry.io/mesh:D006948	""			"wiki"	
+syn25999239:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn25999239
+mesh:D009634	disease	Noonan Syndrome	"Noonan syndrome"	"wiki"	https://bioregistry.io/mesh:D009634	""			"wiki"	
+mesh:D066107	other	Social Skills	"social skills"	"wiki"	https://bioregistry.io/mesh:D066107	""			"wiki"	
+mesh:D038524	experimental_factor	Diffusion Magnetic Resonance Imaging	"MRI, diffusion-weighted"	"wiki"	https://bioregistry.io/mesh:D038524	""			"wiki"	
+efo:0004346	experimental_factor	neuroimaging measurement	"brain imaging"	"wiki"	https://bioregistry.io/efo:0004346	""			"wiki"	
+mesh:D009938	other	Organizations	"organization;organizations"	"wiki"	https://bioregistry.io/mesh:D009938	""			"wiki"	
+syn25999248:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn25999248
+mesh:D009272	other	Persons	"person;persons"	"wiki"	https://bioregistry.io/mesh:D009272	""			"wiki"	
+hp:0012829	disease	Profound	"profound"	"wiki"	https://bioregistry.io/hp:0012829	""			"wiki"	
+go:0002118	biological_process	aggressive behavior	"aggressive behavior"	"wiki"	https://bioregistry.io/go:0002118	""			"wiki"	
+mesh:D035862	other	Vulnerable Populations	"vulnerable population"	"wiki"	https://bioregistry.io/mesh:D035862	""			"wiki"	
+syn25999950:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn25999950
+efo:0007832	experimental_factor	single cell sequencing	"single-cell sequencing;Single cell sequencing"	"wiki"	https://bioregistry.io/efo:0007832	""			"wiki"	
+efo:0008835	experimental_factor	nuc-seq	"Nucseq"	"wiki"	https://bioregistry.io/efo:0008835	""			"wiki"	
+mesh:D004213	other	Dissociative Disorders	"dissociation"	"wiki"	https://bioregistry.io/mesh:D004213	""			"wiki"	
+mesh:D001108	other	Architecture	"architecture"	"wiki"	https://bioregistry.io/mesh:D001108	""			"wiki"	
+syn26238842:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn26238842
+mesh:D009922	other	Oregon	"Oregon"	"wiki"	https://bioregistry.io/mesh:D009922	""			"wiki"	
+mesh:D004806	disease	Ependymoma	"ependymomas;ependymoma"	"wiki"	https://bioregistry.io/mesh:D004806	""			"wiki"	
+mesh:D011845	other	Radio	"radio"	"wiki"	https://bioregistry.io/mesh:D011845	""			"wiki"	
+chebi:63248	small_molecule	oxidising agent	"oxidant"	"wiki"	https://bioregistry.io/chebi:63248	""			"wiki"	
+chebi:25941	small_molecule	peroxynitrite	"peroxynitrite"	"wiki"	https://bioregistry.io/chebi:25941	""			"wiki"	
+mesh:D009464	disease	Neuroma, Acoustic	"Vestibular Schwannoma;vestibular schwannoma;Vestibular schwannomas;vestibular schwannomas;Vestibular schwannoma"	"wiki"	https://bioregistry.io/mesh:D009464	""			"wiki"	
+go:0009966	biological_process	regulation of signal transduction	"regulation of signaling pathways"	"wiki"	https://bioregistry.io/go:0009966	""			"wiki"	
+syn26238926:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn26238926
+hgnc:28196	human_gene_protein	TMEM79	"Matt"	"wiki"	https://bioregistry.io/hgnc:28196	""			"wiki"	
+mesh:D000066	other	Accounting	"accounting"	"wiki"	https://bioregistry.io/mesh:D000066	""			"wiki"	
+hgnc:11589	human_gene_protein	TBPL1	"TRP"	"wiki"	https://bioregistry.io/hgnc:11589	""			"wiki"	
+mesh:D009619	anatomical_region	Nociceptors	"pain receptor"	"wiki"	https://bioregistry.io/mesh:D009619	""			"wiki"	
+chebi:50629	small_molecule	cyclooxygenase 2 inhibitor	"COX2 inhibitor"	"wiki"	https://bioregistry.io/chebi:50629	""			"wiki"	
+hp:0032321	disease	Unaffected	"unaffected"	"wiki"	https://bioregistry.io/hp:0032321	""			"wiki"	
+fplx:DUSP	protein_family_complex	DUSP	"DUSP"	"wiki"	https://bioregistry.io/fplx:DUSP	""			"wiki"	
+syn26238964:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn26238964
+syn26241781:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn26241781
+hp:0031797	disease	Clinical course	"clinical course"	"wiki"	https://bioregistry.io/hp:0031797	""			"wiki"	
+mesh:D012094	other	Repression, Psychology	"repression"	"wiki"	https://bioregistry.io/mesh:D012094	""			"wiki"	
+syn26347297:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn26347297
+mesh:D007167	experimental_factor	Immunotherapy	"immunotherapy;Immunotherapy"	"wiki"	https://bioregistry.io/mesh:D007167	""			"wiki"	
+syn26383473:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn26383473
+mesh:D014930	other	Women	"woman;women;girl"	"wiki"	https://bioregistry.io/mesh:D014930	""			"wiki"	
+mesh:D011336	experimental_factor	Probability	"probability;probabilities"	"wiki"	https://bioregistry.io/mesh:D011336	""			"wiki"	
+chebi:87631	small_molecule	statin	"statin;Statin;statins"	"wiki"	https://bioregistry.io/chebi:87631	""			"wiki"	
+chebi:77383	small_molecule	1,1-bis(phosphonic acid)	"bisphosphonates"	"wiki"	https://bioregistry.io/chebi:77383	""			"wiki"	
+chebi:52217	small_molecule	pharmaceutical	"Pharmaceutical;pharmaceutical"	"wiki"	https://bioregistry.io/chebi:52217	""			"wiki"	
+mesh:D000830	organism	Animals, Laboratory	"laboratory animals"	"wiki"	https://bioregistry.io/mesh:D000830	""			"wiki"	
+syn26410510:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn26410510
+mesh:D001289	other	Attention Deficit Disorder with Hyperactivity	"attention deficit disorder;ADHD"	"wiki"	https://bioregistry.io/mesh:D001289	""			"wiki"	
+mesh:D004569	experimental_factor	Electroencephalography	"EEG;electroencephalography"	"wiki"	https://bioregistry.io/mesh:D004569	""			"wiki"	
+mesh:D017028	other	Caregivers	"caregivers;caregiver"	"wiki"	https://bioregistry.io/mesh:D017028	""			"wiki"	
+mesh:D001526	other	Behavioral Symptoms	"behavioral problems;behavioral disorders;behavioral changes"	"wiki"	https://bioregistry.io/mesh:D001526	""			"wiki"	
+mesh:D000072861	other	Phobia, Social	"Social Phobia"	"wiki"	https://bioregistry.io/mesh:D000072861	""			"wiki"	
+mesh:D000679	anatomical_region	Amygdala	"amygdala"	"wiki"	https://bioregistry.io/mesh:D000679	""			"wiki"	
+go:0033596	protein_family_complex	tuberous sclerosis	"Tuberous Sclerosis Complex"	"wiki"	https://bioregistry.io/go:0033596	""			"wiki"	
+hgnc:18061	human_gene_protein	EBPL	"ERP"	"wiki"	https://bioregistry.io/hgnc:18061	""			"wiki"	
+syn26438193:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn26438193
+mesh:D055118	other	Medication Adherence	"Medication Adherence"	"wiki"	https://bioregistry.io/mesh:D055118	""			"wiki"	
+mesh:D020407	other	Internet	"internet"	"wiki"	https://bioregistry.io/mesh:D020407	""			"wiki"	
+mesh:D003710	other	Demography	"demographic"	"wiki"	https://bioregistry.io/mesh:D003710	""			"wiki"	
+mesh:D000079225	other	Psychological Distress	"emotional distress"	"wiki"	https://bioregistry.io/mesh:D000079225	""			"wiki"	
+mesh:D019497	other	Diary	"diary"	"wiki"	https://bioregistry.io/mesh:D019497	""			"wiki"	
+mesh:D011996	experimental_factor	Records	"record"	"wiki"	https://bioregistry.io/mesh:D011996	""			"wiki"	
+syn26585075:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn26585075
+mesh:D013117	disease	Spinal Cord Compression	"spinal cord compression"	"wiki"	https://bioregistry.io/mesh:D013117	""			"wiki"	
+syn26957643:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn26957643
+hgnc:18606	human_gene_protein	OXCT2	"Scott"	"wiki"	https://bioregistry.io/hgnc:18606	""			"wiki"	
+mesh:D059036	other	Photograph	"photographs"	"wiki"	https://bioregistry.io/mesh:D059036	""			"wiki"	
+syn26966057:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn26966057
+syn27114640:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn27114640
+mesh:D042822	disease	Genomic Instability	"genomic instability"	"wiki"	https://bioregistry.io/mesh:D042822	""			"wiki"	
+mesh:D000069553	biological_process	Supervised Machine Learning	"supervised machine learning"	"wiki"	https://bioregistry.io/mesh:D000069553	""			"wiki"	
+syn27261816:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn27261816
+syn27261829:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn27261829
+efo:0001063	experimental_factor	deafness	"deafness"	"wiki"	https://bioregistry.io/efo:0001063	""			"wiki"	
+hp:0001756	disease	Vestibular hypofunction	"vestibular dysfunction"	"wiki"	https://bioregistry.io/hp:0001756	""			"wiki"	
+mesh:D002531	anatomical_region	Cerebellum	"cerebellum"	"wiki"	https://bioregistry.io/mesh:D002531	""			"wiki"	
+hp:0001730	disease	Progressive hearing impairment	"progressive hearing loss"	"wiki"	https://bioregistry.io/hp:0001730	""			"wiki"	
+mesh:D066126	disease	Cardiotoxicity	"cardiotoxicity"	"wiki"	https://bioregistry.io/mesh:D066126	""			"wiki"	
+chebi:50925	small_molecule	EC 2.7.11.1 (non-specific serine/threonine protein kinase) inhibitor	"PAK1 inhibitor"	"wiki"	https://bioregistry.io/chebi:50925	""			"wiki"	
+syn27261835:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn27261835
+mesh:D015143	other	Philadelphia	"Philadelphia"	"wiki"	https://bioregistry.io/mesh:D015143	""			"wiki"	
+mesh:D016410	disease	Lymphoma, T-Cell, Cutaneous	"Cutaneous T-cell Lymphoma"	"wiki"	https://bioregistry.io/mesh:D016410	""			"wiki"	
+hp:0041092	disease	Emotional hypersensitivity	"highly sensitive"	"wiki"	https://bioregistry.io/hp:0041092	""			"wiki"	
+syn27261848:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn27261848
+mesh:D003142	other	Communication	"communication"	"wiki"	https://bioregistry.io/mesh:D003142	""			"wiki"	
+mesh:D009389	disease	Neovascularization, Pathologic	"pathologic angiogenesis"	"wiki"	https://bioregistry.io/mesh:D009389	""			"wiki"	
+mesh:D012164	disease	Retinal Diseases	"retinopathy"	"wiki"	https://bioregistry.io/mesh:D012164	""			"wiki"	
+hgnc:23088	human_gene_protein	SLC10A7	"P7"	"wiki"	https://bioregistry.io/hgnc:23088	""			"wiki"	
+mesh:D013535	small_molecule	Suspensions	"suspensions"	"wiki"	https://bioregistry.io/mesh:D013535	""			"wiki"	
+doid:0050852	disease	limb ischemia	"limb ischemia"	"wiki"	https://bioregistry.io/doid:0050852	""			"wiki"	
+mesh:D008297	unknown	Male	"males;male"	"wiki"	https://bioregistry.io/mesh:D008297	""			"wiki"	
+mesh:D005260	unknown	Female	"female"	"wiki"	https://bioregistry.io/mesh:D005260	""			"wiki"	
+mesh:D005263	anatomical_region	Femoral Artery	"femoral artery"	"wiki"	https://bioregistry.io/mesh:D005263	""			"wiki"	
+mesh:D008026	experimental_factor	Ligation	"ligation"	"wiki"	https://bioregistry.io/mesh:D008026	""			"wiki"	
+mesh:D018608	experimental_factor	Ultrasonography, Doppler	"doppler ultrasound"	"wiki"	https://bioregistry.io/mesh:D018608	""			"wiki"	
+mesh:D055114	experimental_factor	X-Ray Microtomography	"micro-CT"	"wiki"	https://bioregistry.io/mesh:D055114	""			"wiki"	
+mesh:D002196	anatomical_region	Capillaries	"capillary"	"wiki"	https://bioregistry.io/mesh:D002196	""			"wiki"	
+syn27761862:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn27761862
+chebi:29035	small_molecule	manganese(2+)	"MN"	"wiki"	https://bioregistry.io/chebi:29035	""			"wiki"	
+fplx:SRC	protein_family_complex	SRC	"SFKs;Src family kinase"	"wiki"	https://bioregistry.io/fplx:SRC	""			"wiki"	
+syn27762317:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn27762317
+mesh:D018401	experimental_factor	Sample Size	"sample size"	"wiki"	https://bioregistry.io/mesh:D018401	""			"wiki"	
+syn28545963:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn28545963
+mesh:C000206	small_molecule	Uvitex SWN	"SWN"	"wiki"	https://bioregistry.io/mesh:C000206	""			"wiki"	
+doid:0080327	disease	multinucleated neurons, anhydramnios, renal dysplasia, cerebellar hypoplasia and hydranencephaly	"MARCH"	"wiki"	https://bioregistry.io/doid:0080327	""			"wiki"	
+mesh:D007857	other	Leadership	"leadership"	"wiki"	https://bioregistry.io/mesh:D007857	""			"wiki"	
+efo:0004600	experimental_factor	genomic data	"genomic data"	"wiki"	https://bioregistry.io/efo:0004600	""			"wiki"	
+mesh:D002568	other	Certification	"certification;Certification"	"wiki"	https://bioregistry.io/mesh:D002568	""			"wiki"	
+mesh:D000069550	biological_process	Machine Learning	"machine learning"	"wiki"	https://bioregistry.io/mesh:D000069550	""			"wiki"	
+syn29525025:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn29525025
+mesh:D014768	other	Virginia	"Virginia"	"wiki"	https://bioregistry.io/mesh:D014768	""			"wiki"	
+syn29772925:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn29772925
+syn29866703:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn29866703
+syn29867701:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn29867701
+mesh:D042241	experimental_factor	Early Diagnosis	"Early diagnosis;early diagnosis"	"wiki"	https://bioregistry.io/mesh:D042241	""			"wiki"	
+syn30264486:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn30264486
+mesh:D019281	biological_process	Dimerization	"Dimerization"	"wiki"	https://bioregistry.io/mesh:D019281	""			"wiki"	
+chebi:29287	small_molecule	gold atom	"au"	"wiki"	https://bioregistry.io/chebi:29287	""			"wiki"	
+hp:0009737	disease	Lisch nodules	"Lisch nodules"	"wiki"	https://bioregistry.io/hp:0009737	""			"wiki"	
+hp:0000924	disease	Abnormality of the skeletal system	"skeletal abnormalities"	"wiki"	https://bioregistry.io/hp:0000924	""			"wiki"	
+mesh:D007859	disease	Learning Disabilities	"Learning disabilities;learning disabilities"	"wiki"	https://bioregistry.io/mesh:D007859	""			"wiki"	
+hp:0001507	disease	Growth abnormality	"abnormal growths;abnormal growth"	"wiki"	https://bioregistry.io/hp:0001507	""			"wiki"	
+go:0007613	biological_process	memory	"memory"	"wiki"	https://bioregistry.io/go:0007613	""			"wiki"	
+go:0060348	biological_process	bone development	"bone development"	"wiki"	https://bioregistry.io/go:0060348	""			"wiki"	
+mesh:D064420	disease	Drug-Related Side Effects and Adverse Reactions	"drug side effects"	"wiki"	https://bioregistry.io/mesh:D064420	""			"wiki"	
+syn30283982:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn30283982
+chebi:38867	small_molecule	anaesthetic	"anesthetic"	"wiki"	https://bioregistry.io/chebi:38867	""			"wiki"	
+syn31619419:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn31619419
+mesh:D001171	disease	Arthritis, Juvenile	"Jia"	"wiki"	https://bioregistry.io/mesh:D001171	""			"wiki"	
+mesh:D053685	experimental_factor	Laser Therapy	"laser therapy"	"wiki"	https://bioregistry.io/mesh:D053685	""			"wiki"	
+mesh:D061848	experimental_factor	Optical Imaging	"optical imaging"	"wiki"	https://bioregistry.io/mesh:D061848	""			"wiki"	
+mesh:D000084462	disease	Hyperthermia	"hyperthermia"	"wiki"	https://bioregistry.io/mesh:D000084462	""			"wiki"	
+syn31748644:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn31748644
+mesh:D035703	experimental_factor	Therapies, Investigational	"experimental therapies"	"wiki"	https://bioregistry.io/mesh:D035703	""			"wiki"	
+mesh:D014408	small_molecule	Biomarkers, Tumor	"tumor biomarkers"	"wiki"	https://bioregistry.io/mesh:D014408	""			"wiki"	
+mesh:D057766	other	Policy	"policies"	"wiki"	https://bioregistry.io/mesh:D057766	""			"wiki"	
+mesh:D003187	biological_process	Compliance	"compliance"	"wiki"	https://bioregistry.io/mesh:D003187	""			"wiki"	
+syn31821155:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn31821155
+syn32128792:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn32128792
+efo:1000541	experimental_factor	Soft Tissue Neoplasm	"soft-tissue;soft tissue tumors"	"wiki"	https://bioregistry.io/efo:1000541	""			"wiki"	
+efo:0000638	experimental_factor	overall survival	"overall survival"	"wiki"	https://bioregistry.io/efo:0000638	""			"wiki"	
+mesh:D000095028	other	Multiomics	"Multi-omic;multi-omic;multi-omics"	"wiki"	https://bioregistry.io/mesh:D000095028	""			"wiki"	
+efo:0004601	experimental_factor	transcriptomic data	"transcriptomic data"	"wiki"	https://bioregistry.io/efo:0004601	""			"wiki"	
+mesh:D016437	other	Dictionary	"dictionary"	"wiki"	https://bioregistry.io/mesh:D016437	""			"wiki"	
+syn33791300:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn33791300
+mesh:D032383	anatomical_region	Myocytes, Cardiac	"cardiomyocytes"	"wiki"	https://bioregistry.io/mesh:D032383	""			"wiki"	
+efo:0021426	experimental_factor	humanized mouse	"humanized mouse"	"wiki"	https://bioregistry.io/efo:0021426	""			"wiki"	
+syn33820507:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn33820507
+syn34624846:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn34624846
+syn35627501:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn35627501
+mesh:C040118	small_molecule	CHR 8	"Chr8"	"wiki"	https://bioregistry.io/mesh:C040118	""			"wiki"	
+mesh:D015995	experimental_factor	Prevalence	"prevalence"	"wiki"	https://bioregistry.io/mesh:D015995	""			"wiki"	
+mesh:D002898	anatomical_region	Chromosomes, Human, Pair 8	"Chromosome 8;chromosome 8"	"wiki"	https://bioregistry.io/mesh:D002898	""			"wiki"	
+mesh:D000068617	biological_process	Genetic Background	"genetic background"	"wiki"	https://bioregistry.io/mesh:D000068617	""			"wiki"	
+syn35630161:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn35630161
+mesh:D006403	experimental_factor	Hematologic Tests	"blood test"	"wiki"	https://bioregistry.io/mesh:D006403	""			"wiki"	
+mesh:D055088	experimental_factor	Early Detection of Cancer	"Early detection of cancer"	"wiki"	https://bioregistry.io/mesh:D055088	""			"wiki"	
+mesh:D009656	other	North America	"North America"	"wiki"	https://bioregistry.io/mesh:D009656	""			"wiki"	
+mesh:D012868	disease	Skin Abnormalities	"skin abnormalities"	"wiki"	https://bioregistry.io/mesh:D012868	""			"wiki"	
+syn35632706:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn35632706
+mesh:D016634	experimental_factor	Radiosurgery	"radiosurgery"	"wiki"	https://bioregistry.io/mesh:D016634	""			"wiki"	
+mesh:D056687	experimental_factor	Off-Label Use	"off-label use;Off-label use"	"wiki"	https://bioregistry.io/mesh:D056687	""			"wiki"	
+mesh:D002908	disease	Chronic Disease	"chronic disease;chronic diseases"	"wiki"	https://bioregistry.io/mesh:D002908	""			"wiki"	
+efo:0007816	experimental_factor	response to trametinib	"response to trametinib"	"wiki"	https://bioregistry.io/efo:0007816	""			"wiki"	
+syn35634638:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn35634638
+mesh:D055153	biological_process	Stem Cell Niche	"stem cell niche"	"wiki"	https://bioregistry.io/mesh:D055153	""			"wiki"	
+chebi:25879	small_molecule	pentaerythritol tetranitrate	"ten"	"wiki"	https://bioregistry.io/chebi:25879	""			"wiki"	
+syn35636485:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn35636485
+hp:0100545	disease	Arterial stenosis	"arterial stenosis"	"wiki"	https://bioregistry.io/hp:0100545	""			"wiki"	
+mesh:D004827	disease	Epilepsy	"epilepsy"	"wiki"	https://bioregistry.io/mesh:D004827	""			"wiki"	
+mesh:D008831	disease	Microcephaly	"microcephaly"	"wiki"	https://bioregistry.io/mesh:D008831	""			"wiki"	
+hp:0004322	disease	Short stature	"short stature"	"wiki"	https://bioregistry.io/hp:0004322	""			"wiki"	
+mesh:D001247	disease	Asthenia	"weakness"	"wiki"	https://bioregistry.io/mesh:D001247	""			"wiki"	
+mesh:D010292	disease	Paresthesia	"paresthesia;tingling"	"wiki"	https://bioregistry.io/mesh:D010292	""			"wiki"	
+doid:870	disease	neuropathy	"neuropathy"	"wiki"	https://bioregistry.io/doid:870	""			"wiki"	
+go:0002524	biological_process	hypersensitivity	"hypersensitivity"	"wiki"	https://bioregistry.io/go:0002524	""			"wiki"	
+mesh:D012677	biological_process	Sensation	"sensory function;sensations"	"wiki"	https://bioregistry.io/mesh:D012677	""			"wiki"	
+mesh:D006987	disease	Hypesthesia	"numbness"	"wiki"	https://bioregistry.io/mesh:D006987	""			"wiki"	
+mesh:D017144	experimental_factor	Focus Groups	"focus groups;Focus groups"	"wiki"	https://bioregistry.io/mesh:D017144	""			"wiki"	
+go:0046960	biological_process	sensitization	"sensitization"	"wiki"	https://bioregistry.io/go:0046960	""			"wiki"	
+mesh:D010827	other	Physiology	"physiology"	"wiki"	https://bioregistry.io/mesh:D010827	""			"wiki"	
+chebi:62488	small_molecule	signalling molecule	"signaling molecules"	"wiki"	https://bioregistry.io/chebi:62488	""			"wiki"	
+syn35637409:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn35637409
+mesh:D006973	disease	Hypertension	"high blood pressure"	"wiki"	https://bioregistry.io/mesh:D006973	""			"wiki"	
+mesh:D009132	anatomical_region	Muscles	"muscles;muscle"	"wiki"	https://bioregistry.io/mesh:D009132	""			"wiki"	
+mesh:D019468	other	Disease Management	"disease management"	"wiki"	https://bioregistry.io/mesh:D019468	""			"wiki"	
+go:0030431	biological_process	sleep	"sleep"	"wiki"	https://bioregistry.io/go:0030431	""			"wiki"	
+mesh:D008603	other	Mental Health	"mental health"	"wiki"	https://bioregistry.io/mesh:D008603	""			"wiki"	
+mesh:D035501	experimental_factor	Uncertainty	"uncertainty"	"wiki"	https://bioregistry.io/mesh:D035501	""			"wiki"	
+mesh:D000073278	other	Self-Management	"self-management;Self-management"	"wiki"	https://bioregistry.io/mesh:D000073278	""			"wiki"	
+mesh:D006184	other	Habits	"habits"	"wiki"	https://bioregistry.io/mesh:D006184	""			"wiki"	
+mesh:D006297	other	Health Services Accessibility	"access to care"	"wiki"	https://bioregistry.io/mesh:D006297	""			"wiki"	
+efo:0008568	experimental_factor	Sleep Disorder	"sleep disturbances;sleep disturbance"	"wiki"	https://bioregistry.io/efo:0008568	""			"wiki"	
+mesh:D011586	other	Psychology, Clinical	"clinical psychology"	"wiki"	https://bioregistry.io/mesh:D011586	""			"wiki"	
+go:0007605	biological_process	sensory perception of sound	"Hearing;hearing"	"wiki"	https://bioregistry.io/go:0007605	""			"wiki"	
+mesh:D012648	experimental_factor	Self Care	"Self-Care;self-care"	"wiki"	https://bioregistry.io/mesh:D012648	""			"wiki"	
+mesh:D002980	biological_process	Climate	"Climate"	"wiki"	https://bioregistry.io/mesh:D002980	""			"wiki"	
+mesh:D006282	other	Health Personnel	"healthcare providers;health care providers"	"wiki"	https://bioregistry.io/mesh:D006282	""			"wiki"	
+syn35638003:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn35638003
+mesh:D000073890	experimental_factor	Liquid Biopsy	"Liquid Biopsy;liquid biopsies;liquid biopsy;Liquid biopsy"	"wiki"	https://bioregistry.io/mesh:D000073890	""			"wiki"	
+mesh:D000074141	small_molecule	Circulating Tumor DNA	"circulating tumor DNA"	"wiki"	https://bioregistry.io/mesh:D000074141	""			"wiki"	
+efo:0008672	experimental_factor	Capp-Seq	"CAPP-seq;CAPP-Seq"	"wiki"	https://bioregistry.io/efo:0008672	""			"wiki"	
+hp:0012838	disease	Localized	"localized"	"wiki"	https://bioregistry.io/hp:0012838	""			"wiki"	
+syn36191081:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36191081
+mesh:D035583	disease	Rare Diseases	"rare disease;rare diseases"	"wiki"	https://bioregistry.io/mesh:D035583	""			"wiki"	
+mesh:D000087603	experimental_factor	Cell Culture Techniques, Three Dimensional	"three-dimensional cell culture"	"wiki"	https://bioregistry.io/mesh:D000087603	""			"wiki"	
+syn36360320:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36360320
+mesh:D000284	experimental_factor	Administration, Oral	"oral administration"	"wiki"	https://bioregistry.io/mesh:D000284	""			"wiki"	
+syn36361151:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36361151
+mesh:D004493	other	Education	"education"	"wiki"	https://bioregistry.io/mesh:D004493	""			"wiki"	
+mesh:D001336	other	Automobiles	"car"	"wiki"	https://bioregistry.io/mesh:D001336	""			"wiki"	
+efo:0002691	experimental_factor	retinal ganglion	"retinal ganglion"	"wiki"	https://bioregistry.io/efo:0002691	""			"wiki"	
+mesh:D008137	experimental_factor	Longitudinal Studies	"longitudinal studies"	"wiki"	https://bioregistry.io/mesh:D008137	""			"wiki"	
+mesh:D000066491	experimental_factor	Clinical Decision-Making	"clinical decision making"	"wiki"	https://bioregistry.io/mesh:D000066491	""			"wiki"	
+syn36362557:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36362557
+hp:0034280	disease	Target cells	"target cells"	"wiki"	https://bioregistry.io/hp:0034280	""			"wiki"	
+mesh:D009463	disease	Neuroma	"nerve tumors;nerve tumor"	"wiki"	https://bioregistry.io/mesh:D009463	""			"wiki"	
+mesh:D002213	anatomical_region	Capsid	"capsids;capsid"	"wiki"	https://bioregistry.io/mesh:D002213	""			"wiki"	
+mesh:D017393	biological_process	RNA Editing	"RNA editing"	"wiki"	https://bioregistry.io/mesh:D017393	""			"wiki"	
+syn36362764:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36362764
+mesh:D019656	biological_process	Loss of Heterozygosity	"loss of heterozygosity"	"wiki"	https://bioregistry.io/mesh:D019656	""			"wiki"	
+hp:5200339	disease	Self-cutting	"cutting"	"wiki"	https://bioregistry.io/hp:5200339	""			"wiki"	
+syn36363358:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36363358
+mesh:D019076	biological_process	Transgenes	"transgenes;transgene"	"wiki"	https://bioregistry.io/mesh:D019076	""			"wiki"	
+mesh:D008822	organism	Mice, Transgenic	"transgenic mouse;transgenic mice"	"wiki"	https://bioregistry.io/mesh:D008822	""			"wiki"	
+mesh:C045073	human_gene_protein	Cre recombinase	"Cre recombinase"	"wiki"	https://bioregistry.io/mesh:C045073	""			"wiki"	
+mesh:D007275	experimental_factor	Injections, Intravenous	"intravenous injection"	"wiki"	https://bioregistry.io/mesh:D007275	""			"wiki"	
+syn36364285:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36364285
+mesh:D001254	disease	Astrocytoma	"Anaplastic Astrocytoma"	"wiki"	https://bioregistry.io/mesh:D001254	""			"wiki"	
+mesh:D001932	disease	Brain Neoplasms	"Brain Tumours;Brain Tumors;Brain Tumor"	"wiki"	https://bioregistry.io/mesh:D001932	""			"wiki"	
+syn36366922:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36366922
+mesh:D010808	experimental_factor	Physical Examination	"physical examinations"	"wiki"	https://bioregistry.io/mesh:D010808	""			"wiki"	
+mesh:D059039	other	Standard of Care	"standard of care;standards of care"	"wiki"	https://bioregistry.io/mesh:D059039	""			"wiki"	
+syn36367080:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36367080
+syn36501381:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36501381
+mesh:D009462	other	Neurology	"Neurology"	"wiki"	https://bioregistry.io/mesh:D009462	""			"wiki"	
+syn36501403:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36501403
+mesh:D005128	disease	Eye Diseases	"eye disease"	"wiki"	https://bioregistry.io/mesh:D005128	""			"wiki"	
+syn36501485:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36501485
+syn36528571:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36528571
+mesh:D017930	biological_process	Genes, Reporter	"reporter gene"	"wiki"	https://bioregistry.io/mesh:D017930	""			"wiki"	
+syn36528579:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36528579
+syn36528589:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36528589
+syn36530073:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36530073
+syn36530086:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36530086
+hp:0001050	disease	Plethora	"plethora"	"wiki"	https://bioregistry.io/hp:0001050	""			"wiki"	
+hp:0012837	disease	Generalized	"generalized"	"wiki"	https://bioregistry.io/hp:0012837	""			"wiki"	
+chebi:39043	small_molecule	BES	"BEs"	"wiki"	https://bioregistry.io/chebi:39043	""			"wiki"	
+hgnc:9453	human_gene_protein	PRODH	"POX"	"wiki"	https://bioregistry.io/hgnc:9453	""			"wiki"	
+syn36530108:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36530108
+hp:0007807	disease	Optic nerve compression	"optic nerve compression"	"wiki"	https://bioregistry.io/hp:0007807	""			"wiki"	
+syn36530126:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36530126
+mesh:D000071446	biological_process	Neuronal Outgrowth	"axon outgrowth"	"wiki"	https://bioregistry.io/mesh:D000071446	""			"wiki"	
+syn36530149:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36530149
+mesh:D057170	other	Translational Research, Biomedical	"translational research"	"wiki"	https://bioregistry.io/mesh:D057170	""			"wiki"	
+syn36530163:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36530163
+mesh:D008128	other	Logic	"logic"	"wiki"	https://bioregistry.io/mesh:D008128	""			"wiki"	
+syn36544385:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36544385
+syn36544400:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36544400
+mesh:D029969	organism	Angelica	"Angelica"	"wiki"	https://bioregistry.io/mesh:D029969	""			"wiki"	
+go:1903561	cellular_location	extracellular vesicle	"extracellular vesicles"	"wiki"	https://bioregistry.io/go:1903561	""			"wiki"	
+hgnc:29372	human_gene_protein	KIAA1755	"quo"	"wiki"	https://bioregistry.io/hgnc:29372	""			"wiki"	
+syn36544414:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36544414
+mesh:D009134	disease	Muscular Atrophy, Spinal	"Spinal Muscular Atrophy"	"wiki"	https://bioregistry.io/mesh:D009134	""			"wiki"	
+efo:0008929	experimental_factor	SMA	"SMA"	"wiki"	https://bioregistry.io/efo:0008929	""			"wiki"	
+mesh:D022781	anatomical_region	Hepatocytes	"hepatocytes"	"wiki"	https://bioregistry.io/mesh:D022781	""			"wiki"	
+mesh:D057134	human_gene_protein	Antibodies, Neutralizing	"neutralizing antibodies"	"wiki"	https://bioregistry.io/mesh:D057134	""			"wiki"	
+go:0009606	biological_process	tropism	"tropism"	"wiki"	https://bioregistry.io/go:0009606	""			"wiki"	
+syn36544421:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36544421
+mesh:D020412	biological_process	Multifactorial Inheritance	"complex disease"	"wiki"	https://bioregistry.io/mesh:D020412	""			"wiki"	
+mesh:D009422	disease	Nervous System Diseases	"neurological diseases"	"wiki"	https://bioregistry.io/mesh:D009422	""			"wiki"	
+mesh:D016366	biological_process	Open Reading Frames	"open reading frame"	"wiki"	https://bioregistry.io/mesh:D016366	""			"wiki"	
+mesh:D013971	disease	Thyrotoxicosis	"GRD"	"wiki"	https://bioregistry.io/mesh:D013971	""			"wiki"	
+mesh:D005371	other	Filing	"filings"	"wiki"	https://bioregistry.io/mesh:D005371	""			"wiki"	
+syn36544436:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36544436
+mesh:D015536	biological_process	Down-Regulation	"down-regulation;downregulation"	"wiki"	https://bioregistry.io/mesh:D015536	""			"wiki"	
+syn36544447:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36544447
+go:0001522	biological_process	pseudouridine synthesis	"Pseudouridylation"	"wiki"	https://bioregistry.io/go:0001522	""			"wiki"	
+go:0009451	biological_process	RNA modification	"RNA modification"	"wiki"	https://bioregistry.io/go:0009451	""			"wiki"	
+syn36544458:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36544458
+hp:0011096	disease	Peripheral demyelination	"demyelination"	"wiki"	https://bioregistry.io/hp:0011096	""			"wiki"	
+hgnc:13203	human_gene_protein	AICDA	"aid"	"wiki"	https://bioregistry.io/hgnc:13203	""			"wiki"	
+go:0060384	biological_process	innervation	"innervation"	"wiki"	https://bioregistry.io/go:0060384	""			"wiki"	
+syn36544468:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36544468
+mesh:D000073637	anatomical_region	Oligodendrocyte Precursor Cells	"Oligodendrocyte precursor cells;oligodendrocyte precursor cell;oligodendrocyte precursor"	"wiki"	https://bioregistry.io/mesh:D000073637	""			"wiki"	
+mesh:D003711	disease	Demyelinating Diseases	"demyelinating disease"	"wiki"	https://bioregistry.io/mesh:D003711	""			"wiki"	
+mesh:D000074586	biological_process	Remyelination	"Remyelination;remyelination"	"wiki"	https://bioregistry.io/mesh:D000074586	""			"wiki"	
+syn36544478:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36544478
+syn36544490:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36544490
+mesh:D020100	small_molecule	Hydrogels	"hydrogel"	"wiki"	https://bioregistry.io/mesh:D020100	""			"wiki"	
+hgnc:21748	human_gene_protein	SOSTDC1	"wise"	"wiki"	https://bioregistry.io/hgnc:21748	""			"wiki"	
+syn36544517:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn36544517
+mesh:D014054	experimental_factor	Tomography	"tomography"	"wiki"	https://bioregistry.io/mesh:D014054	""			"wiki"	
+go:0071632	biological_process	optomotor response	"optomotor response"	"wiki"	https://bioregistry.io/go:0071632	""			"wiki"	
+hp:0003447	disease	Axonal loss	"axonal loss"	"wiki"	https://bioregistry.io/hp:0003447	""			"wiki"	
+hp:0003450	disease	Axonal regeneration	"axonal regeneration"	"wiki"	https://bioregistry.io/hp:0003450	""			"wiki"	
+chebi:42485	small_molecule	formyl group	"fo"	"wiki"	https://bioregistry.io/chebi:42485	""			"wiki"	
+syn37860391:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn37860391
+go:0032288	biological_process	myelin assembly	"myelin formation"	"wiki"	https://bioregistry.io/go:0032288	""			"wiki"	
+syn37861830:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn37861830
+mesh:D029424	disease	Pulmonary Disease, Chronic Obstructive	"cold"	"wiki"	https://bioregistry.io/mesh:D029424	""			"wiki"	
+hgnc:16354	human_gene_protein	ADHFE1	"Hot;hot"	"wiki"	https://bioregistry.io/hgnc:16354	""			"wiki"	
+mesh:D000082082	small_molecule	Immune Checkpoint Inhibitors	"Immune Checkpoint Blockers;immune checkpoint blockers;immune checkpoint inhibitor"	"wiki"	https://bioregistry.io/mesh:D000082082	""			"wiki"	
+mesh:D000082102	human_gene_protein	Immune Checkpoint Proteins	"immune checkpoint molecules;immune checkpoint proteins"	"wiki"	https://bioregistry.io/mesh:D000082102	""			"wiki"	
+syn37872335:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn37872335
+mesh:D030801	organism	Animals, Genetically Modified	"genetically engineered animals"	"wiki"	https://bioregistry.io/mesh:D030801	""			"wiki"	
+mesh:D005145	anatomical_region	Face	"faces"	"wiki"	https://bioregistry.io/mesh:D005145	""			"wiki"	
+chebi:46883	small_molecule	carboxy group	"carboxy"	"wiki"	https://bioregistry.io/chebi:46883	""			"wiki"	
+mesh:D013120	disease	Spinal Cord Neoplasms	"spinal tumors"	"wiki"	https://bioregistry.io/mesh:D013120	""			"wiki"	
+syn37889514:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn37889514
+mesh:D019942	biological_process	Genes, p16	"CDKN2A genes"	"wiki"	https://bioregistry.io/mesh:D019942	""			"wiki"	
+syn37889584:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn37889584
+mesh:D016543	disease	Central Nervous System Neoplasms	"central nervous system tumor"	"wiki"	https://bioregistry.io/mesh:D016543	""			"wiki"	
+syn39800678:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn39800678
+syn47857478:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn47857478
+syn50315996:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn50315996
+mesh:D004249	biological_process	DNA Damage	"DNA damage"	"wiki"	https://bioregistry.io/mesh:D004249	""			"wiki"	
+go:0006281	biological_process	DNA repair	"DNA repair"	"wiki"	https://bioregistry.io/go:0006281	""			"wiki"	
+syn51115812:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51115812
+syn51116567:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51116567
+mesh:D058492	experimental_factor	Drug Repositioning	"drug repositioning;Drug repositioning"	"wiki"	https://bioregistry.io/mesh:D058492	""			"wiki"	
+mesh:D057285	experimental_factor	Precision Medicine	"Precision Medicine;precision medicine"	"wiki"	https://bioregistry.io/mesh:D057285	""			"wiki"	
+mesh:D032982	other	Contracts	"Contract"	"wiki"	https://bioregistry.io/mesh:D032982	""			"wiki"	
+go:0009410	biological_process	response to xenobiotic stimulus	"response to drugs"	"wiki"	https://bioregistry.io/go:0009410	""			"wiki"	
+syn51116572:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51116572
+mesh:D005814	biological_process	Genes, Viral	"viral gene"	"wiki"	https://bioregistry.io/mesh:D005814	""			"wiki"	
+syn51116577:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51116577
+mesh:D014771	anatomical_region	Virion	"viral particles"	"wiki"	https://bioregistry.io/mesh:D014771	""			"wiki"	
+mesh:D061605	experimental_factor	Administration, Intravenous	"intravenous administration"	"wiki"	https://bioregistry.io/mesh:D061605	""			"wiki"	
+syn51117783:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51117783
+go:0098687	cellular_location	chromosomal region	"chromosomal regions"	"wiki"	https://bioregistry.io/go:0098687	""			"wiki"	
+mesh:D060965	biological_process	Clonal Evolution	"clonal evolution"	"wiki"	https://bioregistry.io/mesh:D060965	""			"wiki"	
+mesh:D057230	experimental_factor	Limit of Detection	"limit of detection"	"wiki"	https://bioregistry.io/mesh:D057230	""			"wiki"	
+syn51133914:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51133914
+chebi:75830	small_molecule	HOME	"Home"	"wiki"	https://bioregistry.io/chebi:75830	""			"wiki"	
+syn51133924:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51133924
+syn51133929:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51133929
+syn51133935:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51133935
+syn51133946:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51133946
+doid:2226	disease	myeloproliferative neoplasm	"myeloproliferative neoplasm"	"wiki"	https://bioregistry.io/doid:2226	""			"wiki"	
+hgnc:15475	human_gene_protein	PRSS27	"MPN"	"wiki"	https://bioregistry.io/hgnc:15475	""			"wiki"	
+mesh:D018380	experimental_factor	Hematopoietic Stem Cell Transplantation	"Hematopoietic stem cell transplantation"	"wiki"	https://bioregistry.io/mesh:D018380	""			"wiki"	
+mesh:D015470	disease	Leukemia, Myeloid, Acute	"acute myeloid leukemia (AML)"	"wiki"	https://bioregistry.io/mesh:D015470	""			"wiki"	
+mesh:D001854	anatomical_region	Bone Marrow Cells	"bone marrow cells"	"wiki"	https://bioregistry.io/mesh:D001854	""			"wiki"	
+syn51133957:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51133957
+syn51133963:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51133963
+mesh:D000073116	other	Cancer Survivors	"Cancer Survivors;cancer survivors"	"wiki"	https://bioregistry.io/mesh:D000073116	""			"wiki"	
+efo:1000654	experimental_factor	childhood cancer	"childhood cancer;Childhood Cancer"	"wiki"	https://bioregistry.io/efo:1000654	""			"wiki"	
+mesh:D017741	other	Survivors	"survivors;Survivor"	"wiki"	https://bioregistry.io/mesh:D017741	""			"wiki"	
+syn51204782:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51204782
+chebi:59132	small_molecule	antigen	"antigens"	"wiki"	https://bioregistry.io/chebi:59132	""			"wiki"	
+mesh:D000938	anatomical_region	Antigen-Presenting Cells	"antigen-presenting cells"	"wiki"	https://bioregistry.io/mesh:D000938	""			"wiki"	
+mesh:D013404	experimental_factor	Suggestion	"suggestions"	"wiki"	https://bioregistry.io/mesh:D013404	""			"wiki"	
+hgnc:6476	human_gene_protein	LAG3	"LAG-3"	"wiki"	https://bioregistry.io/hgnc:6476	""			"wiki"	
+hgnc:26838	human_gene_protein	TIGIT	"TIGIT"	"wiki"	https://bioregistry.io/hgnc:26838	""			"wiki"	
+hgnc:21087	human_gene_protein	BTLA	"BTLA"	"wiki"	https://bioregistry.io/hgnc:21087	""			"wiki"	
+chebi:33567	small_molecule	catecholamine	"catecholamines"	"wiki"	https://bioregistry.io/chebi:33567	""			"wiki"	
+hp:0002958	disease	Immune dysregulation	"immune dysregulation"	"wiki"	https://bioregistry.io/hp:0002958	""			"wiki"	
+chebi:37962	small_molecule	adrenergic agent	"adrenergic"	"wiki"	https://bioregistry.io/chebi:37962	""			"wiki"	
+efo:0010649	experimental_factor	immunophenotype	"immunophenotype"	"wiki"	https://bioregistry.io/efo:0010649	""			"wiki"	
+syn51207088:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51207088
+hgnc:2559	human_gene_protein	CXADR	"CAR"	"wiki"	https://bioregistry.io/hgnc:2559	""			"wiki"	
+mesh:D009447	disease	Neuroblastoma	"neuroblastoma"	"wiki"	https://bioregistry.io/mesh:D009447	""			"wiki"	
+syn51218284:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51218284
+syn51227166:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51227166
+mesh:D001794	experimental_factor	Blood Pressure	"blood pressure"	"wiki"	https://bioregistry.io/mesh:D001794	""			"wiki"	
+mesh:D059408	experimental_factor	Pain Management	"pain management"	"wiki"	https://bioregistry.io/mesh:D059408	""			"wiki"	
+syn51298831:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51298831
+syn51301409:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51301409
+mesh:D015141	other	Los Angeles	"Los Angeles"	"wiki"	https://bioregistry.io/mesh:D015141	""			"wiki"	
+syn51315882:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51315882
+mesh:D016022	experimental_factor	Case-Control Studies	"case-control study"	"wiki"	https://bioregistry.io/mesh:D016022	""			"wiki"	
+mesh:D000089822	other	Birth Cohort	"Birth Cohort"	"wiki"	https://bioregistry.io/mesh:D000089822	""			"wiki"	
+mesh:D007231	other	Infant, Newborn	"newborn"	"wiki"	https://bioregistry.io/mesh:D007231	""			"wiki"	
+mesh:D001109	other	Archives	"archive"	"wiki"	https://bioregistry.io/mesh:D001109	""			"wiki"	
+mesh:D020022	disease	Genetic Predisposition to Disease	"genetic predisposition"	"wiki"	https://bioregistry.io/mesh:D020022	""			"wiki"	
+mesh:D055106	experimental_factor	Genome-Wide Association Study	"genome-wide association study"	"wiki"	https://bioregistry.io/mesh:D055106	""			"wiki"	
+mesh:D005817	other	Genetic Counseling	"genetic counseling"	"wiki"	https://bioregistry.io/mesh:D005817	""			"wiki"	
+syn51333298:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51333298
+mesh:D005638	anatomical_region	Fruit	"fruit"	"wiki"	https://bioregistry.io/mesh:D005638	""			"wiki"	
+mesh:D004175	organism	Diptera	"fly;flies"	"wiki"	https://bioregistry.io/mesh:D004175	""			"wiki"	
+syn51356705:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51356705
+hp:0001548	disease	Overgrowth	"overgrowth"	"wiki"	https://bioregistry.io/hp:0001548	""			"wiki"	
+mesh:D012934	other	Social Isolation	"social isolation"	"wiki"	https://bioregistry.io/mesh:D012934	""			"wiki"	
+mesh:D003116	biological_process	Color	"color"	"wiki"	https://bioregistry.io/mesh:D003116	""			"wiki"	
+mesh:D011674	biological_process	Pulse	"pulse;pulses"	"wiki"	https://bioregistry.io/mesh:D011674	""			"wiki"	
+mesh:D001768	disease	Blister	"blister"	"wiki"	https://bioregistry.io/mesh:D001768	""			"wiki"	
+syn51356824:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51356824
+mesh:D016086	organism	Lentivirus	"lentivirus"	"wiki"	https://bioregistry.io/mesh:D016086	""			"wiki"	
+hgnc:10489	human_gene_protein	S100A12	"CGRP"	"wiki"	https://bioregistry.io/hgnc:10489	""			"wiki"	
+mesh:D018015	human_gene_protein	Receptors, Calcitonin Gene-Related Peptide	"CGRP receptor"	"wiki"	https://bioregistry.io/mesh:D018015	""			"wiki"	
+syn51356860:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51356860
+mesh:D060845	other	Hoarding	"collecting"	"wiki"	https://bioregistry.io/mesh:D060845	""			"wiki"	
+syn51360851:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51360851
+syn51364179:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51364179
+mesh:D012880	experimental_factor	Skin Pigmentation	"skin colors"	"wiki"	https://bioregistry.io/mesh:D012880	""			"wiki"	
+chebi:35195	small_molecule	surfactant	"surfactant;surfactants"	"wiki"	https://bioregistry.io/chebi:35195	""			"wiki"	
+chebi:23614	small_molecule	deoxycholate	"deoxycholate"	"wiki"	https://bioregistry.io/chebi:23614	""			"wiki"	
+chebi:46859	small_molecule	polidocanol	"polidocanol"	"wiki"	https://bioregistry.io/chebi:46859	""			"wiki"	
+mesh:D000388	biological_process	Air	"air"	"wiki"	https://bioregistry.io/mesh:D000388	""			"wiki"	
+mesh:C112654	small_molecule	alexandrite	"alexandrite"	"wiki"	https://bioregistry.io/mesh:C112654	""			"wiki"	
+chebi:33372	small_molecule	neodymium atom	"Nd"	"wiki"	https://bioregistry.io/chebi:33372	""			"wiki"	
+syn51471542:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51471542
+syn51658171:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51658171
+syn51664331:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51664331
+mesh:D014922	other	Wisconsin	"Wisconsin"	"wiki"	https://bioregistry.io/mesh:D014922	""			"wiki"	
+syn51730549:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51730549
+mesh:D000067877	other	Autism Spectrum Disorder	"autism spectrum disorders"	"wiki"	https://bioregistry.io/mesh:D000067877	""			"wiki"	
+mesh:D014195	other	Travel	"travel"	"wiki"	https://bioregistry.io/mesh:D014195	""			"wiki"	
+syn51907739:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn51907739
+mesh:D014486	other	United States Food and Drug Administration	"Food and Drug Administration"	"wiki"	https://bioregistry.io/mesh:D014486	""			"wiki"	
+mesh:D000092468	human_gene_protein	Bromodomain Containing Proteins	"bromodomain containing proteins"	"wiki"	https://bioregistry.io/mesh:D000092468	""			"wiki"	
+mesh:D005500	experimental_factor	Follow-Up Studies	"Follow-up studies"	"wiki"	https://bioregistry.io/mesh:D005500	""			"wiki"	
+syn52369030:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn52369030
+mesh:D004359	experimental_factor	Drug Therapy, Combination	"combination drug therapies"	"wiki"	https://bioregistry.io/mesh:D004359	""			"wiki"	
+syn52396692:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn52396692
+chebi:30347	small_molecule	ethylenediamine	"en"	"wiki"	https://bioregistry.io/chebi:30347	""			"wiki"	
+go:0036267	biological_process	invasive filamentous growth	"invasive growth"	"wiki"	https://bioregistry.io/go:0036267	""			"wiki"	
+hgnc:12429	human_gene_protein	TWSG1	"TSG"	"wiki"	https://bioregistry.io/hgnc:12429	""			"wiki"	
+mesh:D016158	biological_process	Genes, p53	"TP53 gene"	"wiki"	https://bioregistry.io/mesh:D016158	""			"wiki"	
+syn52396762:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn52396762
+mesh:D061213	experimental_factor	Mortality, Premature	"premature death;premature deaths;premature mortality"	"wiki"	https://bioregistry.io/mesh:D061213	""			"wiki"	
+efo:0000493	experimental_factor	family history	"family history"	"wiki"	https://bioregistry.io/efo:0000493	""			"wiki"	
+mesh:D005387	other	Finland	"Finland"	"wiki"	https://bioregistry.io/mesh:D005387	""			"wiki"	
+mesh:D006664	other	History	"history"	"wiki"	https://bioregistry.io/mesh:D006664	""			"wiki"	
+efo:0009640	experimental_factor	family history of cancer	"family history of cancer"	"wiki"	https://bioregistry.io/efo:0009640	""			"wiki"	
+syn52399590:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn52399590
+mesh:D010414	other	Pennsylvania	"Pennsylvania"	"wiki"	https://bioregistry.io/mesh:D010414	""			"wiki"	
+mesh:D065886	other	Neurodevelopmental Disorders	"neurodevelopmental disorder"	"wiki"	https://bioregistry.io/mesh:D065886	""			"wiki"	
+go:0035176	biological_process	social behavior	"social behaviors;social behavior"	"wiki"	https://bioregistry.io/go:0035176	""			"wiki"	
+mesh:D019956	other	Stereotypic Movement Disorder	"stereotyped"	"wiki"	https://bioregistry.io/mesh:D019956	""			"wiki"	
+hp:0012433	disease	Abnormal social behavior	"abnormal social behavior"	"wiki"	https://bioregistry.io/hp:0012433	""			"wiki"	
+go:0050893	biological_process	sensory processing	"sensory processing"	"wiki"	https://bioregistry.io/go:0050893	""			"wiki"	
+syn52399623:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn52399623
+go:0061701	cellular_location	bacterial outer membrane vesicle	"bacterial outer membrane vesicles;Bacterial Outer membrane Vesicles;Bacterial Outer Membrane Vesicles"	"wiki"	https://bioregistry.io/go:0061701	""			"wiki"	
+efo:0009658	experimental_factor	adverse effect	"adverse effects"	"wiki"	https://bioregistry.io/efo:0009658	""			"wiki"	
+mesh:D007156	biological_process	Immunologic Memory	"immunological memory"	"wiki"	https://bioregistry.io/mesh:D007156	""			"wiki"	
+doid:0060072	disease	benign neoplasm	"benign neoplasm;benign neoplasms"	"wiki"	https://bioregistry.io/doid:0060072	""			"wiki"	
+syn52676851:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn52676851
+syn52677046:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn52677046
+syn52740594:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn52740594
+syn52781876:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn52781876
+syn53072189:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn53072189
+go:0009987	biological_process	cellular process	"cellular process;cellular processes"	"wiki"	https://bioregistry.io/go:0009987	""			"wiki"	
+mesh:D000092386	experimental_factor	Single-Cell Gene Expression Analysis	"Single-cell transcriptome analysis"	"wiki"	https://bioregistry.io/mesh:D000092386	""			"wiki"	
+syn53128248:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn53128248
+mesh:D000782	disease	Aneuploidy	"aneuploidy"	"wiki"	https://bioregistry.io/mesh:D000782	""			"wiki"	
+syn53130024:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn53130024
+mesh:D009437	disease	Neuralgia	"pain, nerve"	"wiki"	https://bioregistry.io/mesh:D009437	""			"wiki"	
+syn53181385:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn53181385
+syn53183718:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn53183718
+chebi:39299	small_molecule	diafenthiuron	"Polo"	"wiki"	https://bioregistry.io/chebi:39299	""			"wiki"	
+mesh:D002892	anatomical_region	Chromosomes, Human, Pair 22	"chromosome 22"	"wiki"	https://bioregistry.io/mesh:D002892	""			"wiki"	
+doid:0050489	disease	multinodular goiter	"multinodular goiter"	"wiki"	https://bioregistry.io/doid:0050489	""			"wiki"	
+hp:0009593	disease	Peripheral schwannoma	"peripheral schwannomas"	"wiki"	https://bioregistry.io/hp:0009593	""			"wiki"	
+efo:0010063	experimental_factor	Therapeutic Procedure	"therapeutic procedures"	"wiki"	https://bioregistry.io/efo:0010063	""			"wiki"	
+go:0035196	biological_process	miRNA processing	"miRNA biogenesis"	"wiki"	https://bioregistry.io/go:0035196	""			"wiki"	
+syn53183744:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn53183744
+hgnc:16665	human_gene_protein	APLN	"apelin;APLN;Apelin"	"wiki"	https://bioregistry.io/hgnc:16665	""			"wiki"	
+chebi:33284	small_molecule	nutrient	"nutrient;nutrients"	"wiki"	https://bioregistry.io/chebi:33284	""			"wiki"	
+mesh:D006470	disease	Hemorrhage	"bleeding"	"wiki"	https://bioregistry.io/mesh:D006470	""			"wiki"	
+syn53185180:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn53185180
+mesh:D014175	other	Translating	"Translating"	"wiki"	https://bioregistry.io/mesh:D014175	""			"wiki"	
+chebi:53199	small_molecule	poly(amido amine)	"PAMAM"	"wiki"	https://bioregistry.io/chebi:53199	""			"wiki"	
+hgnc:19076	human_gene_protein	C6orf47	"G4"	"wiki"	https://bioregistry.io/hgnc:19076	""			"wiki"	
+chebi:61483	small_molecule	dendritic polymer	"Dendrimers"	"wiki"	https://bioregistry.io/chebi:61483	""			"wiki"	
+mesh:C016077	small_molecule	prenyl	"prenyl"	"wiki"	https://bioregistry.io/mesh:C016077	""			"wiki"	
+syn53192398:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn53192398
+efo:0001736	experimental_factor	funder	"Funder;funder"	"wiki"	https://bioregistry.io/efo:0001736	""			"wiki"	
+mesh:D050723	disease	Fractures, Bone	"fracture"	"wiki"	https://bioregistry.io/mesh:D050723	""			"wiki"	
+hgnc:53746	human_rna	LINC02574	"heal"	"wiki"	https://bioregistry.io/hgnc:53746	""			"wiki"	
+mesh:D017102	biological_process	Fracture Healing	"fracture healing"	"wiki"	https://bioregistry.io/mesh:D017102	""			"wiki"	
+syn53213247:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn53213247
+mesh:D057186	other	Comparative Effectiveness Research	"comparative effectiveness research"	"wiki"	https://bioregistry.io/mesh:D057186	""			"wiki"	
+syn53335634:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn53335634
+mesh:D001828	other	Body Image	"body images"	"wiki"	https://bioregistry.io/mesh:D001828	""			"wiki"	
+syn53405342:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn53405342
+syn53604892:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn53604892
+mesh:D018579	experimental_factor	Patient Selection	"patient selection"	"wiki"	https://bioregistry.io/mesh:D018579	""			"wiki"	
+syn53651618:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn53651618
+hgnc:24872	human_rna	GNAS-AS1	"Sang"	"wiki"	https://bioregistry.io/hgnc:24872	""			"wiki"	
+syn53974914:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn53974914
+hgnc:23802	human_gene_protein	RASL11A	"RasL11A;RASL11A"	"wiki"	https://bioregistry.io/hgnc:23802	""			"wiki"	
+mesh:D049452	human_gene_protein	Green Fluorescent Proteins	"green fluorescent protein"	"wiki"	https://bioregistry.io/mesh:D049452	""			"wiki"	
+mesh:D015854	biological_process	Up-Regulation	"up-regulation"	"wiki"	https://bioregistry.io/mesh:D015854	""			"wiki"	
+syn54166654:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn54166654
+go:0006415	biological_process	translational termination	"translation termination"	"wiki"	https://bioregistry.io/go:0006415	""			"wiki"	
+mesh:D057166	experimental_factor	High-Throughput Screening Assays	"high-throughput screening assay"	"wiki"	https://bioregistry.io/mesh:D057166	""			"wiki"	
+mesh:D008156	human_gene_protein	Luciferases	"luciferase"	"wiki"	https://bioregistry.io/mesh:D008156	""			"wiki"	
+mesh:D017495	disease	Hyperpigmentation	"skin hyperpigmentation"	"wiki"	https://bioregistry.io/mesh:D017495	""			"wiki"	
+syn54168300:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn54168300
+go:0008380	biological_process	RNA splicing	"RNA splicing"	"wiki"	https://bioregistry.io/go:0008380	""			"wiki"	
+syn54308478:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn54308478
+mesh:D055825	other	National Institute of Neurological Disorders and Stroke (U.S.)	"NINDS"	"wiki"	https://bioregistry.io/mesh:D055825	""			"wiki"	
+fplx:E3_Ub_ligase	protein_family_complex	E3_Ub_ligase	"E3 ubiquitin ligase"	"wiki"	https://bioregistry.io/fplx:E3_Ub_ligase	""			"wiki"	
+syn56373031:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn56373031
+syn56417025:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn56417025
+mesh:D005076	disease	Exanthema	"rash"	"wiki"	https://bioregistry.io/mesh:D005076	""			"wiki"	
+syn56419166:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn56419166
+syn56420568:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn56420568
+mesh:D000081362	other	Lipidomics	"Lipidomics"	"wiki"	https://bioregistry.io/mesh:D000081362	""			"wiki"	
+mesh:D004954	other	Esthetics	"aesthetics"	"wiki"	https://bioregistry.io/mesh:D004954	""			"wiki"	
+syn56421718:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn56421718
+syn56566376:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn56566376
+go:0019233	biological_process	sensory perception of pain	"nociception"	"wiki"	https://bioregistry.io/go:0019233	""			"wiki"	
+syn57442781:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn57442781
+efo:0006986	experimental_factor	Est	"Est"	"wiki"	https://bioregistry.io/efo:0006986	""			"wiki"	
+mesh:D000072142	other	Pathologists	"pathologists"	"wiki"	https://bioregistry.io/mesh:D000072142	""			"wiki"	
+mesh:D014825	other	Vocabulary	"vocabulary"	"wiki"	https://bioregistry.io/mesh:D014825	""			"wiki"	
+syn58211567:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn58211567
+syn58577585:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn58577585
+mesh:D018365	disease	Neoplasm, Residual	"minimal residual disease"	"wiki"	https://bioregistry.io/mesh:D018365	""			"wiki"	
+syn60057901:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn60057901
+syn60244968:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn60244968
+mesh:D018763	biological_process	Muscle Fatigue	"muscle fatigue"	"wiki"	https://bioregistry.io/mesh:D018763	""			"wiki"	
+efo:0001674	experimental_factor	placebo	"placebo"	"wiki"	https://bioregistry.io/efo:0001674	""			"wiki"	
+mesh:D001315	other	Australia	"Australia"	"wiki"	https://bioregistry.io/mesh:D001315	""			"wiki"	
+mesh:D009068	biological_process	Movement	"movements"	"wiki"	https://bioregistry.io/mesh:D009068	""			"wiki"	
+mesh:D005221	disease	Fatigue	"tired"	"wiki"	https://bioregistry.io/mesh:D005221	""			"wiki"	
+efo:0003940	experimental_factor	physical activity	"physical activities"	"wiki"	https://bioregistry.io/efo:0003940	""			"wiki"	
+syn61249909:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn61249909
+doid:535	disease	sleep disorder	"sleep disorders"	"wiki"	https://bioregistry.io/doid:535	""			"wiki"	
+go:0007623	biological_process	circadian rhythm	"circadian rhythm"	"wiki"	https://bioregistry.io/go:0007623	""			"wiki"	
+mesh:D056044	experimental_factor	Actigraphy	"actigraphy"	"wiki"	https://bioregistry.io/mesh:D056044	""			"wiki"	
+efo:0803364	experimental_factor	sleep efficiency	"sleep efficiency"	"wiki"	https://bioregistry.io/efo:0803364	""			"wiki"	
+mesh:D000070263	other	Sleep Hygiene	"sleep hygiene"	"wiki"	https://bioregistry.io/mesh:D000070263	""			"wiki"	
+mesh:D020189	disease	Nocturnal Myoclonus Syndrome	"periodic limb movement disorder"	"wiki"	https://bioregistry.io/mesh:D020189	""			"wiki"	
+mesh:D012891	disease	Sleep Apnea Syndromes	"sleepdisordered breathing;SDB"	"wiki"	https://bioregistry.io/mesh:D012891	""			"wiki"	
+mesh:D007319	disease	Sleep Initiation and Maintenance Disorders	"insomnia"	"wiki"	https://bioregistry.io/mesh:D007319	""			"wiki"	
+hp:0002360	disease	Sleep abnormality	"Sleep disturbance"	"wiki"	https://bioregistry.io/hp:0002360	""			"wiki"	
+efo:0003925	experimental_factor	cognition	"cognitive functions;cognitive function"	"wiki"	https://bioregistry.io/efo:0003925	""			"wiki"	
+mesh:D017286	experimental_factor	Polysomnography	"polysomnography"	"wiki"	https://bioregistry.io/mesh:D017286	""			"wiki"	
+syn61259950:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn61259950
+chebi:45696	small_molecule	hydrogensulfate	"Hydrogen Sulfate"	"wiki"	https://bioregistry.io/chebi:45696	""			"wiki"	
+hp:0003680	disease	Nonprogressive	"non-progressive"	"wiki"	https://bioregistry.io/hp:0003680	""			"wiki"	
+syn61391891:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn61391891
+mesh:D000159	anatomical_region	Vestibulocochlear Nerve	"eighth cranial nerves"	"wiki"	https://bioregistry.io/mesh:D000159	""			"wiki"	
+mesh:C000723994	small_molecule	fimepinostat	"fimepinostat"	"wiki"	https://bioregistry.io/mesh:C000723994	""			"wiki"	
+efo:0007062	experimental_factor	tumor mass	"tumor mass"	"wiki"	https://bioregistry.io/efo:0007062	""			"wiki"	
+mesh:D043562	human_gene_protein	Receptors, G-Protein-Coupled	"G-protein coupled receptor"	"wiki"	https://bioregistry.io/mesh:D043562	""			"wiki"	
+hgnc:5011	human_gene_other	HMI	"IPA"	"wiki"	https://bioregistry.io/hgnc:5011	""			"wiki"	
+mesh:D003603	small_molecule	Cytotoxins	"cytotoxic agents"	"wiki"	https://bioregistry.io/mesh:D003603	""			"wiki"	
+syn61696875:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn61696875
+mesh:D057286	experimental_factor	Electronic Health Records	"Electronic Health Record;electronic health records"	"wiki"	https://bioregistry.io/mesh:D057286	""			"wiki"	
+mesh:D001130	other	Arizona	"Arizona"	"wiki"	https://bioregistry.io/mesh:D001130	""			"wiki"	
+efo:0000352	experimental_factor	clinical history	"clinical history;clinical information"	"wiki"	https://bioregistry.io/efo:0000352	""			"wiki"	
+syn61718741:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn61718741
+syn61721315:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn61721315
+syn61777297:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn61777297
+hp:0025281	disease	Sharp	"sharp"	"wiki"	https://bioregistry.io/hp:0025281	""			"wiki"	
+mesh:D033062	other	Friends	"friends"	"wiki"	https://bioregistry.io/mesh:D033062	""			"wiki"	
+syn61777443:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn61777443
+mesh:D003865	other	Depressive Disorder, Major	"clinical depression"	"wiki"	https://bioregistry.io/mesh:D003865	""			"wiki"	
+chebi:35674	small_molecule	antihypertensive agent	"antihypertensive drug"	"wiki"	https://bioregistry.io/chebi:35674	""			"wiki"	
+syn61778589:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn61778589
+syn61783227:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn61783227
+chebi:194078	small_molecule	GsMTx4	"GsMTx-4;GsMtx-4"	"wiki"	https://bioregistry.io/chebi:194078	""			"wiki"	
+mesh:D000072716	disease	Cancer Pain	"tumor-related pain"	"wiki"	https://bioregistry.io/mesh:D000072716	""			"wiki"	
+mesh:D011312	biological_process	Pressure	"pressure"	"wiki"	https://bioregistry.io/mesh:D011312	""			"wiki"	
+chebi:78505	small_molecule	venom	"venom"	"wiki"	https://bioregistry.io/chebi:78505	""			"wiki"	
+mesh:D013112	organism	Spiders	"spider"	"wiki"	https://bioregistry.io/mesh:D013112	""			"wiki"	
+go:0050975	biological_process	sensory perception of touch	"touch"	"wiki"	https://bioregistry.io/go:0050975	""			"wiki"	
+mesh:D008051	small_molecule	Lipid Bilayers	"lipid bilayer"	"wiki"	https://bioregistry.io/mesh:D008051	""			"wiki"	
+hgnc:37213	human_gene_protein	FREY1	"Frey"	"wiki"	https://bioregistry.io/hgnc:37213	""			"wiki"	
+chebi:194154	small_molecule	piezo1 agonist	"Piezo1 agonist"	"wiki"	https://bioregistry.io/chebi:194154	""			"wiki"	
+mesh:C000708435	small_molecule	yoda-1	"Yoda-1"	"wiki"	https://bioregistry.io/mesh:C000708435	""			"wiki"	
+fplx:Mechanosensitive_ion_channels	protein_family_complex	Mechanosensitive_ion_channels	"mechanosensitive ion channels"	"wiki"	https://bioregistry.io/fplx:Mechanosensitive_ion_channels	""			"wiki"	
+syn61831970:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn61831970
+chebi:141213	small_molecule	isoxaflutole	"balance"	"wiki"	https://bioregistry.io/chebi:141213	""			"wiki"	
+mesh:D005158	disease	Facial Paralysis	"facial paralysis"	"wiki"	https://bioregistry.io/mesh:D005158	""			"wiki"	
+mesh:D001792	anatomical_region	Blood Platelets	"platelets"	"wiki"	https://bioregistry.io/mesh:D001792	""			"wiki"	
+syn61848703:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn61848703
+mesh:D002947	biological_process	Cities	"Cities"	"wiki"	https://bioregistry.io/mesh:D002947	""			"wiki"	
+syn61915471:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn61915471
+go:0001837	biological_process	epithelial to mesenchymal transition	"EMT"	"wiki"	https://bioregistry.io/go:0001837	""			"wiki"	
+syn61931946:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn61931946
+mesh:D005845	other	Georgia	"Georgia"	"wiki"	https://bioregistry.io/mesh:D005845	""			"wiki"	
+mesh:D000375	biological_process	Aging	"Aging"	"wiki"	https://bioregistry.io/mesh:D000375	""			"wiki"	
+go:0043209	cellular_location	myelin sheath	"myelin sheath"	"wiki"	https://bioregistry.io/go:0043209	""			"wiki"	
+syn62012031:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn62012031
+mesh:D020077	organism	Endogenous Retroviruses	"Endogenous Retroviruses;Endogenous Retrovirus;ERVs"	"wiki"	https://bioregistry.io/mesh:D020077	""			"wiki"	
+hgnc:3455	human_gene_other	ERVK2	"HERVK"	"wiki"	https://bioregistry.io/hgnc:3455	""			"wiki"	
+mesh:D015894	biological_process	Genome, Human	"human genome"	"wiki"	https://bioregistry.io/mesh:D015894	""			"wiki"	
+mesh:D006678	organism	HIV	"HIV"	"wiki"	https://bioregistry.io/mesh:D006678	""			"wiki"	
+mesh:D064368	other	Healthy Volunteers	"healthy volunteers"	"wiki"	https://bioregistry.io/mesh:D064368	""			"wiki"	
+mesh:D014838	other	Volunteers	"volunteer"	"wiki"	https://bioregistry.io/mesh:D014838	""			"wiki"	
+syn62012147:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn62012147
+syn62026045:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn62026045
+go:0006310	biological_process	DNA recombination	"DNA recombination"	"wiki"	https://bioregistry.io/go:0006310	""			"wiki"	
+mesh:D020845	small_molecule	Selective Estrogen Receptor Modulators	"selective estrogen receptor modulator"	"wiki"	https://bioregistry.io/mesh:D020845	""			"wiki"	
+syn62026171:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn62026171
+chebi:23511	small_molecule	cysteinyl group	"cysteinyl"	"wiki"	https://bioregistry.io/chebi:23511	""			"wiki"	
+chebi:49159	small_molecule	leukotriene antagonist	"leukotriene receptor antagonists"	"wiki"	https://bioregistry.io/chebi:49159	""			"wiki"	
+mesh:D000069451	disease	Long Term Adverse Effects	"long-term adverse effects"	"wiki"	https://bioregistry.io/mesh:D000069451	""			"wiki"	
+syn62031004:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn62031004
+mesh:D000077321	biological_process	Deep Learning	"deep learning"	"wiki"	https://bioregistry.io/mesh:D000077321	""			"wiki"	
+mesh:D001185	biological_process	Artificial Intelligence	"artificial intelligence"	"wiki"	https://bioregistry.io/mesh:D001185	""			"wiki"	
+syn62031290:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn62031290
+mesh:D000066492	biological_process	Cognitive Aging	"Cognitive aging"	"wiki"	https://bioregistry.io/mesh:D000066492	""			"wiki"	
+mesh:D008017	experimental_factor	Life Expectancy	"life expectancy"	"wiki"	https://bioregistry.io/mesh:D008017	""			"wiki"	
+mesh:D004522	other	Educational Status	"educational level"	"wiki"	https://bioregistry.io/mesh:D004522	""			"wiki"	
+mesh:D000092862	other	Psychological Well-Being	"psychological wellbeing"	"wiki"	https://bioregistry.io/mesh:D000092862	""			"wiki"	
+mesh:D000080442	other	Social Integration	"social integration"	"wiki"	https://bioregistry.io/mesh:D000080442	""			"wiki"	
+mesh:D010551	other	Personality	"personality"	"wiki"	https://bioregistry.io/mesh:D010551	""			"wiki"	
+syn62626050:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn62626050
+efo:0030069	experimental_factor	complete genomic deletion	"homozygous deletion"	"wiki"	https://bioregistry.io/efo:0030069	""			"wiki"	
+mesh:D015195	experimental_factor	Drug Design	"drug design"	"wiki"	https://bioregistry.io/mesh:D015195	""			"wiki"	
+efo:0000510	experimental_factor	genetic modification	"genetic modification"	"wiki"	https://bioregistry.io/efo:0000510	""			"wiki"	
+syn62660805:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn62660805
+mesh:D002886	anatomical_region	Chromosomes, Human, Pair 17	"chromosome 17"	"wiki"	https://bioregistry.io/mesh:D002886	""			"wiki"	
+mesh:D001321	other	Autistic Disorder	"autism"	"wiki"	https://bioregistry.io/mesh:D001321	""			"wiki"	
+mesh:D020820	disease	Dyskinesias	"movement, abnormal"	"wiki"	https://bioregistry.io/mesh:D020820	""			"wiki"	
+mesh:D003380	other	Courtship	"courtship"	"wiki"	https://bioregistry.io/mesh:D003380	""			"wiki"	
+syn62665253:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn62665253
+go:0044306	cellular_location	neuron projection terminus	"nerve terminals"	"wiki"	https://bioregistry.io/go:0044306	""			"wiki"	
+mesh:D011209	other	Power, Psychological	"power"	"wiki"	https://bioregistry.io/mesh:D011209	""			"wiki"	
+mesh:D008863	experimental_factor	Microspheres	"microspheres"	"wiki"	https://bioregistry.io/mesh:D008863	""			"wiki"	
+syn62809145:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn62809145
+mesh:D007758	anatomical_region	Ear, Inner	"inner ear"	"wiki"	https://bioregistry.io/mesh:D007758	""			"wiki"	
+hgnc:6895	human_gene_protein	MARCO	"Marco"	"wiki"	https://bioregistry.io/hgnc:6895	""			"wiki"	
+mesh:D014012	disease	Tinnitus	"tinnitus;ringing in the ears"	"wiki"	https://bioregistry.io/mesh:D014012	""			"wiki"	
+efo:0009847	experimental_factor	dizziness	"dizziness"	"wiki"	https://bioregistry.io/efo:0009847	""			"wiki"	
+syn63102351:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn63102351
+mesh:D008548	disease	Melanosis	"freckling"	"wiki"	https://bioregistry.io/mesh:D008548	""			"wiki"	
+mesh:D005147	anatomical_region	Facial Bones	"facial bone"	"wiki"	https://bioregistry.io/mesh:D005147	""			"wiki"	
+mesh:D006330	disease	Heart Defects, Congenital	"heart defects;heart defect"	"wiki"	https://bioregistry.io/mesh:D006330	""			"wiki"	
+mesh:D012600	disease	Scoliosis	"scoliosis"	"wiki"	https://bioregistry.io/mesh:D012600	""			"wiki"	
+mesh:D035441	anatomical_region	Thoracic Wall	"chest wall"	"wiki"	https://bioregistry.io/mesh:D035441	""			"wiki"	
+go:0001501	biological_process	skeletal system development	"skeletal development"	"wiki"	https://bioregistry.io/go:0001501	""			"wiki"	
+mesh:D013537	experimental_factor	Sutures	"sutures"	"wiki"	https://bioregistry.io/mesh:D013537	""			"wiki"	
+mesh:D012886	anatomical_region	Skull	"skull"	"wiki"	https://bioregistry.io/mesh:D012886	""			"wiki"	
+mesh:D013249	anatomical_region	Sternum	"sternum"	"wiki"	https://bioregistry.io/mesh:D013249	""			"wiki"	
+mesh:D008018	organism	Life Cycle Stages	"developmental stages"	"wiki"	https://bioregistry.io/mesh:D008018	""			"wiki"	
+syn63298604:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn63298604
+go:0009790	biological_process	embryo development	"embryonic development"	"wiki"	https://bioregistry.io/go:0009790	""			"wiki"	
+syn63543841:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn63543841
+hgnc:10293	human_gene_protein	RPE	"RPE"	"wiki"	https://bioregistry.io/hgnc:10293	""			"wiki"	
+syn63596553:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn63596553
+mesh:D000078682	other	Respect	"respect"	"wiki"	https://bioregistry.io/mesh:D000078682	""			"wiki"	
+mesh:D035842	other	Research Subjects	"human subjects"	"wiki"	https://bioregistry.io/mesh:D035842	""			"wiki"	
+syn63944395:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn63944395
+mesh:D011446	experimental_factor	Prospective Studies	"prospective study;prospective studies"	"wiki"	https://bioregistry.io/mesh:D011446	""			"wiki"	
+mesh:D018570	experimental_factor	Risk Assessment	"risk assessment"	"wiki"	https://bioregistry.io/mesh:D018570	""			"wiki"	
+syn63992357:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn63992357
+mesh:D031787	organism	Sasa	"Sasa"	"wiki"	https://bioregistry.io/mesh:D031787	""			"wiki"	
+fplx:IL2R	protein_family_complex	IL2R	"IL-2R"	"wiki"	https://bioregistry.io/fplx:IL2R	""			"wiki"	
+hgnc:11927	human_gene_protein	TNFSF12	"TWEAK"	"wiki"	https://bioregistry.io/hgnc:11927	""			"wiki"	
+fplx:Eotaxin	protein_family_complex	Eotaxin	"eotaxin"	"wiki"	https://bioregistry.io/fplx:Eotaxin	""			"wiki"	
+hgnc:10639	human_gene_protein	CXCL13	"BLC"	"wiki"	https://bioregistry.io/hgnc:10639	""			"wiki"	
+syn64126375:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn64126375
+mesh:C000720612	small_molecule	belzutifan	"Belzutifan;belzutifan"	"wiki"	https://bioregistry.io/mesh:C000720612	""			"wiki"	
+mesh:D002292	disease	Carcinoma, Renal Cell	"renal cell carcinoma"	"wiki"	https://bioregistry.io/mesh:D002292	""			"wiki"	
+mesh:D005791	experimental_factor	Patient Care	"patient care"	"wiki"	https://bioregistry.io/mesh:D005791	""			"wiki"	
+syn64156441:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn64156441
+mesh:D003625	experimental_factor	Data Collection	"data collection"	"wiki"	https://bioregistry.io/mesh:D003625	""			"wiki"	
+mesh:D002526	disease	Cerebellar Diseases	"cerebellar dysfunction"	"wiki"	https://bioregistry.io/mesh:D002526	""			"wiki"	
+mesh:D005901	disease	Glaucoma	"glaucoma"	"wiki"	https://bioregistry.io/mesh:D005901	""			"wiki"	
+mesh:D012640	disease	Seizures	"seizures"	"wiki"	https://bioregistry.io/mesh:D012640	""			"wiki"	
+syn64500888:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn64500888
+go:0019509	biological_process	L-methionine salvage from methylthioadenosine	"methionine salvage pathway"	"wiki"	https://bioregistry.io/go:0019509	""			"wiki"	
+syn64696349:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn64696349
+mesh:D000094725	other	Processing Speed	"processing speed"	"wiki"	https://bioregistry.io/mesh:D000094725	""			"wiki"	
+syn64765215:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn64765215
+hp:0003581	disease	Adult onset	"adult onset"	"wiki"	https://bioregistry.io/hp:0003581	""			"wiki"	
+efo:0002856	experimental_factor	SCH	"SCH"	"wiki"	https://bioregistry.io/efo:0002856	""			"wiki"	
+hp:0000005	disease	Mode of inheritance	"inheritance"	"wiki"	https://bioregistry.io/hp:0000005	""			"wiki"	
+hp:0003828	disease	Variable expressivity	"variable expressivity"	"wiki"	https://bioregistry.io/hp:0003828	""			"wiki"	
+syn64829479:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn64829479
+mesh:D065948	biological_process	Grassland	"Meadows"	"wiki"	https://bioregistry.io/mesh:D065948	""			"wiki"	
+mesh:D001158	anatomical_region	Arteries	"arteries"	"wiki"	https://bioregistry.io/mesh:D001158	""			"wiki"	
+mesh:D020521	disease	Stroke	"strokes;stroke"	"wiki"	https://bioregistry.io/mesh:D020521	""			"wiki"	
+mesh:D033162	experimental_factor	Incidental Findings	"incidental finding"	"wiki"	https://bioregistry.io/mesh:D033162	""			"wiki"	
+efo:0009868	experimental_factor	sedation	"sedation"	"wiki"	https://bioregistry.io/efo:0009868	""			"wiki"	
+syn66527425:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn66527425
+mesh:D018388	small_molecule	Codon, Terminator	"stop codon"	"wiki"	https://bioregistry.io/mesh:D018388	""			"wiki"	
+chebi:8346	small_molecule	potassium iodide	"KI"	"wiki"	https://bioregistry.io/chebi:8346	""			"wiki"	
+syn68080320:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68080320
+chebi:63726	small_molecule	neuroprotective agent	"Neuroprotective Agents"	"wiki"	https://bioregistry.io/chebi:63726	""			"wiki"	
+syn68622867:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68622867
+mesh:D049428	anatomical_region	Blood-Nerve Barrier	"Blood-Nerve Barrier"	"wiki"	https://bioregistry.io/mesh:D049428	""			"wiki"	
+syn68622887:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68622887
+chebi:138116	small_molecule	imazamethabenz	"IMBA"	"wiki"	https://bioregistry.io/chebi:138116	""			"wiki"	
+syn68622908:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68622908
+mesh:D005821	experimental_factor	Genetic Techniques	"genetic techniques"	"wiki"	https://bioregistry.io/mesh:D005821	""			"wiki"	
+syn68623354:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68623354
+go:0090398	biological_process	cellular senescence	"Senescence"	"wiki"	https://bioregistry.io/go:0090398	""			"wiki"	
+syn68634225:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68634225
+mesh:D017027	human_gene_protein	Protein Tyrosine Phosphatases	"protein-tyrosine phosphatase"	"wiki"	https://bioregistry.io/mesh:D017027	""			"wiki"	
+syn68638152:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68638152
+syn68638197:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68638197
+syn68638227:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68638227
+syn68638238:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68638238
+mesh:D014786	disease	Vision Disorders	"vision disorders"	"wiki"	https://bioregistry.io/mesh:D014786	""			"wiki"	
+syn68638276:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68638276
+syn68638297:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68638297
+syn68698543:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68698543
+mesh:D020466	other	Atlas	"atlas"	"wiki"	https://bioregistry.io/mesh:D020466	""			"wiki"	
+syn68747438:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68747438
+mesh:D016503	experimental_factor	Drug Delivery Systems	"drug targeting"	"wiki"	https://bioregistry.io/mesh:D016503	""			"wiki"	
+mesh:C036350	small_molecule	3-chloro-4,4-dimethyl-2-oxazolidinone	"agent is"	"wiki"	https://bioregistry.io/mesh:C036350	""			"wiki"	
+syn68749817:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68749817
+syn68805918:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68805918
+mesh:D004171	biological_process	Diploidy	"diploid"	"wiki"	https://bioregistry.io/mesh:D004171	""			"wiki"	
+mesh:D058608	other	Nanopores	"Nanopore"	"wiki"	https://bioregistry.io/mesh:D058608	""			"wiki"	
+mesh:D059014	experimental_factor	High-Throughput Nucleotide Sequencing	"next-generation sequencing"	"wiki"	https://bioregistry.io/mesh:D059014	""			"wiki"	
+efo:0000751	experimental_factor	methylation profiling	"Methylation profiling"	"wiki"	https://bioregistry.io/efo:0000751	""			"wiki"	
+syn68872078:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68872078
+syn68872619:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68872619
+mesh:D003615	other	Dancing	"Dance"	"wiki"	https://bioregistry.io/mesh:D003615	""			"wiki"	
+mesh:D032921	other	Consensus	"consensus"	"wiki"	https://bioregistry.io/mesh:D032921	""			"wiki"	
+efo:0009740	experimental_factor	clinician	"clinician-"	"wiki"	https://bioregistry.io/efo:0009740	""			"wiki"	
+syn68876148:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn68876148
+go:0042063	biological_process	gliogenesis	"gliogenesis"	"wiki"	https://bioregistry.io/go:0042063	""			"wiki"	
+go:0000792	cellular_location	heterochromatin	"heterochromatin"	"wiki"	https://bioregistry.io/go:0000792	""			"wiki"	
+syn69071607:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn69071607
+hp:0012833	disease	Unilateral	"unilateral"	"wiki"	https://bioregistry.io/hp:0012833	""			"wiki"	
+mesh:D017354	biological_process	Point Mutation	"point mutations"	"wiki"	https://bioregistry.io/mesh:D017354	""			"wiki"	
+mesh:D011995	biological_process	Recombination, Genetic	"recombination"	"wiki"	https://bioregistry.io/mesh:D011995	""			"wiki"	
+mesh:C000727722	human_gene_protein	tdTomato	"tdTomato"	"wiki"	https://bioregistry.io/mesh:C000727722	""			"wiki"	
+syn69707917:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn69707917
+mesh:D009380	disease	Neoplasms, Nerve Tissue	"nervous system cancers"	"wiki"	https://bioregistry.io/mesh:D009380	""			"wiki"	
+syn69715258:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn69715258
+mesh:D003080	biological_process	Cold Temperature	"Cold"	"wiki"	https://bioregistry.io/mesh:D003080	""			"wiki"	
+go:0019867	cellular_location	outer membrane	"outer membrane"	"wiki"	https://bioregistry.io/go:0019867	""			"wiki"	
+mesh:D014611	experimental_factor	Vaccination	"vaccination"	"wiki"	https://bioregistry.io/mesh:D014611	""			"wiki"	
+syn69715590:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn69715590
+fplx:ALDH	protein_family_complex	ALDH	"ALDH"	"wiki"	https://bioregistry.io/fplx:ALDH	""			"wiki"	
+syn69981762:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn69981762
+mesh:D018432	biological_process	Drug Resistance, Multiple	"multidrug resistance"	"wiki"	https://bioregistry.io/mesh:D018432	""			"wiki"	
+chebi:53218	small_molecule	diphenylmethane-4,4'-diisocyanate	"MDR"	"wiki"	https://bioregistry.io/chebi:53218	""			"wiki"	
+syn70194549:Wiki	Wiki		""	""		""			"wiki"	https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId=syn70194549
