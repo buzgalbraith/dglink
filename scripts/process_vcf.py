@@ -131,13 +131,11 @@ def parse_vcf_file(file_id: str, node_set: NodeSet, edge_set: EdgeSet):
 
 
 if __name__ == "__main__":
-    # node_set, edge_set = load_graph(
-    #     resource_path="dglink/resources/graph/",
-    #     node_name="nodes.tsv",
-    #     edge_name="edges.tsv",
-    # )
-    node_set = NodeSet()
-    edge_set = EdgeSet()
+    node_set, edge_set = load_graph(
+        resource_path="dglink/resources/graph/",
+        node_name="nodes.tsv",
+        edge_name="edges.tsv",
+    )
     processed = 0
     files_df = pl.read_csv(
         os.path.join(REPORT_PATH, "file_type_report.tsv"), separator="\t"
