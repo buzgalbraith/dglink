@@ -106,7 +106,10 @@ class NodeSet:
                 curie = row.iloc[0]
                 self.nodes[curie] = dict()
                 for i, attribute in enumerate(self.attributes):
-                    val = row.iloc[i]
+                    if i < len(row):
+                        val = row.iloc[i]
+                    else:
+                        val = ""
                     if ":string[]" in attribute:
                         val = set(str(val).replace('"', "").replace("'", "").split(";"))
                     self.nodes[curie][attribute] = val

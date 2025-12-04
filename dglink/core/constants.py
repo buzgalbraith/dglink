@@ -19,6 +19,13 @@ NODE_ATTRIBUTES = [
     "DOI",
     "source:string[]",
     "study_url",
+    "PatientID",
+    "AccessionNumber",
+    "Modality",
+    "PatientSex",
+    "PatientAge",
+    "SOPClassUID",
+    "Manufacturer",
 ]
 EDGE_ATTRIBUTES = [
     ":START_ID",

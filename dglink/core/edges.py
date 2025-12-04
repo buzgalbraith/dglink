@@ -112,7 +112,10 @@ class EdgeSet:
                 edge_id = f"{head}_{tail}_{relation}"
                 self.edges[edge_id] = dict()
                 for i, attribute in enumerate(self.attributes):
-                    val = row.iloc[i]
+                    if i < len(row):
+                        val = row.iloc[i]
+                    else:
+                        val = ""
                     if ":string[]" in attribute:
                         val = set(str(val).replace('"', "").replace("'", "").split(";"))
                     self.edges[edge_id][attribute] = val
