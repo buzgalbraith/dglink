@@ -17,7 +17,9 @@ from typing import Union
 logger = logging.getLogger(__name__)
 
 
-def get_project_files(project_syn_id, syn=syn, file_types:Union[list, None]=FILE_TYPES):
+def get_project_files(
+    project_syn_id, syn=syn, file_types: Union[list, None] = FILE_TYPES
+):
     """
     returns a set of all files associated with a given synapse project id.
     By default just parses tabular files, if file_types is set to None, parses all files
@@ -38,7 +40,6 @@ def get_project_files(project_syn_id, syn=syn, file_types:Union[list, None]=FILE
                 else:
                     project_files.add(filename)
     return project_files
-
 
 
 def filter_df(df, base_cols, nan_percentage=0.1, max_types=5):
@@ -361,7 +362,11 @@ def get_experimental_data(
         )
     if write_reports:
         os.makedirs(REPORT_PATH, exist_ok=True)
-        files_df.to_csv(os.path.join(REPORT_PATH,"file_report.tsv"), sep="\t", index=False)
-        cols_df.to_csv(os.path.join(REPORT_PATH,"col_report.tsv"), sep="\t", index=False)
+        files_df.to_csv(
+            os.path.join(REPORT_PATH, "file_report.tsv"), sep="\t", index=False
+        )
+        cols_df.to_csv(
+            os.path.join(REPORT_PATH, "col_report.tsv"), sep="\t", index=False
+        )
 
     return node_set, edge_set, [files_df, cols_df]

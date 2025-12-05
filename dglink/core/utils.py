@@ -52,19 +52,15 @@ def write_graph(
         edge_set.write_edge_set(os.path.join(resource_path, edge_name))
     ## save all nodes and edges from multiple sources
 
-def filter_edge_set(
-        edge_set: EdgeSet,
-        filter_for:str
-):
+
+def filter_edge_set(edge_set: EdgeSet, filter_for: str):
     """filter out edges of a certain type"""
     filtered_edge_set = EdgeSet()
     for edge_id in edge_set.edges:
         edge = edge_set.edges[edge_id]
-        if edge[':TYPE'] != filter_for:
+        if edge[":TYPE"] != filter_for:
             filtered_edge_set.edges[edge_id] = edge
-    filtered_edge_set.write_edge_set(
-        os.path.join(RESOURCE_PATH, "edges.tsv")
-    )
+    filtered_edge_set.write_edge_set(os.path.join(RESOURCE_PATH, "edges.tsv"))
     return filtered_edge_set
 
 
@@ -161,7 +157,8 @@ def write_graph_and_artifacts_default(
 
 
 def merge_resource_sets(
-    artifacts_path: str = os.path.join(RESOURCE_PATH, 'artifacts'), write_resource: bool = True
+    artifacts_path: str = os.path.join(RESOURCE_PATH, "artifacts"),
+    write_resource: bool = True,
 ):
     """merges all resource sets saved at a given path"""
     resource_files = os.listdir(artifacts_path)

@@ -4,10 +4,93 @@ extract KG information from the uncompressed VCF files.
 
 from dglink.core.constants import syn, REPORT_PATH
 from dglink import load_graph, NodeSet, EdgeSet, write_graph
+from bioregistry import normalize_curie, get_iri, parse_curie
 import vcf
 import polars as pl
 import os
 import tqdm
+import re
+
+vcf_formats = [".vcf", ".gvcf", ".vcf.gz", ".gvcf.gz"]
+vcf_pattern = f"({'|'.join(re.escape(s) for s in vcf_formats)})$"
+
+
+def extract_variants(obj, node_set: NodeSet, edge_set: EdgeSet):
+    ## first try doing this pyvcf3
+    compressed = obj.path.endswith(".gz")
+    read_cmd = "rb" if compressed else "r"
+    try:
+        with open(obj.path, mode=read_cmd) as f:
+            vcf_reader = vcf.Reader(f, compressed=compressed)
+            ## extract variant info
+            for record in vcf_reader:
+                raw_id = record.ID
+                if raw_id is not None:
+                    ## ids are from dbSNP (the NCBI Single Nucleotide Polymorphism Database) ##
+                    if raw_id.startswith("rs"):
+                        curie = normalize_curie(f"dbsnp:{raw_id}")
+                        parsed_curie = parse_curie(curie)
+                        node_set.update_nodes(
+                            {
+                                "curie:ID": curie,
+                                ":LABEL": "genetic_variant",  ## vcf files are structured so know this will be the only entity type.
+                                "iri": get_iri(
+                                    prefix=parsed_curie.prefix,
+                                    identifier=parsed_curie.identifier,
+                                ),
+                                "file_id:string[]": file_id,
+                                "source:string[]": "vcf",
+                            }
+                        )
+                        ## add edges between samples and the variant
+                        for sample in vcf_reader.samples:
+                            edge_set.update_edges(
+                                {
+                                    ":START_ID": sample,
+                                    ":END_ID": curie,
+                                    ":TYPE": "has_genetic_variant",
+                                    "source:string[]": "vcf",
+                                }
+                            )
+    ## if this fails, try to directly read teh file.
+    except:
+
+        with open(obj.path, read_cmd) as f:
+            ## skip header lines
+            for line in f:
+                if line.startswith("#"):
+                    continue
+                fields = line.strip().split("\t")
+                if len(fields) > 2:
+                    raw_id = fields[2]  # ID is column 3 (0-indexed: column 2)
+                    if raw_id is not None:
+                        ## ids are from dbSNP (the NCBI Single Nucleotide Polymorphism Database) ##
+                        if raw_id.startswith("rs"):
+                            curie = normalize_curie(f"dbsnp:{raw_id}")
+                            parsed_curie = parse_curie(curie)
+                            node_set.update_nodes(
+                                {
+                                    "curie:ID": curie,
+                                    ":LABEL": "genetic_variant",  ## vcf files are structured so know this will be the only entity type.
+                                    "iri": get_iri(
+                                        prefix=parsed_curie.prefix,
+                                        identifier=parsed_curie.identifier,
+                                    ),
+                                    "file_id:string[]": file_id,
+                                    "source:string[]": "vcf",
+                                }
+                            )
+                            ## add edges between samples and the variant
+                            for sample in vcf_reader.samples:
+                                edge_set.update_edges(
+                                    {
+                                        ":START_ID": sample,
+                                        ":END_ID": curie,
+                                        ":TYPE": "has_genetic_variant",
+                                        "source:string[]": "vcf",
+                                    }
+                                )
+    return node_set, edge_set
 
 
 def parse_vcf_file(file_id: str, node_set: NodeSet, edge_set: EdgeSet):
@@ -18,19 +101,15 @@ def parse_vcf_file(file_id: str, node_set: NodeSet, edge_set: EdgeSet):
     if obj.path is None:
         return node_set, edge_set, 0
     study_id = obj.get("studyId", ["study_id_missing"])[0]
-    ## remove after testing for now just add project node
-    node_set.update_nodes(
-        {
-            "curie:ID": study_id,
-            ":LABEL": "Project",
-            "name": study_id,
-            "source:string[]": "vcf",
-        }
-    )
 
-    with open(obj.path, mode="r") as f:
-        vcf_reader = vcf.Reader(f)
-    ## extract reference and vcf format nodes and edges
+    ## extract the variants
+    node_set, edge_set = extract_variants(obj=obj, node_set=node_set, edge_set=edge_set)
+    ## extract the meta data
+    compressed = obj.path.endswith(".gz")
+    read_cmd = "rb" if compressed else "r"
+    with open(obj.path, mode=read_cmd) as f:
+        compressed = obj.path.endswith(".gz")
+        vcf_reader = vcf.Reader(f, compressed=compressed)
     meta = vcf_reader.metadata
     vcf_format = meta.get("fileformat", "vcf_format_missing")
     reference = meta.get("reference", "reference_fasta_missing")
@@ -127,21 +206,20 @@ def parse_vcf_file(file_id: str, node_set: NodeSet, edge_set: EdgeSet):
                     "source:string[]": "vcf",
                 }
             )
+        ##
     return node_set, edge_set, 1
 
 
 if __name__ == "__main__":
-    # node_set, edge_set = load_graph(
-    #     resource_path="dglink/resources/graph/",
-    #     node_name="nodes.tsv",
-    #     edge_name="edges.tsv",
-    # )
-    node_set = NodeSet()
-    edge_set = EdgeSet()
+    node_set, edge_set = load_graph(
+        resource_path="dglink/resources/graph/",
+        node_name="nodes.tsv",
+        edge_name="edges.tsv",
+    )
     processed = 0
     files_df = pl.read_csv(
         os.path.join(REPORT_PATH, "file_type_report.tsv"), separator="\t"
-    ).filter(pl.col("extension").eq(".vcf"))
+    ).filter(pl.col("file_path").str.contains(vcf_pattern))
     i = 0
     for file_id in tqdm.tqdm(files_df["syn_id"]):
         node_set, edge_set, could_process = parse_vcf_file(

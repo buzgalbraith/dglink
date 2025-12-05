@@ -1,5 +1,7 @@
 import os
-import pandas
+
+# import pandas
+import polars as pl
 from dglink.core.constants import EDGE_ATTRIBUTES
 
 
@@ -99,26 +101,24 @@ class EdgeSet:
     def load_edge_set(self, path):
         self.path = path
         if os.path.exists(self.path):
-            df = pandas.read_csv(self.path, sep="\t", index_col=False)
-            df = df.fillna(value="")
-            # df = df.set_index(self.attributes[0])
+            df = pl.read_csv(self.path, separator="\t")
+            df = df.fill_null("")
+
             if len(self.attributes) == 0:
                 self.attributes = df.columns
-            # set index as first col assuming that is the id
-            for _, row in df.iterrows():
-                head = row.iloc[0]
-                tail = row.iloc[1]
-                relation = row.iloc[2]
-                edge_id = f"{head}_{tail}_{relation}"
-                self.edges[edge_id] = dict()
-                for i, attribute in enumerate(self.attributes):
-                    if i < len(row):
-                        val = row.iloc[i]
-                    else:
-                        val = ""
+
+            # Process rows efficiently with Polars
+            for row in df.iter_rows(named=True):
+                curie = row[self.attributes[0]]
+                self.edges[curie] = dict()
+
+                for attribute in self.attributes:
+                    val = row.get(attribute, "")
+
                     if ":string[]" in attribute:
                         val = set(str(val).replace('"', "").replace("'", "").split(";"))
-                    self.edges[edge_id][attribute] = val
+
+                    self.edges[curie][attribute] = val
 
     def write_edge_set(self, path):
         with open(path, "w") as f:
