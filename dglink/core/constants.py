@@ -42,13 +42,19 @@ EDGE_ATTRIBUTES = [
     "edge_weights:string[]",
 ]
 
-FILE_TYPES = [
+TABULAR_FILE_TYPES = [
     ".tsv",
     ".xls",
     ".xlsx",
     ".csv",
 ]
 
+VCF_FILE_TYPES = [
+    ".vcf",
+    ".gvcf",
+    ".vcf.gz",
+    ".gvcf.gz",
+]
 
 RESOURCE_TYPES = [
     "metadata",
@@ -56,5 +62,8 @@ RESOURCE_TYPES = [
     "publications",
     "wiki",
     "tools",
-    "experimental_data",
+    "tabular_data",
+]
+UNSTRUCTURED_DICOM_FIELDS = [
+    "ImageComments",
 ]

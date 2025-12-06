@@ -81,8 +81,15 @@ class EdgeSet:
         if new_edge_id in self.edges:
             for attribute in self.set_attributes:
                 attr_val = new_edge.get(attribute, "")
-                if attr_val.replace('"', "").replace("'", "") != "":
-                    self.edges[new_edge_id][attribute].add(attr_val)
+                if attribute not in self.set_attributes:
+                    ## standardize empty data representation
+                    if attr_val.replace('"', "").replace("'", "") != "":
+                        self.edges[new_edge_id][attribute].add(attr_val)
+                else:
+                    attr_val = set([attr_val]) if type(attr_val) == str else attr_val
+                    self.edges[new_edge_id][attribute] = self.edges[new_edge_id][
+                        attribute
+                    ].union(attr_val)
         else:
             self.edges[new_edge_id] = dict()
             for attribute in self.attributes:

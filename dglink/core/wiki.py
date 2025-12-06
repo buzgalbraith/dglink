@@ -76,7 +76,10 @@ def get_wikis(
 ):
     logger.info("Getting project Wikis.")
     for project_id in tqdm.tqdm(project_ids):
-        study_wiki = syn.getWiki(project_id)
+        try:
+            study_wiki = syn.getWiki(project_id)
+        except:
+            logger.warning(f"Project: {project_id} wiki could not be loaded ")
         node_set, edge_set = get_entities_from_wiki(
             study_wiki=study_wiki,
             wiki_fields=wiki_fields,

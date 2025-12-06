@@ -88,14 +88,17 @@ def get_meta(
     """pull all fields from a series of project meta data."""
     logger.info("starting meta data pull")
     for project_id in tqdm.tqdm(project_ids):
-        study_metadata = syn.get(project_id)
-        node_set, edge_set = get_entities_from_meta(
-            study_metadata=study_metadata,
-            ground_fields=ground_field,
-            unground_fields=ungrounded_field,
-            node_set=node_set,
-            edge_set=edge_set,
-        )
+        try:
+            study_metadata = syn.get(project_id)
+            node_set, edge_set = get_entities_from_meta(
+                study_metadata=study_metadata,
+                ground_fields=ground_field,
+                unground_fields=ungrounded_field,
+                node_set=node_set,
+                edge_set=edge_set,
+            )
+        except:
+            logger.warning(f"Project: {project_id} metadata could not be loaded ")
     if write_set:
         write_graph(
             node_set=node_set,
