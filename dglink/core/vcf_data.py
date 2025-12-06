@@ -10,7 +10,6 @@ from .nodes import NodeSet
 from .edges import EdgeSet
 from .utils import get_project_files, write_graph
 import vcf
-import re
 import os
 from bioregistry import normalize_curie, get_iri, parse_curie
 import logging
@@ -43,80 +42,58 @@ def extract_variants(
         Only processes variants with dbSNP rs identifiers.
     """
     file_id = obj.get("id", "")
-    ## first try doing this pyvcf3
     compressed = obj.path.endswith(".gz")
     read_cmd = "rb" if compressed else "r"
+    able_to_process = True
     try:
         with open(obj.path, mode=read_cmd) as f:
             vcf_reader = vcf.Reader(f, compressed=compressed)
-            ## extract variant info
+
             for record in vcf_reader:
                 raw_id = record.ID
-                if raw_id is not None:
-                    ## ids are from dbSNP (the NCBI Single Nucleotide Polymorphism Database) ##
-                    if raw_id.startswith("rs"):
-                        curie = normalize_curie(f"dbsnp:{raw_id}")
-                        parsed_curie = parse_curie(curie)
-                        node_set.update_nodes(
-                            {
-                                "curie:ID": curie,
-                                ":LABEL": "genetic_variant",  ## vcf files are structured so know this will be the only entity type.
-                                "iri": get_iri(
-                                    prefix=parsed_curie.prefix,
-                                    identifier=parsed_curie.identifier,
-                                ),
-                                "file_id:string[]": file_id,
-                                "source:string[]": data_source,
-                            }
-                        )
-                        ## add edges between samples and the variant
-                        for sample in vcf_reader.samples:
+                if raw_id is not None and raw_id.startswith("rs"):
+                    curie = normalize_curie(f"dbsnp:{raw_id}")
+                    parsed_curie = parse_curie(curie)
+
+                    # Create variant node
+                    node_set.update_nodes(
+                        {
+                            "curie:ID": curie,
+                            ":LABEL": "genetic_variant",
+                            "iri": get_iri(
+                                prefix=parsed_curie.prefix,
+                                identifier=parsed_curie.identifier,
+                            ),
+                            "file_id:string[]": file_id,
+                            "source:string[]": data_source,
+                            "chrom": str(record.CHROM),
+                            "pos": str(record.POS),
+                            "ref": str(record.REF),
+                            "alt": str(record.ALT),
+                        }
+                    )
+                    # Only create edges for samples that have the variant
+                    for sample in record.samples:
+                        genotype = sample["GT"]  # e.g., '0/1', '1/1', '0/0'
+                        # Only connect if variant is present (not 0/0)
+                        if genotype and genotype not in ["0/0", "./.", "0|0", ".|."]:
                             edge_set.update_edges(
                                 {
-                                    ":START_ID": sample,
+                                    ":START_ID": sample.sample,
                                     ":END_ID": curie,
                                     ":TYPE": "has_genetic_variant",
                                     "source:string[]": data_source,
+                                    "genotype": str(genotype),
+                                    "quality": str(record.QUAL),
                                 }
                             )
-    ## if this fails, try to directly read teh file.
-    except:
-        with open(obj.path, read_cmd) as f:
-            ## skip header lines
-            for line in f:
-                if line.startswith("#"):
-                    continue
-                fields = line.strip().split("\t")
-                if len(fields) > 2:
-                    raw_id = fields[2]  # ID is column 3 (0-indexed: column 2)
-                    if raw_id is not None:
-                        ## ids are from dbSNP (the NCBI Single Nucleotide Polymorphism Database) ##
-                        if raw_id.startswith("rs"):
-                            curie = normalize_curie(f"dbsnp:{raw_id}")
-                            parsed_curie = parse_curie(curie)
-                            node_set.update_nodes(
-                                {
-                                    "curie:ID": curie,
-                                    ":LABEL": "genetic_variant",  ## vcf files are structured so know this will be the only entity type.
-                                    "iri": get_iri(
-                                        prefix=parsed_curie.prefix,
-                                        identifier=parsed_curie.identifier,
-                                    ),
-                                    "file_id:string[]": file_id,
-                                    "source:string[]": data_source,
-                                }
-                            )
-                            ## add edges between samples and the variant
-                            for sample in vcf_reader.samples:
-                                edge_set.update_edges(
-                                    {
-                                        ":START_ID": sample,
-                                        ":END_ID": curie,
-                                        ":TYPE": "has_genetic_variant",
-                                        "source:string[]": data_source,
-                                    }
-                                )
-    return node_set, edge_set
+    except Exception as e:
+        logger.error(
+            f"Error extracting variants from {file_id}, this file may be misformed: {e}"
+        )
+        able_to_process = False
+
+    return node_set, edge_set, able_to_process
 
 
 def extract_vcf_metadata(
@@ -280,7 +257,7 @@ def parse_vcf_file(
     else:
         ## extract the variants
         if process_variants:
-            node_set, edge_set = extract_variants(
+            node_set, edge_set, able_to_process = extract_variants(
                 obj=obj, node_set=node_set, edge_set=edge_set
             )
         ## extract the meta data

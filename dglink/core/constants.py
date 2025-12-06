@@ -8,17 +8,19 @@ RESOURCE_PATH = "dglink/resources/graph/"
 REPORT_PATH = "dglink/resources/reports/"
 SEMANTIC_SEARCH_RESOURCE_PATH = "dglink/applications/semantic_search/neo4j/graph"
 NODE_ATTRIBUTES = [
+    ## core fields - all nodes should have ths other fields are optional
     "curie:ID",
     ":LABEL",
     "name",
+    "iri",
+    "source:string[]",
+    ## Synapse project field
+    "study_url",
+    ## tabular data fields
     "raw_texts:string[]",
     "columns:string[]",
-    "iri",
     "file_id:string[]",
-    "tool_type",
-    "DOI",
-    "source:string[]",
-    "study_url",
+    ## DICOM Fields
     "PatientID",
     "AccessionNumber",
     "Modality",
@@ -26,12 +28,25 @@ NODE_ATTRIBUTES = [
     "PatientAge",
     "SOPClassUID",
     "Manufacturer",
+    ## VCF fields
+    "chrom",
+    "pos",
+    "ref",
+    "alt",
+    "genotype",
+    "quality",
+    ## publication fields
+    "DOI",
+    ## nf data portal tool fields (maybe move elsewhere)
+    "tool_type",
 ]
 EDGE_ATTRIBUTES = [
+    ## core fields - all edges should have ths other fields are optional
     ":START_ID",
     ":END_ID",
     ":TYPE",
     "source:string[]",
+    ## predicted similar project fields
     "jacquard_score",
     "score_cutoff",
     "intersection_score",
