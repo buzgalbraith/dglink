@@ -1,7 +1,7 @@
 services:
   neo-4j:
     build: ./neo4j
-    container_name: neo4j
+    container_name: semantic_search_neo4j
     ports:
       - "7687:7687"
       - "7474:7474"
@@ -9,12 +9,12 @@ services:
     build:
       context: ./          # directory used as build context
       dockerfile: ./backend/Dockerfile 
-    container_name: fastapi_backend
+    container_name: semantic_search_fastapi_backend
     ports:
       - "8000:8000"
   frontend:
     build: ./frontend
-    container_name: flask_frontend
+    container_name: semantic_search_flask_frontend
     ports:
       - "5000:5000"
     depends_on:
