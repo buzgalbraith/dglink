@@ -134,6 +134,5 @@ class NodeSet:
                             val = list(val)[:20]  ## limit max number of elements to 20
                         val = f'"{";".join(val)}"'
                     ## take out any weird line breaks
-
-                    write_str += val.replace("\n", "") + "\t"
+                    write_str += val.replace(r'[\t\n\r]', "") + "\t"
                 f.write(write_str[:-1] + "\n")

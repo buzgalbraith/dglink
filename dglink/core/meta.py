@@ -18,6 +18,7 @@ def get_entities_from_meta(
     unground_fields,
     node_set: NodeSet,
     edge_set: EdgeSet,
+    id_field: str = "id",
 ):
     """parse entities from project metadata."""
     for field in ground_fields + unground_fields:
@@ -58,7 +59,7 @@ def get_entities_from_meta(
                         # edge_set.add((study_metadata.id, curie, f"has_{field}"))
                         edge_set.update_edges(
                             {
-                                ":START_ID": study_metadata.id,
+                                ":START_ID": study_metadata[id_field],
                                 ":END_ID": curie,
                                 ":TYPE": f"has_{field}",
                                 "source:string[]": "metadata",
@@ -67,7 +68,7 @@ def get_entities_from_meta(
                 # edge_set.add((study_metadata.id, entry, f"has_{field}"))
                 edge_set.update_edges(
                     {
-                        ":START_ID": study_metadata.id,
+                        ":START_ID": study_metadata[id_field],
                         ":END_ID": entry,
                         ":TYPE": f"has_{field}",
                         "source:string[]": "metadata",
