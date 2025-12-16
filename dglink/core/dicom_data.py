@@ -234,7 +234,7 @@ def get_dicom_data(
                 edge_set=edge_set,
                 source_filter=True,
                 strict=True,
-                source_name="dicom_data",
+                source_name=["dicom_data", "experimental_data"],
                 resource_path=os.path.join(RESOURCE_PATH, "artifacts"),
             )
 
@@ -245,7 +245,7 @@ def get_dicom_data(
             edge_set=edge_set,
             source_filter=True,
             strict=True,
-            source_name="dicom_data",
+            source_name=["dicom_data", "experimental_data"],
             resource_path=os.path.join(RESOURCE_PATH, "artifacts"),
         )
     processed_df = pl.from_dicts(process_files)

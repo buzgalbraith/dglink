@@ -49,11 +49,14 @@ def write_graph(
     """
     os.makedirs(resource_path, exist_ok=True)
     if source_filter:
+        ## make input list
+        source_name = [source_name] if type(source_name) == str else source_name
+        write_name = "_".join(source_name)
         ns, es = get_graph_for_source(
             node_set=node_set, edge_set=edge_set, source_name=source_name, strict=strict
         )
-        ns.write_node_set(os.path.join(resource_path, f"nodes_{source_name}.tsv"))
-        es.write_edge_set(os.path.join(resource_path, f"edges_{source_name}.tsv"))
+        ns.write_node_set(os.path.join(resource_path, f"nodes_{write_name}.tsv"))
+        es.write_edge_set(os.path.join(resource_path, f"edges_{write_name}.tsv"))
     elif mixed:
         ns, es = get_graph_for_source(node_set=node_set, edge_set=edge_set, mixed=True)
         ns.write_node_set(os.path.join(resource_path, "nodes_mixed.tsv"))
@@ -79,7 +82,7 @@ def filter_edge_set(edge_set: EdgeSet, filter_for: str):
 def get_graph_for_source(
     node_set: NodeSet,
     edge_set: EdgeSet,
-    source_name: str = None,
+    source_name: list = None,
     strict: bool = True,
     mixed: bool = False,
 ):
@@ -90,18 +93,18 @@ def get_graph_for_source(
         for node_id in node_set.nodes:
             add = True
             node = node_set.nodes[node_id]
-            if strict and len(node["source:string[]"]) > 1:
+            if strict and len(node["source:string[]"]) > 1 and len(source_name) < 2:
                 add = False
-            elif source_name not in node["source:string[]"]:
+            elif any([a not in node["source:string[]"] for a in source_name]):
                 add = False
             if add:
                 filter_node_set.nodes[node_id] = node_set.nodes[node_id]
         for edge_id in edge_set.edges:
             add = True
             edge = edge_set.edges[edge_id]
-            if strict and len(edge["source:string[]"]) > 1:
+            if strict and len(edge["source:string[]"]) > 1 and len(source_name) < 2:
                 add = False
-            elif source_name not in edge["source:string[]"]:
+            elif any([a not in edge["source:string[]"] for a in source_name]):
                 add = False
             if add:
                 filter_edge_set.edges[edge_id] = edge_set.edges[edge_id]
@@ -202,6 +205,7 @@ def load_known_files_df() -> pl.DataFrame:
         DataFrame with columns: project_syn_id, file_syn_id, file_name.
         Returns empty DataFrame with schema if cache file doesn't exist.
     """
+    os.makedirs(REPORT_PATH, exist_ok=True)
     df_path = os.path.join(REPORT_PATH, "project_files.tsv")
     file_df_schema = Schema(
         [("project_syn_id", String), ("file_syn_id", String), ("file_name", String)]

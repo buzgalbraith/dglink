@@ -531,7 +531,7 @@ def get_tabular_data(
                 edge_set=edge_set,
                 source_filter=True,
                 strict=True,
-                source_name="tabular_data",
+                source_name=["tabular_data", "experimental_data"],
                 resource_path=os.path.join(RESOURCE_PATH, "artifacts"),
             )
     files_df = pandas.DataFrame(data=files_read)
@@ -543,9 +543,10 @@ def get_tabular_data(
             edge_set=edge_set,
             source_filter=True,
             strict=True,
-            source_name="tabular_data",
+            source_name=["tabular_data", "experimental_data"],
             resource_path=os.path.join(RESOURCE_PATH, "artifacts"),
         )
+
     if write_reports:
         os.makedirs(REPORT_PATH, exist_ok=True)
         files_df.to_csv(

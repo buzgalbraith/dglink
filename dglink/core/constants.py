@@ -77,7 +77,9 @@ RESOURCE_TYPES = [
     "publications",
     "wiki",
     "tools",
-    "tabular_data",
+    ["vcf_data", "experimental_data"],
+    ["tabular_data", "experimental_data"],
+    ["dicom_data", "experimental_data"],
 ]
 UNSTRUCTURED_DICOM_FIELDS = [
     "ImageComments",
