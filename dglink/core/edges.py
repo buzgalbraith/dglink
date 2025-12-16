@@ -116,8 +116,12 @@ class EdgeSet:
 
             # Process rows efficiently with Polars
             for row in df.iter_rows(named=True):
-                curie = row[self.attributes[0]]
-                self.edges[curie] = dict()
+                # curie = row[self.attributes[0]]
+                new_edge_id_1 = row.get(":START_ID", "no_start")
+                new_edge_id_2 = row.get(":END_ID", "no_end")
+                new_edge_id_3 = row.get(":TYPE", "no_type")
+                edge_id = f"{new_edge_id_1}_{new_edge_id_2}:{new_edge_id_3}"
+                self.edges[edge_id] = dict()
 
                 for attribute in self.attributes:
                     val = row.get(attribute, "")
@@ -125,7 +129,7 @@ class EdgeSet:
                     if ":string[]" in attribute:
                         val = set(str(val).replace('"', "").replace("'", "").split(";"))
 
-                    self.edges[curie][attribute] = val
+                    self.edges[edge_id][attribute] = val
 
     def write_edge_set(self, path):
         with open(path, "w") as f:
