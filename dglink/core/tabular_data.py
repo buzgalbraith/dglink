@@ -153,21 +153,26 @@ def frictionless_file_reader(obj, max_size_bytes=100 * 1024 * 1024):
     """
     ## issues with pull
     if obj is None:
-        return {}
+        return {"all": "locked"}
     if obj.path is None:
-        return {}
+        return {"all": "locked"}
     ## check file size
     pth = Path(obj.path)
     file_size = os.path.getsize(pth)
     if file_size > max_size_bytes:
         logger.info("file to large to read")
-        return {}
+        return {"all": "to_large"}
     ## load file contents into frictionless package
     pack = get_frictionless_package(pth=pth)
     ## load frictionless package into dictionary of pandas data frames
     df_dict = {}
     for res in pack.resources:
-        df_dict[res.name] = pandas.DataFrame(res.read_rows())  # stream rows directly
+        try:
+            df_dict[res.name] = pandas.DataFrame(
+                res.read_rows()
+            )  # stream rows directly
+        except:
+            return {"all": "unable_to_read"}
     return df_dict
 
 
@@ -315,8 +320,11 @@ def check_df_readable(df, max_unnamed=2):
         DataFrames with no columns or too many unnamed columns are considered unreadable,
         indicating parsing errors or improperly formatted source files.
     """
+    ## check for error in reading
+    if type(df) == str:
+        return df, None
     if len(df.columns) < 1:
-        return False, df
+        return "look_into", df
     unnamed_count = sum(df.columns.str.contains("Unnamed", case=False))
     can_read = False
     if unnamed_count > max_unnamed:
@@ -324,7 +332,7 @@ def check_df_readable(df, max_unnamed=2):
     else:
         df = df.select_dtypes(include=["object", "string"])
         can_read = True
-    return can_read, df
+    return "good" if can_read else "look_into", df
 
 
 def load_file(syn_file_id, project_id):
@@ -349,39 +357,40 @@ def load_file(syn_file_id, project_id):
     try:
         obj = syn.get(syn_file_id)
     except:
-        return [], {
-            "project_id": project_id,
-            "file_id": "_",
-            "file_path": str(syn_file_id),
-            "can_read": False,
-            "reason": "Locked",
-            "sheet": "all",
-        }
+        return [None], [
+            {
+                "project_id": project_id,
+                "file_id": "_",
+                "file_path": str(syn_file_id),
+                "can_read": False,
+                "reason": "Locked",
+                "sheet": "all",
+            }
+        ]
     df_dict = frictionless_file_reader(obj)
-    if len(df_dict) < 1:
-        return [], {
-            "project_id": project_id,
-            "file_id": "_",
-            "file_path": syn_file_id,
-            "can_read": False,
-            "reason": "Locked",
-            "sheet": "all",
-        }
+    # if len(df_dict) < 1:
+    #     return [], {
+    #         "project_id": project_id,
+    #         "file_id": "_",
+    #         "file_path": syn_file_id,
+    #         "can_read": False,
+    #         "reason": "Locked",
+    #         "sheet": "all",
+    #     }
 
     dfs = []
     read_states = []
     for sheet in df_dict:
         df = df_dict[sheet]
         ## determine if the file was read in correctly
-        df_read, df = check_df_readable(df)
-        reason = "good" if df_read else "look_into"
+        reason, df = check_df_readable(df)
         ## adding to a list of what files can actually be read
         read_states.append(
             {
                 "project_id": project_id,
                 "file_id": obj.id,
                 "file_path": str(obj.path),
-                "can_read": df_read,
+                "can_read": reason == "good",
                 "reason": reason,
                 "sheet": sheet,
             }
@@ -422,36 +431,36 @@ def process_project(
         Uses Gilda for entity grounding with caching to improve performance.
         Processing status is tracked at both file and column granularity for debugging.
     """
-    for sny_file_id in tqdm.tqdm(project_files):
-        dfs, read_states = load_file(syn_file_id=sny_file_id, project_id=project_id)
-        if len(dfs) < 1:
-            files_read.append(read_states)
-        else:
-            for df, read_state in zip(dfs, read_states):
-                if df is not None:
-                    files_read.append(read_state)
-                    base_cols = df.columns
-                    ## ground data frame
-                    entity_df = df.apply(apply_ground, axis=1)
-                    entity_df, base_cols = filter_df(entity_df, base_cols)
-                    node_set, edge_set = extract_df_graph(
-                        entity_df,
-                        base_cols,
-                        project_id,
-                        read_state["file_id"],
-                        node_set=node_set,
-                        edge_set=edge_set,
+    for syn_file_id in tqdm.tqdm(project_files):
+        dfs, read_states = load_file(syn_file_id=syn_file_id, project_id=project_id)
+        # if len(dfs) < 1:
+        #     files_read.append(read_states)
+        # else:
+        for df, read_state in zip(dfs, read_states):
+            files_read.append(read_state)
+            if df is not None:
+                base_cols = df.columns
+                ## ground data frame
+                entity_df = df.apply(apply_ground, axis=1)
+                entity_df, base_cols = filter_df(entity_df, base_cols)
+                node_set, edge_set = extract_df_graph(
+                    entity_df,
+                    base_cols,
+                    project_id,
+                    read_state["file_id"],
+                    node_set=node_set,
+                    edge_set=edge_set,
+                )
+                for col in base_cols:
+                    cols_read.append(
+                        {
+                            "project_id": project_id,
+                            "file_id": read_state["file_id"],
+                            "file_path": read_state["file_path"],
+                            "sheet": read_state["sheet"],
+                            "col": col,
+                        }
                     )
-                    for col in base_cols:
-                        cols_read.append(
-                            {
-                                "project_id": project_id,
-                                "file_id": read_state["file_id"],
-                                "file_path": read_state["file_path"],
-                                "sheet": read_state["sheet"],
-                                "col": col,
-                            }
-                        )
     return node_set, edge_set, files_read, cols_read
 
 
@@ -511,6 +520,7 @@ def get_tabular_data(
         project_files = get_project_files(
             project_syn_id=project_id, file_types=TABULAR_FILE_TYPES, as_list=True
         )
+        project_files.append("syn12516465")  ## TODO Remove
         logger.info(
             f"adding experimental data project {project_id}\n\
                     This is project {i} out of {len(project_ids)+1} \n\
@@ -525,6 +535,7 @@ def get_tabular_data(
             files_read=files_read,
             cols_read=cols_read,
         )
+
         if write_intermediate:
             write_graph(
                 node_set=node_set,
