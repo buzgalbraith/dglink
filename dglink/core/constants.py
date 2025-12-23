@@ -5,25 +5,48 @@ import synapseclient
 syn = synapseclient.login()
 DGLINK_CACHE = Path.joinpath(Path(os.getenv("HOME")), ".dglink")
 RESOURCE_PATH = "dglink/resources/graph/"
+REPORT_PATH = "dglink/resources/reports/"
 SEMANTIC_SEARCH_RESOURCE_PATH = "dglink/applications/semantic_search/neo4j/graph"
 NODE_ATTRIBUTES = [
+    ## core fields - all nodes should have ths other fields are optional
     "curie:ID",
     ":LABEL",
     "name",
+    "iri",
+    "source:string[]",
+    ## Synapse project field
+    "study_url",
+    ## tabular data fields
     "raw_texts:string[]",
     "columns:string[]",
-    "iri",
     "file_id:string[]",
-    "tool_type",
+    ## DICOM Fields
+    "PatientID",
+    "AccessionNumber",
+    "Modality",
+    "PatientSex",
+    "PatientAge",
+    "SOPClassUID",
+    "Manufacturer",
+    ## VCF fields
+    "chrom",
+    "pos",
+    "ref",
+    "alt",
+    "genotype",
+    "quality",
+    ## publication fields
     "DOI",
-    "source:string[]",
-    "study_url",
+    ## nf data portal tool fields (maybe move elsewhere)
+    "tool_type",
 ]
 EDGE_ATTRIBUTES = [
+    ## core fields - all edges should have ths other fields are optional
     ":START_ID",
     ":END_ID",
     ":TYPE",
     "source:string[]",
+    ## predicted similar project fields
     "jacquard_score",
     "score_cutoff",
     "intersection_score",
@@ -34,13 +57,19 @@ EDGE_ATTRIBUTES = [
     "edge_weights:string[]",
 ]
 
-FILE_TYPES = [
+TABULAR_FILE_TYPES = [
     ".tsv",
     ".xls",
     ".xlsx",
     ".csv",
 ]
 
+VCF_FILE_TYPES = [
+    ".vcf",
+    ".gvcf",
+    ".vcf.gz",
+    ".gvcf.gz",
+]
 
 RESOURCE_TYPES = [
     "metadata",
@@ -48,5 +77,10 @@ RESOURCE_TYPES = [
     "publications",
     "wiki",
     "tools",
-    "experimental_data",
+    ["vcf_data", "experimental_data"],
+    ["tabular_data", "experimental_data"],
+    ["dicom_data", "experimental_data"],
+]
+UNSTRUCTURED_DICOM_FIELDS = [
+    "ImageComments",
 ]

@@ -4,7 +4,9 @@ from .core.utils import load_graph, write_graph, write_graph_and_artifacts_defau
 from .core.wiki import get_wikis
 from .core.meta import get_meta
 from .core.projects import get_projects
-from .core.experimental_data import get_experimental_data
+from .core.tabular_data import get_tabular_data
+from .core.vcf_data import get_vcf_data
+from .core.dicom_data import get_dicom_data
 import logging
 
 logging.basicConfig(
@@ -12,8 +14,8 @@ logging.basicConfig(
     level=logging.INFO,
     datefmt="%Y-%m-%d %H:%M:%S",
 )
-logging.getLogger('synapseclient').setLevel(logging.ERROR)
-logging.getLogger('synapseclient_default').setLevel(logging.ERROR)
-logging.getLogger('httpx').setLevel(logging.ERROR)
-logging.getLogger('gilda.grounder').setLevel(logging.ERROR)
+logging.getLogger("synapseclient").setLevel(logging.ERROR)
+logging.getLogger("synapseclient_default").setLevel(logging.ERROR)
+logging.getLogger("httpx").setLevel(logging.ERROR)
+logging.getLogger("gilda.grounder").setLevel(logging.ERROR)
 logger = logging.getLogger("dglink")

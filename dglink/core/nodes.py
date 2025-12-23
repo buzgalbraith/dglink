@@ -1,5 +1,5 @@
 import os
-import pandas
+import polars as pl
 from dglink.core.constants import NODE_ATTRIBUTES
 
 
@@ -76,8 +76,15 @@ class NodeSet:
         if new_node_id in self.nodes:
             for attribute in self.set_attributes:
                 attr_val = new_node.get(attribute, "")
-                if attr_val.replace('"', "").replace("'", "") != "":
-                    self.nodes[new_node_id][attribute].add(attr_val)
+                if attribute not in self.set_attributes:
+                    ## standardize empty data representation
+                    if attr_val.replace('"', "").replace("'", "") != "":
+                        self.nodes[new_node_id][attribute].add(attr_val)
+                else:
+                    attr_val = set([attr_val]) if type(attr_val) == str else attr_val
+                    self.nodes[new_node_id][attribute] = self.nodes[new_node_id][
+                        attribute
+                    ].union(attr_val)
         else:
             self.nodes[new_node_id] = dict()
             for attribute in self.attributes:
@@ -96,19 +103,23 @@ class NodeSet:
     def load_node_set(self, path):
         self.path = path
         if os.path.exists(self.path):
-            df = pandas.read_csv(self.path, sep="\t", index_col=False)
-            df = df.fillna(value="")
-            # df = df.set_index(self.attributes[0])
+            df = pl.read_csv(self.path, separator="\t")
+            df = df.fill_null("")
+
             if len(self.attributes) == 0:
                 self.attributes = df.columns
-            # set index as first col assuming that is the id
-            for _, row in df.iterrows():
-                curie = row.iloc[0]
+
+            # Process rows efficiently with Polars
+            for row in df.iter_rows(named=True):
+                curie = row[self.attributes[0]]
                 self.nodes[curie] = dict()
-                for i, attribute in enumerate(self.attributes):
-                    val = row.iloc[i]
+
+                for attribute in self.attributes:
+                    val = row.get(attribute, "")
+
                     if ":string[]" in attribute:
                         val = set(str(val).replace('"', "").replace("'", "").split(";"))
+
                     self.nodes[curie][attribute] = val
 
     def write_node_set(self, path):

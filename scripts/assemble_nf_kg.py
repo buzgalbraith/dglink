@@ -5,7 +5,9 @@ from dglink import (
     get_meta,
     get_projects,
     write_graph_and_artifacts_default,
-    get_experimental_data,
+    get_tabular_data,
+    get_vcf_data,
+    get_dicom_data,
 )
 from dglink.portals.nf_data_portal import (
     get_all_nf_studies,
@@ -18,6 +20,7 @@ from dglink.portals.nf_data_portal.constants import (
     GROUND_FIELDS,
     UNGROUNDED_FIELDS,
 )
+from dglink.core.utils import get_project_files
 import logging
 
 logger = logging.getLogger(__name__)
@@ -25,8 +28,10 @@ logger = logging.getLogger(__name__)
 if __name__ == "__main__":
     # 1. load all studied from the nf disease portal
     logger.info("loading NF Data portal studies list")
-    # node_set, edge_set = merge_resource_sets()
-    projects_ids = get_all_nf_studies()
+    ## loading all studies
+    # projects_ids = get_all_nf_studies()
+    ## set of projects that have tabular data imaging data and genomic data for testing
+    projects_ids = ["syn26957643", "syn5562324", "syn4939874"]
     # 2. load the node and edge sets if exist
     node_set, edge_set = load_graph(
         resource_path="dglink/resources/graph/",
@@ -38,7 +43,7 @@ if __name__ == "__main__":
         node_set=node_set,
         edge_set=edge_set,
         studies_base_url=NF_STUDIES_BASE_URL,
-        write_set=True
+        write_set=True,
     )
 
     # # 3. parse the project wikis
@@ -48,10 +53,12 @@ if __name__ == "__main__":
         project_ids=projects_ids,
         wiki_fields=WIKI_FIELDS,
         studies_base_url=NF_STUDIES_BASE_URL,
-        write_set=True
+        write_set=True,
     )
     # 4. parse the nf data portal publications
-    node_set, edge_set = get_publications(node_set=node_set, edge_set=edge_set, write_set=True)
+    node_set, edge_set = get_publications(
+        node_set=node_set, edge_set=edge_set, write_set=True
+    )
     # # 5. get tool edges
     logger.info("Adding NF Data Portal Tools registry to KG")
     node_set, edge_set = get_tools(
@@ -63,10 +70,10 @@ if __name__ == "__main__":
         edge_set=edge_set,
         ground_field=GROUND_FIELDS,
         ungrounded_field=UNGROUNDED_FIELDS,
-        write_set=True
+        write_set=True,
     )
     # load in experimental data
-    node_set, edge_set, reports = get_experimental_data(
+    node_set, edge_set, reports = get_tabular_data(
         project_ids=projects_ids,
         # project_ids=[
         # "syn2343195",  ## large project
@@ -91,7 +98,22 @@ if __name__ == "__main__":
         node_set=node_set,
         edge_set=edge_set,
         write_intermediate=True,
-        write_set=True
+        write_set=True,
+    )
+    node_set, edge_set, reports = get_vcf_data(
+        project_ids=projects_ids,
+        node_set=node_set,
+        edge_set=edge_set,
+        process_compressed_files=False,  ## change this later
+        process_variants=False,  ## change this later
+    )
+    node_set, edge_set, reports = get_dicom_data(
+        project_ids=projects_ids,
+        node_set=node_set,
+        edge_set=edge_set,
+        write_set=True,
+        project_granularity=True,  ## change later
+        write_intermediate=True,
     )
     # 5. write the graph for neo4j reading
     write_graph_and_artifacts_default(

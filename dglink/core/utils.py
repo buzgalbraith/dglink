@@ -2,9 +2,21 @@
 Utility functions for core DGLink functionality
 """
 
-from dglink import NodeSet, EdgeSet
-from dglink.core.constants import RESOURCE_PATH, RESOURCE_TYPES
+from .nodes import NodeSet
+from .edges import EdgeSet
+from .constants import RESOURCE_PATH, RESOURCE_TYPES, syn, REPORT_PATH
+from synapseclient.models import Table
 import os.path
+import polars as pl
+from typing import Union
+from synapseutils import walk
+import logging
+from polars import Schema, String
+from typing import Union
+import re
+import tqdm
+
+logger = logging.getLogger(__name__)
 
 
 def load_graph(
@@ -37,11 +49,14 @@ def write_graph(
     """
     os.makedirs(resource_path, exist_ok=True)
     if source_filter:
+        ## make input list
+        source_name = [source_name] if type(source_name) == str else source_name
+        write_name = "_".join(source_name)
         ns, es = get_graph_for_source(
             node_set=node_set, edge_set=edge_set, source_name=source_name, strict=strict
         )
-        ns.write_node_set(os.path.join(resource_path, f"nodes_{source_name}.tsv"))
-        es.write_edge_set(os.path.join(resource_path, f"edges_{source_name}.tsv"))
+        ns.write_node_set(os.path.join(resource_path, f"nodes_{write_name}.tsv"))
+        es.write_edge_set(os.path.join(resource_path, f"edges_{write_name}.tsv"))
     elif mixed:
         ns, es = get_graph_for_source(node_set=node_set, edge_set=edge_set, mixed=True)
         ns.write_node_set(os.path.join(resource_path, "nodes_mixed.tsv"))
@@ -52,26 +67,22 @@ def write_graph(
         edge_set.write_edge_set(os.path.join(resource_path, edge_name))
     ## save all nodes and edges from multiple sources
 
-def filter_edge_set(
-        edge_set: EdgeSet,
-        filter_for:str
-):
+
+def filter_edge_set(edge_set: EdgeSet, filter_for: str):
     """filter out edges of a certain type"""
     filtered_edge_set = EdgeSet()
     for edge_id in edge_set.edges:
         edge = edge_set.edges[edge_id]
-        if edge[':TYPE'] != filter_for:
+        if edge[":TYPE"] != filter_for:
             filtered_edge_set.edges[edge_id] = edge
-    filtered_edge_set.write_edge_set(
-        os.path.join(RESOURCE_PATH, "edges.tsv")
-    )
+    filtered_edge_set.write_edge_set(os.path.join(RESOURCE_PATH, "edges.tsv"))
     return filtered_edge_set
 
 
 def get_graph_for_source(
     node_set: NodeSet,
     edge_set: EdgeSet,
-    source_name: str = None,
+    source_name: list = None,
     strict: bool = True,
     mixed: bool = False,
 ):
@@ -82,18 +93,18 @@ def get_graph_for_source(
         for node_id in node_set.nodes:
             add = True
             node = node_set.nodes[node_id]
-            if strict and len(node["source:string[]"]) > 1:
+            if strict and len(node["source:string[]"]) > 1 and len(source_name) < 2:
                 add = False
-            elif source_name not in node["source:string[]"]:
+            elif any([a not in node["source:string[]"] for a in source_name]):
                 add = False
             if add:
                 filter_node_set.nodes[node_id] = node_set.nodes[node_id]
         for edge_id in edge_set.edges:
             add = True
             edge = edge_set.edges[edge_id]
-            if strict and len(edge["source:string[]"]) > 1:
+            if strict and len(edge["source:string[]"]) > 1 and len(source_name) < 2:
                 add = False
-            elif source_name not in edge["source:string[]"]:
+            elif any([a not in edge["source:string[]"] for a in source_name]):
                 add = False
             if add:
                 filter_edge_set.edges[edge_id] = edge_set.edges[edge_id]
@@ -161,7 +172,8 @@ def write_graph_and_artifacts_default(
 
 
 def merge_resource_sets(
-    artifacts_path: str = os.path.join(RESOURCE_PATH, 'artifacts'), write_resource: bool = True
+    artifacts_path: str = os.path.join(RESOURCE_PATH, "artifacts"),
+    write_resource: bool = True,
 ):
     """merges all resource sets saved at a given path"""
     resource_files = os.listdir(artifacts_path)
@@ -184,3 +196,159 @@ def merge_resource_sets(
     if write_resource:
         write_graph(node_set=full_node_set, edge_set=full_edge_set)
     return full_node_set, full_edge_set
+
+
+def load_known_files_df() -> pl.DataFrame:
+    """Load the cached registry of files from previously crawled projects.
+
+    Returns:
+        DataFrame with columns: project_syn_id, file_syn_id, file_name.
+        Returns empty DataFrame with schema if cache file doesn't exist.
+    """
+    os.makedirs(REPORT_PATH, exist_ok=True)
+    df_path = os.path.join(REPORT_PATH, "project_files.tsv")
+    file_df_schema = Schema(
+        [("project_syn_id", String), ("file_syn_id", String), ("file_name", String)]
+    )
+    if os.path.exists(df_path):
+        return pl.read_csv(df_path, schema=file_df_schema, separator="\t")
+    return pl.DataFrame(schema=file_df_schema)
+
+
+def crawl_project_files(
+    project_syn_id: str, known_files: pl.DataFrame = None
+) -> pl.DataFrame:
+    """Crawl a Synapse project to discover all files and update the cache.
+
+    Args:
+        project_syn_id: Synapse project ID (e.g., 'syn12345678')
+        known_files: Existing file registry. If None, loads from cache.
+
+    Returns:
+        Updated DataFrame containing all known files including newly discovered ones.
+        Cache file is automatically updated on disk.
+
+    Note:
+        Handles locked projects gracefully by logging a warning and continuing.
+    """
+    if known_files is None:
+        known_files = load_known_files_df()
+    found_files = []
+    try:
+        ## will throw and error if try to lead wiki of locked project
+        _ = syn.getWiki(project_syn_id)
+        file_name_iter = walk(
+            syn=syn,
+            synId=project_syn_id,
+            includeTypes=[
+                "file",
+            ],
+        )
+    except:
+        logger.warning(f"Could not read files for project with id {project_syn_id}")
+        file_name_iter = [
+            [
+                "",
+                "",
+                [("", "")],
+            ]
+        ]  ## give just empty syn_id and file_name
+    for _, _, filenames in file_name_iter:
+        for filename, file_syn_id in filenames:
+            found_files.append(
+                {
+                    "project_syn_id": project_syn_id,
+                    "file_syn_id": file_syn_id,
+                    "file_name": filename,
+                }
+            )
+
+    found_files = pl.from_dicts(found_files, schema=known_files.schema)
+    known_files = known_files.vstack(found_files)
+    known_files.write_csv(
+        os.path.join(REPORT_PATH, "project_files.tsv"), separator="\t"
+    )
+    return known_files
+
+
+def get_project_files(
+    project_syn_id: str, file_types: list = None, as_list: bool = False
+) -> Union[pl.DataFrame, list]:
+    """Get all files for a Synapse project, with optional filtering by file extension.
+
+    Uses cached data if available, otherwise crawls the project and updates cache.
+
+    There is a table that has many of the files already aggregated from the nf data portal, but it seems to be missing a lot of files that can be pulled by just crawling everything.
+
+    Args:
+        project_syn_id: Synapse project ID (e.g., 'syn12345678')
+        file_types: Optional list of file extensions to filter by (e.g., ['.vcf', '.bam'])
+        as_list: If True, returns list of file_syn_ids instead of DataFrame
+
+    Returns:
+        DataFrame with columns [project_syn_id, file_syn_id, file_name], or
+        list of file_syn_ids if as_list=True
+
+    Examples:
+        >>> # Get all files as DataFrame
+        >>> files = get_project_files('syn12345678')
+        >>>
+        >>> # Get only VCF files as list of IDs
+        >>> vcf_ids = get_project_files('syn12345678', file_types=['.vcf'], as_list=True)
+    """
+    known_files = load_known_files_df()
+    ## check if we have already crawled the files for this data frame
+    if len(known_files.filter(pl.col("project_syn_id").eq(project_syn_id))) > 0:
+        logger.info(f"loading files for {project_syn_id} from cache")
+    ## if not crawl the files and save the results
+    else:
+        logger.info(
+            f"Files from {project_syn_id} not found in cache, checking synapse..."
+        )
+        known_files = crawl_project_files(
+            project_syn_id=project_syn_id, known_files=known_files
+        )
+
+    project_files = known_files.filter(pl.col("project_syn_id").eq(project_syn_id))
+    if file_types is not None:
+        file_types_pattern = f"({'|'.join(re.escape(s) for s in file_types)})$"
+        project_files = project_files.filter(
+            pl.col("file_name").str.contains(file_types_pattern)
+        )
+    if as_list:
+        project_files = project_files["file_syn_id"].to_list()
+    return project_files
+
+
+def get_projects_files(project_ids: list) -> pl.DataFrame:
+    """Get all files for multiple Synapse projects.
+
+    Efficiently retrieves files for multiple projects by using cached data when
+    available and only crawling uncached projects.
+
+    Args:
+        project_ids: List of Synapse project IDs (e.g., ['syn12345678', 'syn87654321'])
+
+    Returns:
+        DataFrame containing files from all specified projects with columns:
+        [project_syn_id, file_syn_id, file_name]
+
+    Note:
+        Cache is automatically updated with any newly crawled projects.
+    """
+    known_files = load_known_files_df()
+    for project_syn_id in tqdm.tqdm(project_ids):
+        ## check if we have already crawled the files for this data frame
+        if len(known_files.filter(pl.col("project_syn_id").eq(project_syn_id))) > 0:
+            logger.info(f"loading files for {project_syn_id} from cache")
+            continue
+        ## if not crawl the files and save the results
+        else:
+            logger.info(
+                f"Files from {project_syn_id} not found in cache, checking synapse..."
+            )
+            known_files = crawl_project_files(
+                project_syn_id=project_syn_id, known_files=known_files
+            )
+
+    return known_files.filter(pl.col("project_syn_id").is_in(project_ids))

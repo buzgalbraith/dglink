@@ -41,7 +41,12 @@ def get_projects_to_edges(edges_df):
         head_edges = edges_df.loc[
             edges_df[":START_ID"].isin([project_id, f"{project_id}:Wiki"]),
         ]
-        for x, _ in head_edges.groupby(by=[":END_ID", ":TYPE", "source:string[]"]).first().itertuples():
+        for i in (
+            head_edges.groupby(by=[":END_ID", ":TYPE", "source:string[]"])
+            .first()
+            .itertuples()
+        ):
+            x = i[0]
             if x[1] not in project_to_edges_map[project_id]:
                 project_to_edges_map[project_id][x[1]] = set()
             project_to_edges_map[project_id][x[1]].add(x[0])
@@ -49,7 +54,12 @@ def get_projects_to_edges(edges_df):
         tail_edges = edges_df.loc[
             edges_df[":END_ID"].isin([project_id, f"{project_id}:Wiki"]),
         ]
-        for x, _ in tail_edges.groupby(by=[":START_ID", ":TYPE", "source:string[]"]).first().itertuples():
+        for i in (
+            tail_edges.groupby(by=[":START_ID", ":TYPE", "source:string[]"])
+            .first()
+            .itertuples()
+        ):
+            x = i[0]
             if x[1] not in project_to_edges_map[project_id]:
                 project_to_edges_map[project_id][x[1]] = set()
             project_to_edges_map[project_id][x[1]].add(x[0])
@@ -119,11 +129,11 @@ def jacquard_sim(pid_1, pid_2):
     return jacquard_score, edge_attrs
 
 
-
-
 if __name__ == "__main__":
     _, edge_set = load_graph()
-    edge_set = filter_edge_set(edge_set=edge_set, filter_for='predicted_relatedStudies_GL')
+    edge_set = filter_edge_set(
+        edge_set=edge_set, filter_for="predicted_relatedStudies_GL"
+    )
     edges_df = pandas.read_csv(
         f"{RESOURCE_DIR}/non_related_projects_edges.tsv", sep="\t"
     )
@@ -164,7 +174,6 @@ if __name__ == "__main__":
     )
     sorted_df.to_csv("jac.csv")
 
-
     ## cutoff analysis
     cutoff = 0.15
     count_known_edges = lambda x: sum(x["has_related_study"])
@@ -174,6 +183,4 @@ if __name__ == "__main__":
     print(
         f"Total known {total}, remaining known : {remaining} ({remaining/total}), Total predicted {len(after_cutoff)}"
     )
-    edge_set.write_edge_set(
-        os.path.join(SEMANTIC_SEARCH_RESOURCE_PATH, "edges.tsv")
-    )
+    edge_set.write_edge_set(os.path.join(SEMANTIC_SEARCH_RESOURCE_PATH, "edges.tsv"))

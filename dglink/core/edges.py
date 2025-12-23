@@ -1,5 +1,7 @@
 import os
-import pandas
+
+# import pandas
+import polars as pl
 from dglink.core.constants import EDGE_ATTRIBUTES
 
 
@@ -79,8 +81,15 @@ class EdgeSet:
         if new_edge_id in self.edges:
             for attribute in self.set_attributes:
                 attr_val = new_edge.get(attribute, "")
-                if attr_val.replace('"', "").replace("'", "") != "":
-                    self.edges[new_edge_id][attribute].add(attr_val)
+                if attribute not in self.set_attributes:
+                    ## standardize empty data representation
+                    if attr_val.replace('"', "").replace("'", "") != "":
+                        self.edges[new_edge_id][attribute].add(attr_val)
+                else:
+                    attr_val = set([attr_val]) if type(attr_val) == str else attr_val
+                    self.edges[new_edge_id][attribute] = self.edges[new_edge_id][
+                        attribute
+                    ].union(attr_val)
         else:
             self.edges[new_edge_id] = dict()
             for attribute in self.attributes:
@@ -99,22 +108,27 @@ class EdgeSet:
     def load_edge_set(self, path):
         self.path = path
         if os.path.exists(self.path):
-            df = pandas.read_csv(self.path, sep="\t", index_col=False)
-            df = df.fillna(value="")
-            # df = df.set_index(self.attributes[0])
+            df = pl.read_csv(self.path, separator="\t")
+            df = df.fill_null("")
+
             if len(self.attributes) == 0:
                 self.attributes = df.columns
-            # set index as first col assuming that is the id
-            for _, row in df.iterrows():
-                head = row.iloc[0]
-                tail = row.iloc[1]
-                relation = row.iloc[2]
-                edge_id = f"{head}_{tail}_{relation}"
+
+            # Process rows efficiently with Polars
+            for row in df.iter_rows(named=True):
+                # curie = row[self.attributes[0]]
+                new_edge_id_1 = row.get(":START_ID", "no_start")
+                new_edge_id_2 = row.get(":END_ID", "no_end")
+                new_edge_id_3 = row.get(":TYPE", "no_type")
+                edge_id = f"{new_edge_id_1}_{new_edge_id_2}:{new_edge_id_3}"
                 self.edges[edge_id] = dict()
-                for i, attribute in enumerate(self.attributes):
-                    val = row.iloc[i]
+
+                for attribute in self.attributes:
+                    val = row.get(attribute, "")
+
                     if ":string[]" in attribute:
                         val = set(str(val).replace('"', "").replace("'", "").split(";"))
+
                     self.edges[edge_id][attribute] = val
 
     def write_edge_set(self, path):
@@ -129,6 +143,6 @@ class EdgeSet:
                             val = list(val)[:20]  ## limit max number of elements to 20
                         val = f'"{";".join(val)}"'
                     ## take out any weird line breaks
-                    val = val if type(val) == str else str(type)
+                    val = val if type(val) == str else str(val)
                     write_str += val.replace("\n", "") + "\t"
                 f.write(write_str[:-1] + "\n")
