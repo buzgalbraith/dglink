@@ -1,4 +1,5 @@
-from dglink.core.constants import DGLINK_CACHE, syn, RESOURCE_PATH
+from dglink.core.constants import DGLINK_CACHE, RESOURCE_PATH
+from .constants import syn
 from pathlib import Path
 import os
 import logging

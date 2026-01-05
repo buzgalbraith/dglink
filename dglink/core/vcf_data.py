@@ -5,7 +5,8 @@ This module processes VCF files from Synapse projects to extract genetic variant
 sample information, and metadata into a knowledge graph structure.
 """
 
-from .constants import syn, VCF_FILE_TYPES, RESOURCE_PATH, REPORT_PATH
+from .constants import VCF_FILE_TYPES, RESOURCE_PATH, REPORT_PATH
+from dglink.portals.nf_data_portal import syn
 from .nodes import NodeSet
 from .edges import EdgeSet
 from .utils import get_project_files, write_graph

@@ -6,7 +6,8 @@ to extract biomedical entities through text grounding and construct a knowledge 
 Uses Gilda for entity recognition and INDRA for ontology typing.
 """
 
-from .constants import RESOURCE_PATH, REPORT_PATH, TABULAR_FILE_TYPES, syn
+from .constants import RESOURCE_PATH, REPORT_PATH, TABULAR_FILE_TYPES
+from dglink.portals.nf_data_portal import syn
 from .utils import get_project_files, write_graph
 from .nodes import NodeSet
 from .edges import EdgeSet
