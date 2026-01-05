@@ -2,6 +2,8 @@
 Constants specific to the NCI General Data Commons portal
 """
 
+import os
+
 DATA_ENDPNT = "https://api.gdc.cancer.gov/data"
 CASES_ENDPNT = "https://api.gdc.cancer.gov/cases/"
 NODE_ATTRIBUTES = [
@@ -48,3 +50,8 @@ FILE_FIELDS = [
     "file_name",
     "file_size",
 ]
+GDC_CACHE_DIR = os.path.join(
+    os.getenv("HOME"),
+    ".data",
+    "gdc",
+)

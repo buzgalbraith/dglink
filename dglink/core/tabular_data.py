@@ -21,6 +21,7 @@ from bioregistry import normalize_curie, get_bioregistry_iri
 import tqdm
 import gilda
 import logging
+from typing import Iterator
 
 
 logger = logging.getLogger(__name__)
@@ -132,14 +133,14 @@ def get_frictionless_package(pth):
     return pac
 
 
-def frictionless_file_reader(obj, max_size_bytes=100 * 1024 * 1024):
+def frictionless_file_reader(pth: str, max_size_bytes=100 * 1024 * 1024):
     """Read tabular files from Synapse file objects using Frictionless framework.
 
     Downloads and parses various tabular formats (CSV, TSV, Excel) into a dictionary
     of pandas DataFrames, with one DataFrame per sheet for multi-sheet files.
 
     Args:
-        obj: Synapse file object with path attribute
+        pth: path to tabular file to read.
         max_size_bytes: Maximum file size to process in bytes (default: 100MB)
 
     Returns:
@@ -153,12 +154,7 @@ def frictionless_file_reader(obj, max_size_bytes=100 * 1024 * 1024):
         Excel files. All sheets from multi-sheet files are returned separately.
     """
     ## issues with pull
-    if obj is None:
-        return {"all": "locked"}
-    if obj.path is None:
-        return {"all": "locked"}
-    ## check file size
-    pth = Path(obj.path)
+    pth = Path(pth)
     file_size = os.path.getsize(pth)
     if file_size > max_size_bytes:
         logger.info("file to large to read")
@@ -241,7 +237,7 @@ def apply_ground(row):
 
 
 def extract_df_graph(
-    df, cols, project_id, file_id, node_set: NodeSet, edge_set: EdgeSet
+    df, cols, group_identifier, file_id, node_set: NodeSet, edge_set: EdgeSet
 ) -> tuple[NodeSet, EdgeSet]:
     """Extract nodes and edges from grounded entity DataFrame into knowledge graph.
 
@@ -252,7 +248,7 @@ def extract_df_graph(
     Args:
         df: DataFrame with grounded entity columns (entity, type, name, raw_text, etc.)
         cols: List of base column names to extract entities from
-        project_id: Synapse project ID for edge creation
+        group_identifier: group ID for edge creation
         file_id: Synapse file ID for provenance tracking
         node_set: Existing set of nodes to update
         edge_set: Existing set of edges to update
@@ -291,7 +287,7 @@ def extract_df_graph(
                 node_set.update_nodes(new_node=attributes)
                 edge_set.update_edges(
                     {
-                        ":START_ID": project_id,
+                        ":START_ID": group_identifier,
                         ":END_ID": entity,
                         ":TYPE": f"has_{entity_type}",
                         "source:string[]": source,
@@ -335,15 +331,15 @@ def check_df_readable(df, max_unnamed=2):
     return "good" if can_read else "look_into", df
 
 
-def load_file(syn_file_id, project_id):
-    """Load a tabular file from Synapse and validate readability of all sheets.
+def load_file(group_identifier: str, fp: str):
+    """Load a tabular file and validate readability of all sheets.
 
-    Downloads file from Synapse, parses with frictionless framework, and validates
+    Parses with frictionless framework, and validates
     each sheet (for multi-sheet files like Excel) for entity grounding.
 
     Args:
-        syn_file_id: Synapse file ID (e.g., 'syn12345678')
-        project_id: Synapse project ID for tracking
+        group_identifier: identifier for group of files (project_id in NF data portal and case_id in gdc)
+        fp: local path to the file
 
     Returns:
         Tuple of (list of DataFrames, list of read status dicts)
@@ -354,30 +350,7 @@ def load_file(syn_file_id, project_id):
         Handles locked files and parsing failures gracefully by returning empty lists
         and status dicts indicating the failure reason.
     """
-    try:
-        obj = syn.get(syn_file_id)
-    except:
-        return [None], [
-            {
-                "project_id": project_id,
-                "file_id": "_",
-                "file_path": str(syn_file_id),
-                "can_read": False,
-                "reason": "Locked",
-                "sheet": "all",
-            }
-        ]
-    df_dict = frictionless_file_reader(obj)
-    # if len(df_dict) < 1:
-    #     return [], {
-    #         "project_id": project_id,
-    #         "file_id": "_",
-    #         "file_path": syn_file_id,
-    #         "can_read": False,
-    #         "reason": "Locked",
-    #         "sheet": "all",
-    #     }
-
+    df_dict = frictionless_file_reader(fp)
     dfs = []
     read_states = []
     for sheet in df_dict:
@@ -387,9 +360,8 @@ def load_file(syn_file_id, project_id):
         ## adding to a list of what files can actually be read
         read_states.append(
             {
-                "project_id": project_id,
-                "file_id": obj.id,
-                "file_path": str(obj.path),
+                "group_identifier": group_identifier,
+                "fp": fp,
                 "can_read": reason == "good",
                 "reason": reason,
                 "sheet": sheet,
@@ -399,164 +371,55 @@ def load_file(syn_file_id, project_id):
     return dfs, read_states
 
 
-def process_project(
-    project_files,
-    project_id,
-    node_set: NodeSet,
-    edge_set: EdgeSet,
-    cols_read: list = [],
-    files_read: list = [],
-) -> tuple[NodeSet, EdgeSet, list, list]:
-    """Process all tabular files in a project and extract entities into knowledge graph.
-
-    Main processing loop for a single project that:
-    1. Loads each file and validates sheets
-    2. Grounds text in all string columns to biomedical entities
-    3. Filters columns by grounding quality
-    4. Extracts entities and relationships into the knowledge graph
-    5. Tracks processing status for reporting
-
-    Args:
-        project_files: List of Synapse file IDs to process
-        project_id: Synapse project ID
-        node_set: Existing set of nodes to update
-        edge_set: Existing set of edges to update
-        cols_read: Running list of successfully processed column metadata (modified in place)
-        files_read: Running list of file processing status (modified in place)
-
-    Returns:
-        Tuple of (updated node_set, updated edge_set, files_read, cols_read)
-
-    Note:
-        Uses Gilda for entity grounding with caching to improve performance.
-        Processing status is tracked at both file and column granularity for debugging.
-    """
-    for syn_file_id in tqdm.tqdm(project_files):
-        dfs, read_states = load_file(syn_file_id=syn_file_id, project_id=project_id)
-        # if len(dfs) < 1:
-        #     files_read.append(read_states)
-        # else:
-        for df, read_state in zip(dfs, read_states):
-            files_read.append(read_state)
-            if df is not None:
-                base_cols = df.columns
-                ## ground data frame
-                entity_df = df.apply(apply_ground, axis=1)
-                entity_df, base_cols = filter_df(entity_df, base_cols)
-                node_set, edge_set = extract_df_graph(
-                    entity_df,
-                    base_cols,
-                    project_id,
-                    read_state["file_id"],
-                    node_set=node_set,
-                    edge_set=edge_set,
-                )
-                for col in base_cols:
-                    cols_read.append(
-                        {
-                            "project_id": project_id,
-                            "file_id": read_state["file_id"],
-                            "file_path": read_state["file_path"],
-                            "sheet": read_state["sheet"],
-                            "col": col,
-                        }
-                    )
-    return node_set, edge_set, files_read, cols_read
-
-
 def get_tabular_data(
-    project_ids: list,
+    group_identifiers: list,
     node_set: NodeSet,
     edge_set: EdgeSet,
-    write_set: bool = False,
+    tabular_iterator: Iterator,
     write_reports: bool = True,
-    write_intermediate: bool = True,
-) -> tuple[NodeSet, EdgeSet, list[pandas.DataFrame]]:
-    """Process tabular data files from multiple Synapse projects and build knowledge graph.
+) -> list[pandas.DataFrame]:
+    """Process tabular data files from multiple groups and build knowledge graph.
 
     Main orchestration function that discovers tabular files (CSV, TSV, Excel) in specified
     projects, extracts biomedical entities through text grounding with Gilda, and constructs
     a knowledge graph. Supports multi-sheet Excel files and various CSV/TSV dialects.
-
-    Args:
-        project_ids: List of Synapse project IDs to process
-        node_set: Existing set of nodes to update
-        edge_set: Existing set of edges to update
-        write_set: If True, write final knowledge graph to disk
-        write_reports: If True, generate TSV reports of file and column processing status
-        write_intermediate: If True, write graph after each project
-
-    Returns:
-        Tuple of (updated node_set, updated edge_set, list of report DataFrames)
-        Report DataFrames: [files_df (processing status), cols_df (grounded columns)]
-
-    Note:
-        Uses Gilda for entity grounding and INDRA for ontology typing. Applies quality
-        filters to remove columns with low grounding rates or excessive entity type diversity.
-        Intermediate graphs and reports are written to RESOURCE_PATH/artifacts and REPORT_PATH.
-
-    Processing pipeline per file:
-        1. Load file with frictionless (handles multiple formats/sheets)
-        2. Validate sheet readability
-        3. Ground all string columns to biomedical entities
-        4. Filter columns by grounding quality (≥10% success, ≤5 entity types)
-        5. Extract entities and project relationships into graph
-
-    Examples:
-        >>> # Process tabular files from multiple projects
-        >>> nodes, edges, reports = get_tabular_data(
-        ...     project_ids=['syn12345', 'syn67890'],
-        ...     node_set=NodeSet(),
-        ...     edge_set=EdgeSet(),
-        ...     write_intermediate=True
-        ... )
-        >>> files_report, cols_report = reports
     """
-    logger.info(f"Adding tabular experimental data for {len(project_ids)} projects")
+    logger.info(f"Adding tabular experimental data for {len(group_identifiers)} groups")
     files_read = []
     cols_read = []
-    i = 1
-    for project_id in tqdm.tqdm(project_ids):
-        project_files = get_project_files(
-            project_syn_id=project_id, file_types=TABULAR_FILE_TYPES, as_list=True
-        )
-        logger.info(
-            f"adding experimental data project {project_id}\n\
-                    This is project {i} out of {len(project_ids)+1} \n\
-                    There are {len(project_files)} total files to parse."
-        )
-        i = i + 1
-        node_set, edge_set, files_read, cols_read = process_project(
-            project_files=project_files,
-            project_id=project_id,
-            node_set=node_set,
-            edge_set=edge_set,
-            files_read=files_read,
-            cols_read=cols_read,
-        )
-
-        if write_intermediate:
-            write_graph(
-                node_set=node_set,
-                edge_set=edge_set,
-                source_filter=True,
-                strict=True,
-                source_name=["tabular_data", "experimental_data"],
-                resource_path=os.path.join(RESOURCE_PATH, "artifacts"),
-            )
+    for group_identifier, file_paths, file_ids in tqdm.tqdm(
+        tabular_iterator, total=len(group_identifiers)
+    ):
+        for fp, file_id in zip(file_paths, file_ids):
+            dfs, read_states = load_file(group_identifier=group_identifier, fp=fp)
+            for df, read_state in zip(dfs, read_states):
+                files_read.append(read_state)
+                if df is not None:
+                    base_cols = df.columns
+                    ## ground data frame
+                    entity_df = df.apply(apply_ground, axis=1)
+                    filtered_df, base_cols = filter_df(entity_df, base_cols)
+                    node_set, edge_set = extract_df_graph(
+                        filtered_df,
+                        base_cols,
+                        group_identifier,
+                        file_id,
+                        node_set=node_set,
+                        edge_set=edge_set,
+                    )
+                    for col in base_cols:
+                        cols_read.append(
+                            {
+                                "group_identifier": group_identifier,
+                                "file_id": file_id,
+                                "file_path": fp,
+                                "sheet": read_state["sheet"],
+                                "col": col,
+                            }
+                        )
+        write_graph(node_set=node_set, edge_set=edge_set)
     files_df = pandas.DataFrame(data=files_read)
     cols_df = pandas.DataFrame(data=cols_read)
-    ## write a sub-graph with just experimental data
-    if write_set:
-        write_graph(
-            node_set=node_set,
-            edge_set=edge_set,
-            source_filter=True,
-            strict=True,
-            source_name=["tabular_data", "experimental_data"],
-            resource_path=os.path.join(RESOURCE_PATH, "artifacts"),
-        )
-
     if write_reports:
         os.makedirs(REPORT_PATH, exist_ok=True)
         files_df.to_csv(
@@ -566,4 +429,4 @@ def get_tabular_data(
             os.path.join(REPORT_PATH, "col_report.tsv"), sep="\t", index=False
         )
 
-    return node_set, edge_set, [files_df, cols_df]
+    return [files_df, cols_df]
