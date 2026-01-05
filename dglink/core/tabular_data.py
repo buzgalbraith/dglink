@@ -25,7 +25,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def filter_df(df, base_cols, nan_percentage=0.1, max_types=5):
+def filter_df(df, base_cols, nan_percentage=0.1, max_types=8):
     """Filter grounded entity DataFrame to remove low-quality or overly heterogeneous columns.
 
     Applies two quality filters:
@@ -199,7 +199,6 @@ def cached_annotate(val, col):
         ans = gilda.annotate(str(val))
         if ans:
             nsid = ans[0].matches[0].term
-
             return (
                 normalize_curie(f"{nsid.db}:{nsid.id}"),
                 bio_ontology.get_type(nsid.db, nsid.id),
@@ -520,7 +519,6 @@ def get_tabular_data(
         project_files = get_project_files(
             project_syn_id=project_id, file_types=TABULAR_FILE_TYPES, as_list=True
         )
-        project_files.append("syn12516465")  ## TODO Remove
         logger.info(
             f"adding experimental data project {project_id}\n\
                     This is project {i} out of {len(project_ids)+1} \n\
