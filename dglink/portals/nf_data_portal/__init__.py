@@ -1,1 +1,1 @@
-from .nf_data_portal import *
+from .constants import NODE_ATTRIBUTES, EDGE_ATTRIBUTES, syn

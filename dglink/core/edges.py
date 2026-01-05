@@ -2,13 +2,10 @@ import os
 
 # import pandas
 import polars as pl
-from dglink.core.constants import EDGE_ATTRIBUTES
 
 
 class Edge:
-    def __init__(
-        self, attribute_names: list = EDGE_ATTRIBUTES, attributes: dict = None
-    ):
+    def __init__(self, attribute_names: list, attributes: dict = None):
         if attribute_names is not None:
             self.attribute_names = attribute_names
             self.attributes = {attribute: "" for attribute in self.attribute_names}
@@ -50,9 +47,9 @@ class Edge:
 class EdgeSet:
     def __init__(
         self,
+        attributes: list = [],
         edge_set_name: str = "",
         edge_type: str = "",
-        attributes: list = EDGE_ATTRIBUTES,
     ):
         self.edge_set_name = edge_set_name
         self.path = ""

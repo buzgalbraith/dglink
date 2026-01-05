@@ -4,7 +4,8 @@ Utility functions for core DGLink functionality
 
 from .nodes import NodeSet
 from .edges import EdgeSet
-from .constants import RESOURCE_PATH, RESOURCE_TYPES, syn, REPORT_PATH
+from .constants import RESOURCE_PATH, RESOURCE_TYPES, REPORT_PATH
+from dglink.portals.nf_data_portal import syn
 from synapseclient.models import Table
 import os.path
 import polars as pl
@@ -20,13 +21,17 @@ logger = logging.getLogger(__name__)
 
 
 def load_graph(
-    resource_path=RESOURCE_PATH, edge_name="edges.tsv", node_name="nodes.tsv"
+    node_attributes: list = [],
+    edge_attributes: list = [],
+    resource_path=RESOURCE_PATH,
+    edge_name="edges.tsv",
+    node_name="nodes.tsv",
 ):
     """
     read in a knowledge graph as a Node and Edge set.
     """
-    node_set = NodeSet()
-    edge_set = EdgeSet()
+    node_set = NodeSet(attributes=node_attributes)
+    edge_set = EdgeSet(attributes=edge_attributes)
 
     node_set.load_node_set(os.path.join(resource_path, node_name))
     edge_set.load_edge_set(os.path.join(resource_path, edge_name))

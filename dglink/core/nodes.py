@@ -1,12 +1,9 @@
 import os
 import polars as pl
-from dglink.core.constants import NODE_ATTRIBUTES
 
 
 class Node:
-    def __init__(
-        self, attribute_names: list = NODE_ATTRIBUTES, attributes: dict = None
-    ):
+    def __init__(self, attribute_names: list, attributes: dict = None):
         if attribute_names is not None:
             self.attribute_names = attribute_names
             self.attributes = {attribute: "" for attribute in self.attribute_names}
@@ -48,9 +45,9 @@ class Node:
 class NodeSet:
     def __init__(
         self,
+        attributes: list = [],
         node_set_name: str = "",
         node_type: str = "",
-        attributes: list = NODE_ATTRIBUTES,
     ):
         self.node_set_name = node_set_name
         self.path = ""
