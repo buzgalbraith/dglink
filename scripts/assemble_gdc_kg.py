@@ -2,8 +2,15 @@
 Assembles a knowledge graph by parsing the NCI General Data Commons (GDC) Portal https://general.datacommons.cancer.gov/#/
 """
 
-from dglink import NodeSet, EdgeSet
-from dglink.portals.nci.gdc import NODE_ATTRIBUTES, EDGE_ATTRIBUTES, get_case_hierarchy
+from dglink import NodeSet, EdgeSet, write_graph
+from dglink.portals.nci.gdc import (
+    NODE_ATTRIBUTES,
+    EDGE_ATTRIBUTES,
+    get_case_hierarchy,
+    download_tabular_files,
+)
+from dglink.portals.nci.gdc.utils import get_tabular_iterator
+from dglink.core.tabular_data import get_tabular_data
 
 num_cases = 5  ## number of cases to process at max
 batch_size = 500  ## number of cases to process at one
@@ -23,13 +30,12 @@ if __name__ == "__main__":
         case_list=case_ids,
         batch_length=batch_size,
     )
-    # get_case_hierarchy(
-    #     node_set=node_set,
-    #     edge_set=edge_set,
-    #     number_cases=num_cases
-    # )
-    # get_case_hierarchy(
-    #     node_set=node_set,
-    #     edge_set=edge_set,
-    #     # number_cases=num_cases
-    # )
+    download_tabular_files(case_list=case_ids)
+    case_to_files = get_tabular_iterator(case_list=case_ids)
+    reports = get_tabular_data(
+        group_identifiers=case_ids,
+        node_set=node_set,
+        edge_set=edge_set,
+        tabular_iterator=case_to_files,
+    )
+    write_graph(node_set=node_set, edge_set=edge_set)

@@ -1,4 +1,4 @@
-from .constants import CASES_ENDPNT, FILE_FIELDS
+from .constants import CASES_ENDPNT, FILE_FIELDS, DATA_ENDPNT, GDC_CACHE_DIR
 from dglink import NodeSet, EdgeSet, write_graph
 from dglink.core.constants import REPORT_PATH
 
@@ -7,6 +7,10 @@ import tqdm
 import requests
 import polars as pl
 import os
+import re
+from subprocess import run
+from typing import Tuple, Iterator
+import pandas as pd
 
 
 def connect_cases_to_files(hits, file_to_cases: pl.DataFrame = None) -> pl.DataFrame:
@@ -32,7 +36,8 @@ def connect_cases_to_files(hits, file_to_cases: pl.DataFrame = None) -> pl.DataF
     cases_df = pl.from_dicts(records)
     if file_to_cases is None:
         return cases_df
-    return file_to_cases.vstack(cases_df)
+    ## stack files and ensure uniqueness
+    return file_to_cases.vstack(cases_df).unique()
 
 
 ## TODO: Re-examine
@@ -133,7 +138,12 @@ def get_case_hierarchy(
         "format": "JSON",
         "expand": "files,samples",  ## get associated files and expand samples
     }
-    case_to_files = None
+    cases_to_files_path = os.path.join(GDC_CACHE_DIR, "cases_to_files.tsv")
+    ## load from cache if already exists
+    if os.path.exists(cases_to_files_path):
+        case_to_files = pl.read_csv(cases_to_files_path, separator="\t")
+    else:
+        case_to_files = None
     for x in tqdm.tqdm(range(0, number_cases, batch_length)):
         params["from"] = x
         params["size"] = min(batch_length, number_cases - x)
@@ -145,9 +155,139 @@ def get_case_hierarchy(
         get_sample_metadata(hits, node_set=node_set)
         process_case_hierarchy(hits=hits, node_set=node_set, edge_set=edge_set)
         if x % (batch_length * 10) == 0:
-            print("writing ", x)
             write_graph(node_set, edge_set)
     write_graph(node_set, edge_set)
-    case_to_files.write_csv(
-        os.path.join(REPORT_PATH, "cases_to_files.tsv"), separator="\t"
+    os.makedirs(GDC_CACHE_DIR, exist_ok=True)
+    case_to_files.write_csv(cases_to_files_path, separator="\t")
+
+
+def download_tabular_files(case_list: list):
+    """download tabular files associated with a case list and save in `~/.data/gdc/files`"""
+    files_df = pl.read_csv(
+        os.path.join(GDC_CACHE_DIR, "cases_to_files.tsv"), separator="\t"
     )
+    files_dir = os.path.join(GDC_CACHE_DIR, "files")
+    ## filter for available files and also those that are tsv
+    to_load = (
+        files_df.filter(
+            pl.col("file_access").eq("open")
+            & pl.col("file_data_format").eq("TSV")
+            & pl.col("case_id").is_in(case_list)
+        )["file_id"]
+        .unique()
+        .sort()
+        .to_list()
+    )
+    ## only download files that are not already in the cache
+    undownloaded_files = filter(
+        lambda x: not os.path.exists(os.path.join(files_dir, x)), to_load
+    )
+    params = {"ids": list(undownloaded_files)}
+    ## if there are no files to download exit
+    if len(params["ids"]) < 1:
+        return
+
+    response = requests.post(
+        DATA_ENDPNT,
+        data=json.dumps(params),
+        headers={"Content-Type": "application/json"},
+    )
+
+    response_head_cd = response.headers["Content-Disposition"]
+
+    file_name = re.findall("filename=(.+)", response_head_cd)[0]
+
+    os.makedirs(files_dir, exist_ok=True)
+
+    archive_path = os.path.join(files_dir, file_name)
+
+    with open(archive_path, "wb") as output_file:
+        output_file.write(response.content)
+    ## stop all files from going in separate folder
+    unzip_cmd = [
+        "tar",
+        "-xvzf",
+        archive_path,
+        "-C",
+        files_dir,
+    ]
+    run(unzip_cmd)
+    ## quick and dirty stuff to make the downloads nicer to work with
+    rm_cmd = ["rm", archive_path, os.path.join(files_dir, "MANIFEST.txt")]
+    run(rm_cmd)
+
+
+def get_tabular_iterator(case_list: list) -> Iterator:
+    """
+    returns a 2d iterator of case_ids and associated file_paths
+    """
+    files_df = pl.read_csv(
+        os.path.join(GDC_CACHE_DIR, "cases_to_files.tsv"), separator="\t"
+    )
+    ## get only tabular files
+    project_files = files_df.filter(
+        pl.col("file_access").eq("open")
+        & pl.col("file_data_format").eq("TSV")
+        & pl.col("case_id").is_in(case_list)
+    ).with_columns(
+        file_paths=pl.format(  # Better than string concat
+            "{}/files/{}/{}",
+            pl.lit(GDC_CACHE_DIR),
+            pl.col("file_id"),
+            pl.col("file_file_name"),
+        )
+    )
+
+    ## group by case
+    case_files = project_files.group_by("case_id", maintain_order=True).agg(
+        [pl.col("file_paths"), pl.col("file_id")]
+    )
+    return case_files.iter_rows()
+
+    # for case in case_files.iter_rows(named=True):
+    #     case_id = case.get('case_id', 'case_id_missing')
+    #     dataset_paths = case.get('file_paths', [])
+    #     for dataset_path in dataset_paths:
+    #         print(dataset_path)
+    #         print(
+    #             os.path.exists(
+    #                 dataset_path
+    #             )
+    #         )
+
+    # print(
+    #     x.get('case_id'),
+    #     print(len(x.get('file_id'))),
+    #     print(len(x.get('file_file_name'))),
+    # )
+    # files_read = []
+    # cols_read = []
+    # for uuid, f_name, case_id in project_files:
+    #     dfs, read_states = load_file(uuid, f_name, case_id)
+    #     for df, read_state in zip(dfs, read_states):
+    #         files_read.append(read_state)
+    #         if df is not None:
+    #             base_cols = df.columns
+    #             ## ground data frame
+    #             entity_df = df.apply(apply_ground, axis=1)
+    #             filtered_df, base_cols = filter_df(entity_df, base_cols)
+    #             node_set, edge_set = extract_df_graph(
+    #                 filtered_df,
+    #                 base_cols,
+    #                 case_id,
+    #                 read_state["file_id"],
+    #                 node_set=node_set,
+    #                 edge_set=edge_set,
+    #             )
+    #             for col in base_cols:
+    #                 cols_read.append(
+    #                     {
+    #                         "case_id": case_id,
+    #                         "file_id": read_state["file_id"],
+    #                         "file_path": read_state["file_path"],
+    #                         "sheet": read_state["sheet"],
+    #                         "col": col,
+    #                     }
+    #                 )
+    # write_graph(node_set, edge_set)
+    # return [files_read, cols_read]
