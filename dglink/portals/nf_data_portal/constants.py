@@ -1,5 +1,5 @@
 import synapseclient
-
+import os 
 syn = synapseclient.login()
 
 NF_STUDIES_BASE_URL = (
@@ -74,3 +74,8 @@ UNGROUNDED_FIELDS = [
 ]
 
 WIKI_FIELDS = ["markdown", "title"]
+NF_DATA_PORTAL_CACHE_DIR = os.path.join(
+    os.getenv("HOME"),
+    ".data",
+    "nf_data_portal",
+)
