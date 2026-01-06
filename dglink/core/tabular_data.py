@@ -122,6 +122,21 @@ def get_frictionless_package(pth):
             except:
                 pac.add_resource(Resource(pth, format="tsv"))
                 format = ".tsv"
+    elif pth.suffix == ".txt":
+        # Check first line
+        with open(pth) as tmp:
+            first_line = tmp.readline()
+        # Check tab-separated first (more specific)
+        if len(first_line.split("\t")) > 1:
+            pac.add_resource(Resource(pth, format="tsv"))
+            format = ".tsv"
+        # Then check comma-separated
+        elif len(first_line.split(",")) > 1:
+            pac.add_resource(Resource(pth, format="csv"))
+            format = ".csv"
+        # Fallback: let Frictionless auto-detect
+        else:
+            pac.add_resource(Resource(pth))
     else:
         pac.add_resource(Resource(pth))
     for res in pac.resources:
@@ -160,6 +175,7 @@ def frictionless_file_reader(pth: str, max_size_bytes=100 * 1024 * 1024):
         logger.info("file to large to read")
         return {"all": "to_large"}
     ## load file contents into frictionless package
+
     pack = get_frictionless_package(pth=pth)
     ## load frictionless package into dictionary of pandas data frames
     df_dict = {}
