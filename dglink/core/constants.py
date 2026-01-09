@@ -1,7 +1,14 @@
 import os
 from pathlib import Path
+from openai import OpenAI
+from pydantic import BaseModel
 
-DGLINK_CACHE = Path.joinpath(Path(os.getenv("HOME")), ".dglink")
+open_ai_client = OpenAI(
+    # This is the default and can be omitted
+    api_key=os.environ.get("OPENAI_API_KEY"),
+)
+
+DGLINK_CACHE = Path.joinpath(Path(os.getenv("HOME") or '.'), ".dglink")
 RESOURCE_PATH = "dglink/resources/graph/"
 REPORT_PATH = "dglink/resources/reports/"
 SEMANTIC_SEARCH_RESOURCE_PATH = "dglink/applications/semantic_search/neo4j/graph"
@@ -33,3 +40,34 @@ RESOURCE_TYPES = [
 UNSTRUCTURED_DICOM_FIELDS = [
     "ImageComments",
 ]
+
+## List of entity types found in experimental data + a null class that are passed as classes to the LLM for schema matching
+TABULAR_ENTITY_TYPES_LLM = [
+    "human_rna",
+    "small_molecule",
+    "anatomical_region",
+    "cellular_location",
+    "human_gene_protein",
+    "experimental_factor", ## general should not be in experimental data ## 
+    "biological_process",
+    "organism",
+    "nonhuman_gene_protein",
+    "disease",
+    "protein_family_complex",
+    "human_gene_other",
+]
+
+class evaluation_response(BaseModel):
+    human_rna:float
+    small_molecule:float
+    anatomical_region:float
+    cellular_location:float
+    human_gene_protein:float
+    experimental_factor:float
+    biological_process:float
+    organism:float
+    nonhuman_gene_protein:float
+    disease:float
+    protein_family_complex:float
+    human_gene_other:float
+    no_schema_match:float
