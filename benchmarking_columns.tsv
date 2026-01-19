@@ -1,0 +1,151 @@
+fp	sheet	column	group_identifier	heuristic_vote	is_entity_col
+/Users/buzgalbraith/.synapseCache/19/8917019/69244-0209702964.TARGET.BED.sample_statistics.csv	69244-0209702964.target.bed.sample_statistics	Source_of_reads	syn4939874	false	false
+/Users/buzgalbraith/.synapseCache/943/127374943/7-7-16AZD_2Da.xlsx	plate-1-sheet1	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/702/19100702/NTAP ipnNF95.11C MIPE qHTS.csv	ntap-ipnnf95.11c-mipe-qhts	Cell Line	syn4939906	false	true
+/Users/buzgalbraith/.synapseCache/621/8651621/ENCFF705UBV.tsv	encff705ubv	N_unmapped	syn4984604	false	false
+/Users/buzgalbraith/.synapseCache/539/14654539/dapD1_3-25-15_02-8_S4dap-TdT.csv	dapd1_3-25-15_02-8_s4dap-tdt	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/992/127374992/RFP97-4S3_11-12-14.csv	rfp97-4s3_11-12-14	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/406/81221406/age_topgenes_adjpval_0.05.csv	age_topgenes_adjpval_0.05	GENE	syn21984813	false	false
+/Users/buzgalbraith/.synapseCache/426/97517426/geneDiffExTRAM_6H.tsv	genediffextram_6h	lfcSE	syn21984813	true	false
+/Users/buzgalbraith/.synapseCache/642/160231642/SRR31653890.runinfo_ftp.tsv	srr31653890.runinfo_ftp	fastq_galaxy	syn68634225	false	false
+/Users/buzgalbraith/.synapseCache/891/127374891/RFP_D6_956_S2_5-13-15.csv	rfp_d6_956_s2_5-13-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/445/69099445/055_cell_O_Glycan.xlsx	summary	field2	syn22267284	true	false
+/Users/buzgalbraith/.synapseCache/525/125599525/Mutect2_filtered_icNF98.4d.vcf.gz.filteringStats.tsv	mutect2_filtered_icnf98.4d.vcf.gz.filteringstats	#<METADATA>Ln prior of deletion of length 10=-14.62849790717772	syn11374339	true	false
+/Users/buzgalbraith/.synapseCache/917/127374917/DQ97-4S2_11-12-14.csv	dq97-4s2_11-12-14	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/11/158564011/patient4tumor10.junction.xls	patient4tumor10.junction	annotation	syn4984604	false	false
+/Users/buzgalbraith/.synapseCache/13/8917013/69244-0209702964.TARGET.BED.sample_interval_statistics.csv	69244-0209702964.target.bed.sample_interval_statistics	Number_of_sources	syn4939874	false	false
+/Users/buzgalbraith/.synapseCache/735/135145735/HS01_16.biotype_counts_mqc.tsv	hs01_16.biotype_counts_mqc	# id: 'biotype_counts'	syn2343195	true	true
+/Users/buzgalbraith/.synapseCache/175/93239175/Strelka_cNF97.2a_variants_snpEff.csv	strelka_cnf97.2a_variants_snpeff	Value	syn11374339	false	false
+/Users/buzgalbraith/.synapseCache/71/7353071/C856CANXX_1_RNASeq_Kallisto_gencodev24_quants.tsv	c856canxx_1_rnaseq_kallisto_gencodev24_quants	OttTrans	syn4939874	false	false
+/Users/buzgalbraith/.synapseCache/734/40728734/HS11_CCG_20hours_metadata_set2.csv	hs11_ccg_20hours_metadata_set2	ColSid	syn2343195	false	false
+/Users/buzgalbraith/.synapseCache/639/127374639/RFP_D1_956_S4_5-13-15.csv	rfp_d1_956_s4_5-13-15	Abs. Time	syn7217928	false	false
+/Users/buzgalbraith/.synapseCache/420/14655420/RFP_D6_956_S2_5-20-15.csv	rfp_d6_956_s2_5-20-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/405/93239405/Mutect2_unfiltered_icNF97.2b_snpEff.csv	mutect2_unfiltered_icnf97.2b_snpeff	Value	syn11374339	false	false
+/Users/buzgalbraith/.synapseCache/349/64963349/morpholino nf1, ascl1a.xlsx	edu-counts	field24	syn21650493	false	false
+/Users/buzgalbraith/.synapseCache/136/24247136/Exp008_04-sNF02.2.xlsx	jf003	Raw Data	syn11817821	false	false
+/Users/buzgalbraith/.synapseCache/104/92799104/Mutect2_filtered_cNF97.2a.vcf.gz.filteringStats.tsv	mutect2_filtered_cnf97.2a.vcf.gz.filteringstats	#<METADATA>Ln prior of deletion of length 10=-15.233618614539022	syn11374339	true	false
+/Users/buzgalbraith/.synapseCache/787/127374787/dapi_D1_CT_S2_4-22-15.csv	dapi_d1_ct_s2_4-22-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/944/127374944/DQ95-6_2lambS1_1-7-15.csv	dq95-6_2lambs1_1-7-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/535/9773535/MS12_run2_GSK458_kinome.xlsx	raw	Accession	syn2343195	false	false
+/Users/buzgalbraith/.synapseCache/832/135145832/HS11_4.biotype_counts_rrna_mqc.tsv	hs11_4.biotype_counts_rrna_mqc	#id: 'biotype-gs'	syn2343195	true	false
+/Users/buzgalbraith/.synapseCache/78/90227078/synapse_storage_manifest.csv	synapse_storage_manifest	resourceType	syn21650493	false	false
+/Users/buzgalbraith/.synapseCache/785/127374785/DQ_02-8S2_2-4-15.csv	dq_02-8s2_2-4-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/781/40728781/Syn1_CTG_72hours_metadata_set1.csv	syn1_ctg_72hours_metadata_set1	RowName	syn2343195	true	true
+/Users/buzgalbraith/.synapseCache/417/14655417/RFP_D1_956_S4_5-20-15.csv	rfp_d1_956_s4_5-20-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/717/127374717/DQ97-4S1_12-10-14.csv	dq97-4s1_12-10-14	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/682/127374682/dapi_D6_C_S1_4-8-15.csv	dapi_d6_c_s1_4-8-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/410/14655410/RFP_D1_956_S1_5-20-15.csv	rfp_d1_956_s1_5-20-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/69/8917069/69247-0209702954.TARGET.BED.sample_cumulative_coverage_proportions.csv	69247-0209702954.target.bed.sample_cumulative_coverage_proportions	sample	syn4939874	false	false
+/Users/buzgalbraith/.synapseCache/731/135145731/HS01_15.biotype_counts_mqc.tsv	hs01_15.biotype_counts_mqc	# id: 'biotype_counts'	syn2343195	true	true
+/Users/buzgalbraith/.synapseCache/124/127375124/RFPD1_3-25-15_C_S2dap-TdT.csv	rfpd1_3-25-15_c_s2dap-tdt	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/906/145477906/JH-2-055-W1_Normal_segments.tsv	jh-2-055-w1_normal_segments	INFO	syn21984813	true	false
+/Users/buzgalbraith/.synapseCache/766/135145766/HS01_6.biotype_counts_mqc.tsv	hs01_6.biotype_counts_mqc	# id: 'biotype_counts'	syn2343195	true	false
+/Users/buzgalbraith/.synapseCache/584/124496584/ES-SSEA4-A1.junction.xls	es-ssea4-a1.junction	annotation	syn11374349	false	false
+/Users/buzgalbraith/.synapseCache/487/71456487/gsego_Toluidine Blue.tsv	gsego_toluidine-blue	core_enrichment	syn11374354	false	false
+/Users/buzgalbraith/.synapseCache/116/22281116/interactions.tsv	interactions	interaction_types	syn11672851	false	true
+/Users/buzgalbraith/.synapseCache/461/122561461/synapse_storage_manifest_genomicsassaytemplate.csv	synapse_storage_manifest_genomicsassaytemplate	fileFormat	syn11374345	false	false
+/Users/buzgalbraith/.synapseCache/263/127374263/RFP97-4S2_1-7-15.csv	rfp97-4s2_1-7-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/888/93218888/cNF97.2b.junction.xls	cnf97.2b.junction	annotation	syn11374339	false	false
+/Users/buzgalbraith/.synapseCache/684/54745684/Rigo_combo_Ratner_PDX.csv	rigo_combo_ratner_pdx	field5	syn52740594	false	false
+/Users/buzgalbraith/.synapseCache/130/85158130/112921_Kinome_Walker_Synapse.xlsx	kinome-analysis	field2	syn8016599	true	true
+/Users/buzgalbraith/.synapseCache/3/90363003/IPN50-test1.xlsx	ipn50-0004o-exp	field2	syn21650484	true	false
+/Users/buzgalbraith/.synapseCache/113/8917113/69249-0209702956.TARGET.BED.sample_gene_summary.csv	69249-0209702956.target.bed.sample_gene_summary	Gene	syn4939874	true	true
+/Users/buzgalbraith/.synapseCache/866/27736866/SNF96.2 Analysis template GEC 41916.xlsx	billing-info	field1	syn11817821	true	false
+/Users/buzgalbraith/.synapseCache/226/92799226/Mutect2_filtered_icNF00.10a.vcf.gz.filteringStats.tsv	mutect2_filtered_icnf00.10a.vcf.gz.filteringstats	#<METADATA>Ln prior of deletion of length 10=-15.38972458668043	syn11374339	true	false
+/Users/buzgalbraith/.synapseCache/55/127375055/DQCS3_11-12-14.csv	dqcs3_11-12-14	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/535/147383535/patient4tumor1.junction.xls	patient4tumor1.junction	chrom	syn4984604	false	false
+/Users/buzgalbraith/.synapseCache/153/127375153/dapiD1_CT_S4_4-15-15.csv	dapid1_ct_s4_4-15-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/558/81837558/Dose-response curves TRAP1 inhibitors.csv	dose-response-curves-trap1-inhibitors	response	syn8016650	false	false
+/Users/buzgalbraith/.synapseCache/411/14655411/RFP_D1_956_S2_5-20-15.csv	rfp_d1_956_s2_5-20-15	Abs. Time	syn7217928	false	false
+/Users/buzgalbraith/.synapseCache/194/14655194/dapiD1_CT_S3_4-15-15.csv	dapid1_ct_s3_4-15-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/513/127374513/RFP95-6_2lambS4_11-12-14.csv	rfp95-6_2lambs4_11-12-14	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/763/8916763/69241-0209702973.ALL.UCSC.EXONS.sample_statistics.csv	69241-0209702973.all.ucsc.exons.sample_statistics	Source_of_reads	syn4939874	false	false
+/Users/buzgalbraith/.synapseCache/446/127374446/RFPCTS2_11-12-14.csv	rfpcts2_11-12-14	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/115/127375115/RFP_02-8S1_1_21_15.csv	rfp_02-8s1_1_21_15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/89/7353089/C8581ANXX_1_RNASeq_Kallisto_gencodev24_quants.tsv	c8581anxx_1_rnaseq_kallisto_gencodev24_quants	Descrip	syn4939874	false	true
+/Users/buzgalbraith/.synapseCache/320/14655320/dapi_D1_CT_S2_5-6-15.csv	dapi_d1_ct_s2_5-6-15	Abs. Time	syn7217928	false	false
+/Users/buzgalbraith/.synapseCache/860/127374860/RFPD6_3-25-15_C_S2dap-TdT.csv	rfpd6_3-25-15_c_s2dap-tdt	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/448/7220448/C8581ANXX_6_RNASeq_Kallisto_grch38_quants.tsv	c8581anxx_6_rnaseq_kallisto_grch38_quants	HGNCSymbol	syn4939874	true	true
+/Users/buzgalbraith/.synapseCache/284/14655284/RFP_D1_974_S4_4-22-15.csv	rfp_d1_974_s4_4-22-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/409/93239409/Mutect2_filtered_icNF97.2b_snpEff.csv	mutect2_filtered_icnf97.2b_snpeff	Value	syn11374339	false	false
+/Users/buzgalbraith/.synapseCache/171/82353171/Fig.29_NAD+-NADH.xlsx	nad-only	field1	syn8016650	true	false
+/Users/buzgalbraith/.synapseCache/385/93239385/Strelka_icNF98.4c_variants_snpEff.csv	strelka_icnf98.4c_variants_snpeff	Name	syn11374339	false	false
+/Users/buzgalbraith/.synapseCache/856/135145856/HS11_7.biotype_counts_rrna_mqc.tsv	hs11_7.biotype_counts_rrna_mqc	#id: 'biotype-gs'	syn2343195	true	false
+/Users/buzgalbraith/.synapseCache/245/125597245/recalibrated.tsv	recalibrated	s3://ntap-cnf-cell-project-tower-bucket/cnf_wgs//Preprocessing/28NF/Recalibrated/28NF.recal.bam	syn11374339	true	false
+/Users/buzgalbraith/.synapseCache/775/8916775/69242-0209702972.ALL.UCSC.EXONS.sample_interval_summary.csv	69242-0209702972.all.ucsc.exons.sample_interval_summary	Target	syn4939874	false	false
+/Users/buzgalbraith/.synapseCache/867/8916867/69249-0209702956.ALL.UCSC.EXONS.sample_cumulative_coverage_proportions.csv	69249-0209702956.all.ucsc.exons.sample_cumulative_coverage_proportions	sample	syn4939874	false	false
+/Users/buzgalbraith/.synapseCache/837/8916837/69247-0209702954.ALL.UCSC.EXONS.sample_cumulative_coverage_counts.csv	69247-0209702954.all.ucsc.exons.sample_cumulative_coverage_counts	sample	syn4939874	false	false
+/Users/buzgalbraith/.synapseCache/14/90363014/DSC_analysis.xlsx	analysis	field9	syn21650484	false	false
+/Users/buzgalbraith/.synapseCache/130/8917130/NA12891-0175549876.TARGET.BED.sample_cumulative_coverage_proportions.csv	na12891-0175549876.target.bed.sample_cumulative_coverage_proportions	sample	syn4939874	false	false
+/Users/buzgalbraith/.synapseCache/939/126584939/synapse_storage_manifest_updatemilestonereport.csv	synapse_storage_manifest_updatemilestonereport	Component	syn31619419	false	false
+/Users/buzgalbraith/.synapseCache/582/124496582/NC-SOX10-A1.junction.xls	nc-sox10-a1.junction	chrom	syn11374349	false	false
+/Users/buzgalbraith/.synapseCache/714/127374714/DQ95-6_2lambS4_12-10-14.csv	dq95-6_2lambs4_12-10-14	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/111/127375111/RFP_D6_974_S1_4-22-15.csv	rfp_d6_974_s1_4-22-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/255/14655255/dapi_D1_CT_S1_4-22-15.csv	dapi_d1_ct_s1_4-22-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/670/160231670/SRR31653911.runinfo_ftp.tsv	srr31653911.runinfo_ftp	fastq_md5	syn68634225	false	false
+/Users/buzgalbraith/.synapseCache/403/93239403/Strelka_icNF98.4d_genome_snpEff.csv	strelka_icnf98.4d_genome_snpeff	Value	syn11374339	false	false
+/Users/buzgalbraith/.synapseCache/847/145477847/JH-2-013-J1_Normal_segments.tsv	jh-2-013-j1_normal_segments	FILTER	syn21984813	false	false
+/Users/buzgalbraith/.synapseCache/996/90362996/HA-Tyr-test2.xlsx	hatyr2-1mm-0001o-exp	TA Instruments	syn21650484	true	false
+/Users/buzgalbraith/.synapseCache/80/127375080/RFP_CS1_1_21_15.csv	rfp_cs1_1_21_15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/901/127374901/dapi_D6_974_S1_5-6-15.csv	dapi_d6_974_s1_5-6-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/966/90362966/IPN50-test2.xlsx	ipn50-0005o-exp	field2	syn21650484	true	false
+/Users/buzgalbraith/.synapseCache/496/124494496/SC-A1.biotype_counts_rrna_mqc.tsv	sc-a1.biotype_counts_rrna_mqc	#id: 'biotype-gs'	syn11374349	true	false
+/Users/buzgalbraith/.synapseCache/493/127374493/DQ_97-4S3_2-4-15.csv	dq_97-4s3_2-4-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/950/8916950/69241-0209702973.TARGET.BED.sample_gene_summary.csv	69241-0209702973.target.bed.sample_gene_summary	Gene	syn4939874	true	true
+/Users/buzgalbraith/.synapseCache/999/145477999/JH-2-126-W3_Normal_segments.tsv	jh-2-126-w3_normal_segments	CHROM	syn21984813	false	false
+/Users/buzgalbraith/.synapseCache/56/127375056/RFPD6_4-1-15_Cp_S1dap-TdT.csv	rfpd6_4-1-15_cp_s1dap-tdt	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/807/8916807/69244-0209702964.ALL.UCSC.EXONS.sample_summary.csv	69244-0209702964.all.ucsc.exons.sample_summary	granular_third_quartile	syn4939874	false	false
+/Users/buzgalbraith/.synapseCache/738/135145738/HS01_15.biotype_counts_rrna_mqc.tsv	hs01_15.biotype_counts_rrna_mqc	#id: 'biotype-gs'	syn2343195	true	false
+/Users/buzgalbraith/.synapseCache/821/8916821/69245-0209702952.ALL.UCSC.EXONS.sample_summary.csv	69245-0209702952.all.ucsc.exons.sample_summary	granular_median	syn4939874	false	false
+/Users/buzgalbraith/.synapseCache/803/8916803/69244-0209702964.ALL.UCSC.EXONS.sample_interval_summary.csv	69244-0209702964.all.ucsc.exons.sample_interval_summary	Target	syn4939874	false	false
+/Users/buzgalbraith/.synapseCache/791/135145791/HS11_11.biotype_counts_mqc.tsv	hs11_11.biotype_counts_mqc	# id: 'biotype_counts'	syn2343195	true	false
+/Users/buzgalbraith/.synapseCache/533/14654533/dapD1_3-25-15_02-8_S1dap-TdT.csv	dapd1_3-25-15_02-8_s1dap-tdt	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/340/73908340/interactions.tsv	interactions	interaction_claim_source	syn11672851	true	false
+/Users/buzgalbraith/.synapseCache/835/127374835/RFP02-8S212-10-14.csv	rfp02-8s212-10-14	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/322/127374322/DQ_CTS3_1_21_15.csv	dq_cts3_1_21_15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/164/93218164/hTERT_NF1_ipNF05.5.biotype_counts_mqc.tsv	htert_nf1_ipnf05.5.biotype_counts_mqc	# id: 'biotype_counts'	syn11374339	true	false
+/Users/buzgalbraith/.synapseCache/903/160235903/SRR31653886.runinfo_ftp.tsv	srr31653886.runinfo_ftp	library_name	syn68634225	false	false
+/Users/buzgalbraith/.synapseCache/910/12862910/Synodos_kinome_baseline_iTRAQ_data.tsv	synodos_kinome_baseline_itraq_data	Family	syn2343195	true	true
+/Users/buzgalbraith/.synapseCache/281/92799281/Mutect2_filtered_icNF98.4d.vcf.gz.filteringStats.tsv	mutect2_filtered_icnf98.4d.vcf.gz.filteringstats	#<METADATA>Ln prior of deletion of length 10=-15.232674186479132	syn11374339	true	false
+/Users/buzgalbraith/.synapseCache/795/86251795/synapse_storage_manifest.csv	synapse_storage_manifest	modelSystemName	syn11374357	true	true
+/Users/buzgalbraith/.synapseCache/21/127375021/RFPCS1_11-12-14.csv	rfpcs1_11-12-14	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/186/148306186/WU-561_Normal_segments.tsv	wu-561_normal_segments	WU-561_Normal.GT	syn21984813	false	false
+/Users/buzgalbraith/.synapseCache/781/8916781/69243-0209702971.ALL.UCSC.EXONS.sample_cumulative_coverage_counts.csv	69243-0209702971.all.ucsc.exons.sample_cumulative_coverage_counts	sample	syn4939874	false	false
+/Users/buzgalbraith/.synapseCache/240/124578240/counts.xlsx	in	field1	syn26347297	false	false
+/Users/buzgalbraith/.synapseCache/564/14654564/RFPD1_3-25-15_02-8_S3dap-TdT.csv	rfpd1_3-25-15_02-8_s3dap-tdt	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/539/147383539/patient2tumor1.junction.xls	patient2tumor1.junction	annotation	syn4984604	false	false
+/Users/buzgalbraith/.synapseCache/873/127374873/dapiD1_CT_S2_4-15-15.csv	dapid1_ct_s2_4-15-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/842/135147842/HS01_17.junction.xls	hs01_17.junction	chrom	syn2343195	false	false
+/Users/buzgalbraith/.synapseCache/12/158564012/patient6tumor4.junction.xls	patient6tumor4.junction	annotation	syn4984604	false	false
+/Users/buzgalbraith/.synapseCache/776/83566776/everolimus_topgenes_adjpval_0.01.csv	everolimus_topgenes_adjpval_0.01	GENENAME	syn21984813	true	true
+/Users/buzgalbraith/.synapseCache/983/90362983/IPN60-test2.xlsx	ipn60-0007o-exp	TA Instruments	syn21650484	true	false
+/Users/buzgalbraith/.synapseCache/270/14655270/dapi_D6_CT_S2_4-22-15.csv	dapi_d6_ct_s2_4-22-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/531/127374531/RFPD1_3-25-15_C_S3dap-TdT.csv	rfpd1_3-25-15_c_s3dap-tdt	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/818/40728818/Syn5_CTG_72hours_metadata_set1.csv	syn5_ctg_72hours_metadata_set1	ColConcUnit	syn2343195	true	false
+/Users/buzgalbraith/.synapseCache/308/9784308/baseline_schwannoma_mouse.xlsx	proteingroups	Fasta headers	syn2343195	false	false
+/Users/buzgalbraith/.synapseCache/482/124494482/NC-SOX10-D2.biotype_counts_rrna_mqc.tsv	nc-sox10-d2.biotype_counts_rrna_mqc	#id: 'biotype-gs'	syn11374349	true	false
+/Users/buzgalbraith/.synapseCache/995/122302995/NRG1 Beta Regulated Genes in Adult Schwann CellsJF.xlsx	sheet1	Gene Symbol (DUPS removed)2	syn22267330	true	true
+/Users/buzgalbraith/.synapseCache/974/161798974/AL002-014.xlsx	al002-014	Visit 6 (Post Cycle 9-12)	syn8012530	true	true
+/Users/buzgalbraith/.synapseCache/327/159180327/Fig 4C Viability JH-2-002 Dox TNG-462.xlsx	sheet1	cell_line_name	syn21984813	false	true
+/Users/buzgalbraith/.synapseCache/34/158564034/patient6tumor5.junction.xls	patient6tumor5.junction	chrom	syn4984604	false	false
+/Users/buzgalbraith/.synapseCache/742/135145742/HS01_2.biotype_counts_mqc.tsv	hs01_2.biotype_counts_mqc	# id: 'biotype_counts'	syn2343195	true	true
+/Users/buzgalbraith/.synapseCache/596/7418596/iPNF05.5_mixed_10x10_CCG_16h_metadata.csv	ipnf05.5_mixed_10x10_ccg_16h_metadata	ColConcUnit	syn4939906	true	false
+/Users/buzgalbraith/.synapseCache/827/127374827/RFP_D1_956_S1_5-20-15.csv	rfp_d1_956_s1_5-20-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/767/8916767/69242-0209702972.ALL.UCSC.EXONS.sample_cumulative_coverage_counts.csv	69242-0209702972.all.ucsc.exons.sample_cumulative_coverage_counts	sample	syn4939874	false	false
+/Users/buzgalbraith/.synapseCache/641/160231641/SRR31653896.runinfo_ftp.tsv	srr31653896.runinfo_ftp	fastq_galaxy	syn68634225	false	false
+/Users/buzgalbraith/.synapseCache/183/14655183/dapiD1_974_S2_4-15-15.csv	dapid1_974_s2_4-15-15	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/789/127374789/DQ95-6_2lambS1_11-12-14.csv	dq95-6_2lambs1_11-12-14	field1	syn7217928	true	false
+/Users/buzgalbraith/.synapseCache/8/27325008/s-nf2-MS02-1-MIPE4.0-single.csv	s-nf2-ms02-1-mipe4.0-single	Name	syn2343195	true	true
+/Users/buzgalbraith/.synapseCache/606/82116606/cisMPNST dose-dependent SDH activity TRAP1 inhibitors.csv	cismpnst-dose-dependent-sdh-activity-trap1-inhibitors	compound_name	syn8016650	true	true
+/Users/buzgalbraith/.synapseCache/706/62929706/P0 vs P5 sphere comparison.xlsx	default	MGI symbol	syn11374337	true	true
+/Users/buzgalbraith/.synapseCache/625/161799625/synapse_storage_manifest_clinicalassaytemplate.csv	synapse_storage_manifest_clinicalassaytemplate	bodyPart	syn8012530	true	true
+/Users/buzgalbraith/.synapseCache/150/85158150/112921_Total Proteome_Walker_Synapse.xlsx	table	field4	syn8016599	true	true
+/Users/buzgalbraith/.synapseCache/683/95629683/synapse_storage_manifest.csv	synapse_storage_manifest	diagnosis	syn11374357	true	true
+/Users/buzgalbraith/.synapseCache/33/37740033/CTF-UCF-Cenix-CompleteCompoundData-all passes in one tab_ to release_FINAL_cleaned.xlsx	single-agent-set-1-raw-data	compound	syn5562324	true	true
+/Users/buzgalbraith/.synapseCache/683/122563683/synapse_storage_manifest_imagingassaytemplate.csv	synapse_storage_manifest_imagingassaytemplate	assayTarget	syn11374345	true	true
+/Users/buzgalbraith/.synapseCache/820/138419820/Metadata_RNASeq.xlsx	metadata-rnaseq	organ	syn11374354	true	true
+/Users/buzgalbraith/.synapseCache/332/24247332/Exp008_05-HEI193.xlsx	curvefit-data	cmpd_name	syn11817821	true	true
+/Users/buzgalbraith/.synapseCache/220/84295220/doseResponse_table.csv	doseresponse_table	CellLine	syn21984813	true	true
+/Users/buzgalbraith/.synapseCache/460/7110460/NTAP ipNF05.5 MC MIPE qHTS.csv	ntap-ipnf05.5-mc-mipe-qhts	name	syn4939906	true	true
+/Users/buzgalbraith/.synapseCache/605/9773605/Syn1_run3_GSK458_kinome.xlsx	kinases	Gene	syn4939906	true	true
+/Users/buzgalbraith/.synapseCache/415/9773415/HS01_run3_GSK458_kinome.xlsx	kinases	Family	syn4939906	true	true
