@@ -7,7 +7,7 @@ from dglink.core.constants import (
 from dglink.core.tabular_data import (
     check_df_readable,
     get_frictionless_package,
-    filter_df,
+    heuristic_quality_check,
     apply_ground,
     extract_df_graph,
 )
@@ -178,7 +178,7 @@ def process_project(
                 base_cols = df.columns
                 ## ground data frame
                 entity_df = df.apply(apply_ground, axis=1)
-                entity_df, base_cols = filter_df(entity_df, base_cols)
+                entity_df, base_cols = heuristic_quality_check(entity_df, base_cols)
                 node_set, edge_set = extract_df_graph(
                     entity_df,
                     base_cols,
