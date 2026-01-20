@@ -9,7 +9,8 @@ from .constants import VCF_FILE_TYPES, RESOURCE_PATH, REPORT_PATH
 from dglink.portals.nf_data_portal import syn
 from .nodes import NodeSet
 from .edges import EdgeSet
-from .utils import get_project_files, write_graph
+from .utils import write_graph
+from dglink.portals.nf_data_portal.utils import get_project_files 
 import vcf
 import os
 from bioregistry import normalize_curie, get_iri, parse_curie

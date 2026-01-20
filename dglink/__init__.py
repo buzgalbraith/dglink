@@ -1,12 +1,8 @@
 from .core.nodes import NodeSet
 from .core.edges import EdgeSet
 from .core.utils import load_graph, write_graph, write_graph_and_artifacts_default
-from .core.wiki import get_wikis
-from .core.meta import get_meta
 from .core.projects import get_projects
 from .core.tabular_data import get_tabular_data
-from .core.vcf_data import get_vcf_data
-from .core.dicom_data import get_dicom_data
 import logging
 
 logging.basicConfig(

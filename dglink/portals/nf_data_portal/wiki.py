@@ -1,5 +1,5 @@
 from dglink.core.constants import RESOURCE_PATH
-from dglink.portals.nf_data_portal import syn
+from .constants import syn
 from dglink.core.nodes import NodeSet
 from dglink.core.edges import EdgeSet
 from dglink import write_graph
@@ -81,6 +81,7 @@ def get_wikis(
             study_wiki = syn.getWiki(project_id)
         except:
             logger.warning(f"Project: {project_id} wiki could not be loaded ")
+            study_wiki = None
         node_set, edge_set = get_entities_from_wiki(
             study_wiki=study_wiki,
             wiki_fields=wiki_fields,

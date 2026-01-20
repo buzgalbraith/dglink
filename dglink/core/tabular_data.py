@@ -7,15 +7,12 @@ Uses Gilda for entity recognition and INDRA for ontology typing.
 """
 
 from .constants import (
-    RESOURCE_PATH,
     REPORT_PATH,
-    TABULAR_FILE_TYPES,
     TABULAR_ENTITY_TYPES_LLM,
     open_ai_client,
     evaluation_response,
 )
-from dglink.portals.nf_data_portal import syn
-from .utils import get_project_files, write_graph
+from .utils import write_graph
 from .nodes import NodeSet
 from .edges import EdgeSet
 import os
