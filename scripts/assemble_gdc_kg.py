@@ -37,7 +37,10 @@ if __name__ == "__main__":
         node_set=node_set,
         edge_set=edge_set,
         tabular_iterator=case_to_files,
-        quality_check_method="ml_schema_match",
+        quality_check_method="llm_schema_match",
+        max_quality_check_samples=10,
+        quality_check_confidence_threshold=0.5,
+        model="gpt-4o",
         # quality_check_method='heuristic'
     )
     write_graph(node_set=node_set, edge_set=edge_set)

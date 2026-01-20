@@ -28,6 +28,7 @@ import logging
 from typing import Iterator
 import json
 import numpy as np
+from openai import BadRequestError
 
 
 logger = logging.getLogger(__name__)
@@ -520,25 +521,32 @@ def get_llm_schema_matching_prompt(
     return model_context, model_prompt
 
 
-def call_llm_for_schema_matching(llm_prompt: tuple[str, str]) -> dict[str, float]:
-    """call the llm to match a schema given a prompt"""
+def call_llm_for_schema_matching(
+    llm_prompt: tuple[str, str], model: str
+) -> dict[str, float]:
     call_context, call_prompt = llm_prompt
     if call_prompt == "":
         return {
             entity_type: 0
             for entity_type in TABULAR_ENTITY_TYPES_LLM + ["no_schema_match"]
         }
-    response = open_ai_client.responses.parse(
-        model="gpt-4o-2024-08-06",
-        input=[
-            {
-                "role": "system",
-                "content": call_context,
-            },
-            {"role": "user", "content": call_prompt},
-        ],
-        text_format=evaluation_response,
-    )
+    try:
+        response = open_ai_client.responses.parse(
+            model=model,
+            input=[
+                {
+                    "role": "system",
+                    "content": call_context,
+                },
+                {"role": "user", "content": call_prompt},
+            ],
+            text_format=evaluation_response,
+        )
+    except BadRequestError:
+        raise ValueError(
+            f"Model {model} invalid perhaps try gpt-4o, gpt-4o-mini, gpt-5 or gpt-5-mini"
+        )
+
     raw_probs = response.output_parsed
     if raw_probs:
         raw_probs = raw_probs.model_dump()
@@ -581,12 +589,13 @@ def process_schema_matching(
     return entity_df, base_cols
 
 
-def ml_schema_match(
+def llm_schema_match(
     unmatched_df: pandas.DataFrame,
     all_original_cols: list,
     table_path: str,
     max_samples: int,
     confidence_threshold: float,
+    model: str,
 ) -> tuple[pandas.DataFrame, list]:
     schema_map = {}
     matching_cols = []
@@ -598,9 +607,7 @@ def ml_schema_match(
             max_samples=max_samples,
             table_cols=all_original_cols,
         )
-        llm_resp = call_llm_for_schema_matching(
-            llm_prompt=llm_prompt,
-        )
+        llm_resp = call_llm_for_schema_matching(llm_prompt=llm_prompt, model=model)
         ## check cases where it is confident that the col represents nothing or unconfined in everything
         most_likely_entity_type: str = max(llm_resp, key=lambda k: llm_resp[k])
         ## TODO: Decide how want to do cut off for llm schema matching ##
@@ -632,22 +639,24 @@ def quality_check_groundings(
     dataset_path: str,
     max_schema_matching_samples: int,
     schema_matching_confidence_threshold: float,
+    model: str,
 ) -> tuple[pandas.DataFrame, list]:
     matched_dataset, retained_columns = (
         grounded_dataset,
         original_dataset_cols,
-    )  ## TODO: Remove
+    )
     if qc_method == "heuristic":
         matched_dataset, retained_columns = heuristic_quality_check(
             grounded_dataset, original_dataset_cols
         )
-    elif qc_method == "ml_schema_match":
-        matched_dataset, retained_columns = ml_schema_match(
+    elif qc_method == "llm_schema_match":
+        matched_dataset, retained_columns = llm_schema_match(
             grounded_dataset,
             original_dataset_cols,
             dataset_path,
             max_samples=max_schema_matching_samples,
             confidence_threshold=schema_matching_confidence_threshold,
+            model=model,
         )
     return matched_dataset, retained_columns
 
@@ -659,8 +668,9 @@ def get_tabular_data(
     tabular_iterator: Iterator,
     write_reports: bool = True,
     quality_check_method: str = "heuristic",
-    max_quality_check_samples: int = 5,
-    quality_check_confidence_threshold: float = 0.3,
+    max_quality_check_samples: int = 10,
+    quality_check_confidence_threshold: float = 0.5,
+    model: str = "gpt-4o",
 ) -> list[pandas.DataFrame]:
     """Process tabular data files from multiple groups and build knowledge graph.
 
@@ -690,6 +700,7 @@ def get_tabular_data(
                         dataset_path=fp,
                         max_schema_matching_samples=max_quality_check_samples,
                         schema_matching_confidence_threshold=quality_check_confidence_threshold,
+                        model=model,
                     )
                     node_set, edge_set = extract_df_graph(
                         filtered_df,
