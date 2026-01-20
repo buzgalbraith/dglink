@@ -2,76 +2,48 @@
 this is a complete restructure of the assemble NF KG Method
 """
 
-from dglink.core.utils import get_projects_files
-from dglink import NodeSet, EdgeSet, write_graph, get_projects
-from dglink.core.tabular_data import get_tabular_data
-from dglink.portals.nf_data_portal.nf_data_portal import get_all_nf_studies
-from dglink.portals.nf_data_portal.constants import NF_DATA_PORTAL_CACHE_DIR, NODE_ATTRIBUTES, EDGE_ATTRIBUTES, NF_STUDIES_BASE_URL
-from dglink.core.constants import TABULAR_FILE_TYPES
-from dglink.portals.nf_data_portal import syn
-import re
-import polars as pl
-import os
+from dglink import NodeSet, EdgeSet, get_projects, get_tabular_data, write_graph
+from dglink.portals.nf_data_portal import get_tabular_iterator, get_tabular_iterator, get_wikis, get_publications, get_tools, get_meta, get_all_nf_studies
+from dglink.portals.nf_data_portal.constants import NODE_ATTRIBUTES, EDGE_ATTRIBUTES, NF_STUDIES_BASE_URL, WIKI_FIELDS, UNGROUNDED_FIELDS, GROUND_FIELDS
 
 
+import logging
+logger = logging.getLogger(__name__)
 
-project_ids = [
-"syn2343195",  ## large project
-"syn5562324",  ## small project
-]
-def safe_download(syn_id):
-    """safe download method to apply to dataframe"""
-    try:
-        entity = syn.get(syn_id, ifcollision="keep.local") ## keep local file if already downloaded ie do not re-download.
-        return entity.path
-    except Exception:
-        return None
+
 if __name__ == "__main__":
-    ## get a full list of studies
-    project_ids = get_all_nf_studies()
-    ## crawl all projects
-    project_files = get_projects_files(project_ids=project_ids, )
-    ## filter for tabular projects
-    file_types_pattern = f"({'|'.join(re.escape(s) for s in TABULAR_FILE_TYPES)})$"
-    tabular_project_files = project_files.filter(
-        pl.col("file_name").str.contains(file_types_pattern)
-    )
-    # download tabular files when possible (note that this file was saved TODO: look into if things are working )
-    tabular_project_files = tabular_project_files.with_columns(
-        file_path=pl.col('file_syn_id').map_elements(
-            safe_download,
-            return_dtype=pl.String
-        )
-    )
-    ## assuming the above works ## 
-    ## first save the result. 
-    os.makedirs(
-        NF_DATA_PORTAL_CACHE_DIR, 
-        exist_ok=True
-    )
-    tabular_project_files.write_csv(
-        os.path.join(
-            NF_DATA_PORTAL_CACHE_DIR, 
-            'tabular_file_paths.tsv'
-        ), 
-        separator='\t'
-    )
-    ## now filter for just files that were able to be downloaded
-    downloaded_files = tabular_project_files.filter(pl.col("file_path").is_not_null()).select(
-        ['project_syn_id','file_path', 'file_syn_id', ]
-    ).rename(
-        {'file_syn_id':'file_id', 'file_path':'file_paths'}
-    )
-    ## now lets group these by project id 
-    project_files = downloaded_files.group_by("project_syn_id", maintain_order=True).agg(
-    [pl.col("file_paths"), pl.col("file_id")]
-    )
-    ## then we can finally get the tabular iterator.
-    tabular_iterator = project_files.iter_rows()
-    
-    ## now lets try to add the tabular datasets
+    ## load the graph
+    # node_set, edge_set = load_graph(
+    #     resource_path="dglink/resources/graph/",
+    #     node_name="nodes.tsv",
+    #     edge_name="edges.tsv",
+    # )
+    ## make a new graph
     node_set = NodeSet(attributes=NODE_ATTRIBUTES)
     edge_set = EdgeSet(attributes=EDGE_ATTRIBUTES)
+    ## get a full list of studies
+    # project_ids = get_all_nf_studies()
+    project_ids = [
+    # "syn2343195",  ## large project
+    "syn5562324",  ## small project
+    "syn27761862",  ## small project
+    # "syn4939874",  ## large project
+    # "syn4939876",  ## locked
+    # "syn4939906",  ## small
+    # "syn4939916",  ## locked
+    # "syn7217928",  ## large
+    # "syn8016635",  ## small
+    # "syn11638893",  ## locked
+    # "syn11817821",  ## large
+    # "syn21641813",  ## locked
+    # "syn21642027",  ## locked
+    # "syn21650493",  ## large
+    # "syn21984813",  ## large
+    # "syn23639889",  ## locked
+    # "syn51133914",  ## locked
+    "syn52740594",  ## large
+    ]
+    ## add projects to KG as nodes
     node_set, edge_set = get_projects(
         project_ids=project_ids,
         node_set=node_set,
@@ -79,13 +51,39 @@ if __name__ == "__main__":
         studies_base_url=NF_STUDIES_BASE_URL,
         write_set=True,
     )
+    # process the tabular data 
+    tabular_iterator = get_tabular_iterator(project_list=project_ids)
     reports = get_tabular_data(
         group_identifiers=project_ids,
         node_set=node_set, 
         edge_set = edge_set,
         tabular_iterator=tabular_iterator
     )
-
-from dglink.portals.nci.gdc.utils import max_call_size
-from dglink.portals.nci.gdc.constants import CASES_ENDPNT
-res = max_call_size(CASES_ENDPNT)
+    ## load in wikis
+    node_set, edge_set = get_wikis(
+        node_set=node_set,
+        edge_set=edge_set,
+        project_ids=project_ids,
+        wiki_fields=WIKI_FIELDS,
+        studies_base_url=NF_STUDIES_BASE_URL,
+        write_set=True,
+    )
+    ## load in publications
+    node_set, edge_set = get_publications(
+        node_set=node_set, edge_set=edge_set, write_set=True
+    )
+    ## load in tools
+    node_set, edge_set = get_tools(
+        node_set=node_set, edge_set=edge_set, project_ids=project_ids, write_set=True
+    )
+    ## load in metadata
+    node_set, edge_set = get_meta(
+        project_ids=project_ids,
+        node_set=node_set,
+        edge_set=edge_set,
+        ground_field=GROUND_FIELDS,
+        ungrounded_field=UNGROUNDED_FIELDS,
+        write_set=True,
+    )
+    ## write the graph
+    write_graph(node_set=node_set, edge_set=edge_set)

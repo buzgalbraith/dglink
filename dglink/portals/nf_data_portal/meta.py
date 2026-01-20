@@ -1,5 +1,5 @@
 from dglink.core.constants import RESOURCE_PATH
-from dglink.portals.nf_data_portal import syn
+from .constants import syn
 from dglink.core.nodes import NodeSet
 from dglink.core.edges import EdgeSet
 from dglink import write_graph
