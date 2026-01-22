@@ -121,6 +121,10 @@ def get_frictionless_package(pth):
                     col_names = load_workbook(pth, read_only=True)
                 else:
                     col_names = pandas.ExcelFile(pth).sheet_names
+                ## This check makes it type safe. I do not think should have any effect remove if does ##
+                if not isinstance(col_names, list):
+                    raise ValueError(f"col_names of type {type(col_names)} unexpected")
+
                 for sheet in col_names:
                     pac.add_resource(
                         Resource(pth, control=formats.ExcelControl(sheet=sheet))
@@ -179,21 +183,24 @@ def frictionless_file_reader(pth: str, max_size_bytes=100 * 1024 * 1024):
         Excel files. All sheets from multi-sheet files are returned separately.
     """
     ## issues with pull
-    pth = Path(pth)
-    file_size = os.path.getsize(pth)
+    fp = Path(pth)
+    file_size = os.path.getsize(fp)
     if file_size > max_size_bytes:
         logger.info("file to large to read")
         return {"all": "to_large"}
     ## load file contents into frictionless package
 
-    pack = get_frictionless_package(pth=pth)
+    pack = get_frictionless_package(pth=fp)
     ## load frictionless package into dictionary of pandas data frames
     df_dict = {}
+    from frictionless.resources import TableResource
+
     for res in pack.resources:
+        ## type check to make things type safe remove is this cause issue
+        if not isinstance(res, TableResource):
+            raise ValueError(f"this should be a table not {type(res)}")  ## change this
         try:
-            df_dict[res.name] = pandas.DataFrame(
-                res.read_rows()
-            )  # stream rows directly
+            df_dict[res.name] = pandas.DataFrame(res.read_rows())
         except:
             return {"all": "unable_to_read"}
     return df_dict
@@ -595,9 +602,8 @@ def ml_schema_match(
             llm_prompt=llm_prompt,
         )
         ## check cases where it is confident that the col represents nothing or unconfined in everything
-        most_likely_entity_type: str = max(llm_resp, key=llm_resp.get)
+        most_likely_entity_type: str = max(llm_resp, key=lambda k: llm_resp[k])
         ## TODO: Decide how want to do cut off for llm schema matching ##
-
         # if llm_resp.get('no_schema_match', 0) > confidence_threshold or max(llm_resp.values()) < confidence_threshold:
         #     schema_map[col] = None
 
