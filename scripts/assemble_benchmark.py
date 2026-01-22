@@ -52,6 +52,7 @@ if __name__ == "__main__":
             dataset_path=fp,
             max_schema_matching_samples=4,
             schema_matching_confidence_threshold=0.5,
+            model="",
         )
         ## add records to df ##
         records.append(
