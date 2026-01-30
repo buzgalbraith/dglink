@@ -15,21 +15,21 @@ driver = GraphDatabase.driver(
 )
 
 
-
 def load_prefix_sets(nodes_df, edges_df):
     """load the prefix sets of nodes and edges for auto-complete"""
-    ## load node prefix set 
+    ## load node prefix set
     node_prefix_set = pygtrie.PrefixSet()
-    ## add curie and name to node prefix set 
-    node_prefix_set = node_prefix_set | pygtrie.PrefixSet(nodes_df["curie:ID"].astype(str))
+    ## add curie and name to node prefix set
     node_prefix_set = node_prefix_set | pygtrie.PrefixSet(
-                    nodes_df["name"].dropna()
+        nodes_df["curie:ID"].astype(str)
     )
-    # load edge prefix set 
+    node_prefix_set = node_prefix_set | pygtrie.PrefixSet(nodes_df["name"].dropna())
+    # load edge prefix set
     edge_prefix_set = pygtrie.PrefixSet()
     edges_df = pandas.read_csv(f"/app/resources/edges.tsv", sep="\t")
     edge_prefix_set = edge_prefix_set | pygtrie.PrefixSet(edges_df[":TYPE"])
     return node_prefix_set, edge_prefix_set
+
 
 def load_mappings(nodes_df, edges_df):
     """get mapping from entity name to curie (and inverse) as well as a list of projects to their disease focus"""
@@ -42,7 +42,9 @@ def load_mappings(nodes_df, edges_df):
     inverse_names_mapping = {names_mapping[key]: key for key in names_mapping}
     ## get project to disease focus
     project_to_disease_focus = {}
-    disease_focus_df = edges_df[edges_df[":TYPE"] == "has_diseaseFocus"].drop_duplicates()
+    disease_focus_df = edges_df[
+        edges_df[":TYPE"] == "has_diseaseFocus"
+    ].drop_duplicates()
     for _, row in disease_focus_df.iterrows():
         if row.iloc[0] not in project_to_disease_focus:
             project_to_disease_focus[row.iloc[0]] = ["", ""]
@@ -51,6 +53,7 @@ def load_mappings(nodes_df, edges_df):
         else:
             project_to_disease_focus[row.iloc[0]][1] = row.iloc[1]
     return names_mapping, inverse_names_mapping, project_to_disease_focus
+
 
 def get_no_context_indra_url(curie):
     get_indra_url = (
@@ -132,6 +135,7 @@ def query_dispatch(
     relation: str = None,
     other_agent: str = None,
     query_type: str = "Subject",
+    sort: None | str = None,
 ):
     agent = agent.split(", ", maxsplit=1)[-1]
     other_agent = other_agent.split(", ", maxsplit=1)[-1]
@@ -139,67 +143,50 @@ def query_dispatch(
         agent = names_mapping[agent]
     if other_agent in names_mapping:
         other_agent = names_mapping[other_agent]
+    records = []
     if agent == "" and relation != "":
-        res = relation_search(relation=relation)
-    elif query_type == "Subject":
-        res = subject_search(agent=agent, relation=relation, other_agent=other_agent)
-    elif query_type == "Object":
-        res = object_search(agent=agent, relation=relation, other_agent=other_agent)
-    else:
-        subjects = subject_search(
-            agent=agent, relation=relation, other_agent=other_agent
-        )
-        objects = object_search(agent=agent, relation=relation, other_agent=other_agent)
-        res = subjects + objects
+        records += relation_search(relation=relation, sort_results=sort)
+    if query_type == "Subject" or query_type == "Subject/Object":
+        records += subject_search(agent=agent, relation=relation, other_agent=other_agent,sort_results=sort)
+    if query_type == "Object" or query_type == "Subject/Object":
+        records += object_search(agent=agent, relation=relation, other_agent=other_agent,sort_results=sort)
+    res = process_records(records)
     return {"message": res}
 
 
-def relation_search(relation: str = None):
+def relation_search(relation: str = None, sort_results:str = ''):
+    if sort_results != '':
+        ## sort by score if looking predicted related project
+        if relation == "predicted_relatedStudies_GL":
+            sort_arg = f"ORDER BY r.jacquard_score {sort_results}"
+        ## otherwise just sort by head node curie
+        else:
+            sort_arg = f'ORDER by p.name, e.name {sort_results}'
+    else:
+        sort_arg = ""
     records, _, _ = driver.execute_query(
         f"""
         MATCH (p)-[r:{relation}]->(e)
         RETURN p.curie as subject, p as subject_whole, r as relation, properties(r) as whole_relation, e.curie as object, e as object_whole
+        {sort_arg}
         """,
         database_="neo4j",
     )
-    res = []
-    for record in records:
-        object_whole = {
-            f"Object {key}": record.data()["object_whole"][key]
-            for key in record.data()["object_whole"]
-        }
-        subject_whole = {
-            f"Subject {key}": record.data()["subject_whole"][key]
-            for key in record.data()["subject_whole"]
-        }
-        relation_whole = {
-            f"Relation {key}": record.data()["whole_relation"][key]
-            for key in record.data()["whole_relation"]
-        }
-        subject_whole, object_whole = add_indra_url_no_context(
-            record=record, object_whole=object_whole, subject_whole=subject_whole
-        )
-        subject_whole, object_whole = add_indra_url_with_context(
-            record=record, object_whole=object_whole, subject_whole=subject_whole
-        )
-        del subject_whole["Subject curie"]
-        del object_whole["Object curie"]
-        res.append(
-            (
-                f"Subject identifier : {record.data()['subject']}",
-                f"subject attributes : {subject_whole}",
-                f"Relation : {record.data()['relation'][1]}",
-                f"Relation attributes : {relation_whole}",
-                f"Object identifier : {record.data()['object']}",
-                f"object attributes : {object_whole}",
-            )
-        )
-    return res
+    return records
 
 
 def subject_search(
-    agent: str = "syn52740594", relation: str = None, other_agent: str = None
+    agent: str = "syn52740594", relation: str = None, other_agent: str = None, sort_results:str = ''
 ):
+    if sort_results != '':
+        ## sort by score if looking predicted related project
+        if relation == "predicted_relatedStudies_GL":
+            sort_arg = f"ORDER BY r.jacquard_score {sort_results}"
+        ## otherwise just sort by head node curie
+        else:
+            sort_arg = f'ORDER by p.name, e.name {sort_results}'
+    else:
+        sort_arg = ""
     relation_query = f"r:{relation}" if relation else "r"
     other_agent_query = f"AND e.curie = '{other_agent}'" if other_agent else ""
     records, _, _ = driver.execute_query(
@@ -207,48 +194,26 @@ def subject_search(
         MATCH (p)-[{relation_query}]->(e)
         WHERE p.curie = '{agent}' {other_agent_query}
         RETURN p.curie as subject, p as subject_whole, r as relation, properties(r) as whole_relation, e.curie as object, e as object_whole
+        {sort_arg}
         """,
         database_="neo4j",
     )
-    res = []
-    for record in records:
-        object_whole = {
-            f"Object {key}": record.data()["object_whole"][key]
-            for key in record.data()["object_whole"]
-        }
-        subject_whole = {
-            f"Subject {key}": record.data()["subject_whole"][key]
-            for key in record.data()["subject_whole"]
-        }
-        relation_whole = {
-            f"Relation {key}": record.data()["whole_relation"][key]
-            for key in record.data()["whole_relation"]
-        }
+    return records
 
-        del subject_whole["Subject curie"]
-        del object_whole["Object curie"]
-        subject_whole, object_whole = add_indra_url_no_context(
-            record=record, object_whole=object_whole, subject_whole=subject_whole
-        )
-        subject_whole, object_whole = add_indra_url_with_context(
-            record=record, object_whole=object_whole, subject_whole=subject_whole
-        )
-        res.append(
-            (
-                f"Subject identifier : {record.data()['subject']}",
-                f"subject attributes : {subject_whole}",
-                f"Relation : {record.data()['relation'][1]}",
-                f"Relation attributes : {relation_whole}",
-                f"Object identifier : {record.data()['object']}",
-                f"object attributes : {object_whole}",
-            )
-        )
-    return res
 
 
 def object_search(
-    agent: str = "syn52740594", relation: str = None, other_agent: str = None
+    agent: str = "syn52740594", relation: str = None, other_agent: str = None, sort_results:str = ''
 ):
+    if sort_results != '':
+        ## sort by score if looking predicted related project
+        if relation == "predicted_relatedStudies_GL":
+            sort_arg = f"ORDER BY r.jacquard_score {sort_results}"
+        ## otherwise just sort by head node curie
+        else:
+            sort_arg = f'ORDER by p.name, e.name {sort_results}'
+    else:
+        sort_arg = ""
     relation_query = f"r:{relation}" if relation else "r"
     other_agent_query = f"AND p.curie = '{other_agent}'" if other_agent else ""
     records, _, _ = driver.execute_query(
@@ -256,9 +221,12 @@ def object_search(
         MATCH (p)-[{relation_query}]->(e)
         WHERE e.curie = '{agent}' {other_agent_query}
         RETURN p.curie as subject, p as subject_whole, r as relation, properties(r) as whole_relation, e.curie as object, e as object_whole
+        {sort_arg}
         """,
         database_="neo4j",
     )
+    return records
+def process_records(records:list)->list:
     res = []
     for record in records:
         object_whole = {
@@ -286,8 +254,8 @@ def object_search(
                 f"Subject identifier : {record.data()['subject']}",
                 f"subject attributes : {subject_whole}",
                 f"Relation : {record.data()['relation'][1]}",
-                f"Object identifier : {record.data()['object']}",
                 f"Relation attributes : {relation_whole}",
+                f"Object identifier : {record.data()['object']}",
                 f"object attributes : {object_whole}",
             )
         )
@@ -313,9 +281,10 @@ def Autocomplete(query: str, completion_type: str, k: int = 100):
     return {"suggestions": res}
 
 
-
 ## read in the graph as data frame.
 nodes_df = pandas.read_csv(f"/app/resources/nodes.tsv", sep="\t")
 edges_df = pandas.read_csv(f"/app/resources/edges.tsv", sep="\t")
 node_prefix_set, edge_prefix_set = load_prefix_sets(nodes_df, edges_df)
-names_mapping, inverse_names_mapping, project_to_disease_focus = load_mappings(nodes_df, edges_df)
+names_mapping, inverse_names_mapping, project_to_disease_focus = load_mappings(
+    nodes_df, edges_df
+)

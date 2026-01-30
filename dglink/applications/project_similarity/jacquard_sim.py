@@ -129,7 +129,11 @@ def jacquard_sim(pid_1, pid_2):
 
 
 if __name__ == "__main__":
-    _, edge_set = load_graph()
+    # _, edge_set = load_graph(resource_path='/Users/buzgalbraith/workspace/dglink/dglink/applications/semantic_search/neo4j/graph')
+    from dglink import EdgeSet
+    from dglink.portals.nf_data_portal import EDGE_ATTRIBUTES
+    edge_set = EdgeSet(attributes=EDGE_ATTRIBUTES)
+    edge_set.load_edge_set(os.path.join(SEMANTIC_SEARCH_RESOURCE_PATH, 'edges.tsv'))
     edge_set = filter_edge_set(
         edge_set=edge_set, filter_for="predicted_relatedStudies_GL"
     )

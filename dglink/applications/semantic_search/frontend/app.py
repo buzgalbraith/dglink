@@ -49,16 +49,19 @@ def index():
         "Relation": "",
         "OtherAgent": "",
         "QueryType": "Subject",  # default selection
+        "SortTable" : "",
     }
     if request.method == "POST":
         form_data["Agent"] = request.form.get("Agent", "")
         form_data["Relation"] = request.form.get("Relation", "")
         form_data["OtherAgent"] = request.form.get("OtherAgent", "")
         form_data["QueryType"] = request.form.get("QueryType", "Subject")
+        form_data["SortTable"] = request.form.get("SortTable", '')
         agent = request.form.get("Agent")
         relation = request.form.get("Relation")
         other_agent = request.form.get("OtherAgent")
         query_type = request.form.get("QueryType")
+        sort = request.form.get("SortTable", '')
         response = requests.get(
             f"{BACKEND_URL}/query",
             params={
@@ -66,6 +69,7 @@ def index():
                 "relation": relation,
                 "other_agent": other_agent,
                 "query_type": query_type,
+                "sort": sort,
             },
         )
         data = response.json()

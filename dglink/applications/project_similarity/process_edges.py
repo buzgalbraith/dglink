@@ -6,15 +6,15 @@ import pandas
 import os
 import json
 from dglink.core.constants import RESOURCE_PATH
-save_dir = "dglink/applications/project_similarity/resources"
+save_dir = "dglink/applications/project_similarity/resources/graph/"
 
 
 if __name__ == "__main__":
     ## make a directory to store the results and copy all existing edges
     os.makedirs(save_dir, exist_ok=True)
     ## read in the edges
-    edges_df = pandas.read_csv(f'{RESOURCE_PATH}/edges.tsv', sep="\t")
-    nodes_df = pandas.read_csv(f'{RESOURCE_PATH}/nodes.tsv', sep="\t")
+    edges_df = pandas.read_csv(f'{save_dir}/edges.tsv', sep="\t")
+    nodes_df = pandas.read_csv(f'{save_dir}/nodes.tsv', sep="\t")
     ## now get a mapping for all names
 
     names_mapping = {}

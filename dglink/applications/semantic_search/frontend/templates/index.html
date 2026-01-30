@@ -23,6 +23,28 @@
         .option-card {
             text-align: center;
         }
+        .collapsible {
+        background-color: #777;
+        color: white;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        }
+
+        .active, .collapsible:hover {
+        background-color: #555;
+        }
+
+        .content {
+        padding: 0 18px;
+        display: none;
+        overflow: hidden;
+        background-color: #f1f1f1;
+        }
     </style>
 </head>
 
@@ -79,7 +101,49 @@ document.addEventListener('DOMContentLoaded', function() {
     setupAutocomplete('Agent');
     setupAutocomplete('Relation');
     setupAutocomplete('OtherAgent');
-});
+    // sorted formatting
+    const sortRadios = document.querySelectorAll('input[name="SortTable"]');
+    let lastChecked = null;
+
+    sortRadios.forEach(radio => {
+                radio.addEventListener('click', function() {
+                    if (this === lastChecked) {
+                        this.checked = false;
+                        lastChecked = null;
+                    } else {
+                        lastChecked = this;
+                    }
+                });
+            });
+    });
+    // Update weight slider values
+    const weightA = document.getElementById('WeightA');
+    const weightB = document.getElementById('WeightB');
+    const weightAValue = document.getElementById('WeightAValue');
+    const weightBValue = document.getElementById('WeightBValue');
+
+    weightA.addEventListener('input', function() {
+        weightAValue.textContent = this.value;
+    });
+
+    weightB.addEventListener('input', function() {
+        weightBValue.textContent = this.value;
+    });
+
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+        content.style.display = "none";
+        } else {
+        content.style.display = "block";
+        }
+    });
+    } 
 </script>
 
 
@@ -111,6 +175,73 @@ document.addEventListener('DOMContentLoaded', function() {
                     value="{{ form_data.OtherAgent }}" autocomplete="off">
             </div>
 
+
+            <h5 class="mb-2">Sort results:</h5>
+            <ul class="list-unstyled ms-3">
+                <li class="mb-2">
+                    <input class="form-check-input me-2" 
+                        type="radio" 
+                        id="ASCENDING" 
+                        name="SortTable" 
+                        value="ASCENDING"
+                        {% if form_data.SortTable == "ASCENDING" %}checked{% endif %}>
+                    <label class="form-check-label" for="ASCENDING">Ascending order</label>
+                </li>
+                <li class="mb-2">
+                    <input class="form-check-input me-2" 
+                        type="radio" 
+                        id="DESCENDING" 
+                        name="SortTable" 
+                        value="DESCENDING"
+                        {% if form_data.SortTable == "DESCENDING" %}checked{% endif %}>
+                    <label class="form-check-label" for="DESCENDING">Descending order</label>
+                </li>
+            </ul>
+            <!-- weights-->
+            <div class="mb-4">
+                <h5 class="mb-2">
+                    <a class="text-decoration-none" data-bs-toggle="collapse" href="#weightsCollapse" role="button" aria-expanded="false" aria-controls="weightsCollapse">
+                        Weights: <small class="text-muted">(click to expand)</small>
+                    </a>
+                </h5>
+                <div class="collapse" id="weightsCollapse">
+                    <div class="card card-body">
+                        <div class="mb-3">
+                            <label for="WeightA" class="form-label">A</label>
+                            <input type="range" 
+                                class="form-range" 
+                                id="WeightA" 
+                                name="WeightA" 
+                                min="0" 
+                                max="1" 
+                                step="0.01" 
+                                value="{{ form_data.WeightA if form_data.WeightA else '0.25' }}">
+                            <div class="text-center mt-1">
+                                <small class="text-muted">Current value: <span id="WeightAValue">{{ form_data.WeightA if form_data.WeightA else '0.25' }}</span></small>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="WeightB" class="form-label">B</label>
+                            <input type="range" 
+                                class="form-range" 
+                                id="WeightB" 
+                                name="WeightB" 
+                                min="0" 
+                                max="1" 
+                                step="0.01" 
+                                value="{{ form_data.WeightB if form_data.WeightB else '0.75' }}">
+                            <div class="text-center mt-1">
+                                <small class="text-muted">Current value: <span id="WeightBValue">{{ form_data.WeightB if form_data.WeightB else '0.75' }}</span></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <p>A Collapsible:</p>
+            <button type="button" class="collapsible">Open Collapsible</button>
+            <div class="content">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
             <h5 class="mb-3">Agent Role:</h5>
 
             <div class="row text-center mb-4">
@@ -219,3 +350,5 @@ document.addEventListener('DOMContentLoaded', function() {
     </script>
 </body>
 </html>
+
+
