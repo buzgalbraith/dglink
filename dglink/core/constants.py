@@ -56,18 +56,3 @@ TABULAR_ENTITY_TYPES_LLM = [
     "protein_family_complex",
     "human_gene_other",
 ]
-
-class evaluation_response(BaseModel):
-    human_rna:float
-    small_molecule:float
-    anatomical_region:float
-    cellular_location:float
-    human_gene_protein:float
-    experimental_factor:float
-    biological_process:float
-    organism:float
-    nonhuman_gene_protein:float
-    disease:float
-    protein_family_complex:float
-    human_gene_other:float
-    no_schema_match:float

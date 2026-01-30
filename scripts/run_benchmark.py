@@ -3,15 +3,13 @@ Goal is to evaluate a benchmarking dataset generated from `scripts/assemble_benc
 """
 
 import polars as pl
-import pandas as pd
 from dglink.core.constants import REPORT_PATH
 from dglink.core.tabular_data import (
     load_file,
-    quality_check_groundings,
     apply_ground,
-    get_llm_schema_matching_prompt,
-    call_llm_for_schema_matching,
 )
+from dglink.core.ColumnSelectors import LLMSelector, heuristicSelector
+from dglink.core.TabularDataset import TabularDataset
 import os
 from pathlib import Path
 from tqdm import tqdm
@@ -22,52 +20,8 @@ logger = logging.getLogger(__name__)
 benchmark_path = os.path.join(REPORT_PATH, "benchmarking_columns.tsv")
 
 
-## run schema matching on one col and return true or false TODO: clean up maybe make a class ##
-def heuristic_check(
-    df: pd.DataFrame,
-    target_col: str,
-    table_path: str,
-) -> bool:
-    base_cols = df.columns.to_list()
-    raw_groundings = df.apply(apply_ground, axis=1)
-    _, entity_cols = quality_check_groundings(
-        qc_method="heuristic",
-        grounded_dataset=raw_groundings,
-        original_dataset_cols=base_cols,
-        dataset_path=table_path,
-        max_schema_matching_samples=4,
-        schema_matching_confidence_threshold=0.5,
-        model="",
-    )
-    return target_col in entity_cols
-
-
-def llm_check(df: pd.DataFrame, target_col: str, table_path: str, model_name: str):
-    confidence_threshold = 0.5
-    raw_groundings = df.apply(apply_ground, axis=1)
-    all_original_cols = df.columns.to_list()
-    llm_prompt = get_llm_schema_matching_prompt(
-        entity_df=raw_groundings,
-        col=target_col,
-        file_name=Path(table_path).name,  ## pass just the name
-        max_samples=5,
-        table_cols=all_original_cols,
-    )
-    llm_resp = call_llm_for_schema_matching(llm_prompt=llm_prompt, model=model_name)
-    most_likely_entity_type: str = max(llm_resp, key=lambda k: llm_resp[k])
-    if (
-        llm_resp.get(most_likely_entity_type, 0) < confidence_threshold
-        or most_likely_entity_type == "no_schema_match"
-    ):
-        return False
-    else:
-        return True
-
-
 def run_benchmark(
     benchmark: pl.DataFrame,
-    heuristic: bool = True,
-    llm_models: list[str] = [],
     overwrite: bool = False,
     load: bool = True,
 ) -> pl.DataFrame:
@@ -105,20 +59,18 @@ def run_benchmark(
             sheet_idx += 1
         df = dfs[sheet_idx]
         record["column"] = column
-        if heuristic:
-            record["heuristic_vote"] = heuristic_check(
-                df=df, target_col=column, table_path=fp
-            )
-        for llm_model in tqdm(
-            llm_models,
-            total=len(llm_models),
-            desc="checking schema matching with different models",
-            unit="model",
-        ):
-            record[f"{llm_model}_vote"] = llm_check(
-                df=df, target_col=column, table_path=fp, model_name=llm_model
-            )
-        record["label"] = benchmark_row.get("label")
+        table = TabularDataset(dataset_path=Path(fp), sheet_name=target_sheet, table=df)
+        ## try to ground everything in the dataframe
+        table.table = table.table.apply(apply_ground, axis=1)
+        selector = heuristicSelector()
+        record["heuristic_vote"] = selector.check_column(table=table, col=column, verbose=True)
+        selector = LLMSelector()
+        record["llm_vote"] = selector.check_column(table=table, col=column, verbose=True)
+        if record["heuristic_vote"]:
+            record["hiercahal_vote"] = record["llm_vote"]
+        else:
+            record["hiercahal_vote"] = False
+        record["is_entity_col"] = benchmark_row.get("is_entity_col")
         record["sheet"] = target_sheet
         record["group_identifier"] = group_id
         record["file_path"] = fp
@@ -134,21 +86,21 @@ def run_benchmark(
 ## metrics for benchmarking
 def accuracy(col_name: str, evaluated_df: pl.DataFrame) -> float:
     """Checks number of correct predictions for a col in the write data frame"""
-    correct_pred = evaluated_df.filter(pl.col(col_name).eq(pl.col("label")))
+    correct_pred = evaluated_df.filter(pl.col(col_name).eq(pl.col("is_entity_col")))
     return len(correct_pred) / len(evaluated_df)
 
 
 def precision(col_name: str, evaluated_df: pl.DataFrame) -> float:
     """Checks precision for a col in the write data frame"""
-    tp = len(evaluated_df.filter(pl.col(col_name) & pl.col("label")))
-    fp = len(evaluated_df.filter(pl.col(col_name) & ~pl.col("label")))
+    tp = len(evaluated_df.filter(pl.col(col_name) & pl.col("is_entity_col")))
+    fp = len(evaluated_df.filter(pl.col(col_name) & ~pl.col("is_entity_col")))
     return tp / (tp + fp)
 
 
 def recall(col_name: str, evaluated_df: pl.DataFrame) -> float:
     """Checks recall for a col in the write data frame"""
-    tp = len(evaluated_df.filter(pl.col(col_name) & pl.col("label")))
-    fn = len(evaluated_df.filter(~pl.col(col_name) & pl.col("label")))
+    tp = len(evaluated_df.filter(pl.col(col_name) & pl.col("is_entity_col")))
+    fn = len(evaluated_df.filter(~pl.col(col_name) & pl.col("is_entity_col")))
     return tp / (tp + fn)
 
 
@@ -194,6 +146,7 @@ def get_benchmark_summary(
     """Gets summary stats on evaluated benchmark df"""
     method_cols = evaluated_benchmark_df.select(r"^.*(_vote)$").columns
     methods_summary = []
+    evaluated_benchmark_df = evaluated_benchmark_df.cast({pl.Int64: pl.Boolean})
     for method in method_cols:
         methods_summary.append(
             evaluate_col(col_name=method, evaluated_df=evaluated_benchmark_df)
@@ -221,14 +174,13 @@ def get_benchmark_summary(
 
 if __name__ == "__main__":
     llm_models = ["gpt-4o", "gpt-4o-mini", "gpt-5", "gpt-5-mini"]
+    llm_models = []
     benchmark = pl.read_csv(benchmark_path, separator="\t")
     logger.info("Running benchmark....")
     benchmarked_df = run_benchmark(
         benchmark=benchmark,
-        heuristic=True,
-        llm_models=llm_models,
-        overwrite=False,
-        load=True,
+        overwrite=True,
+        load=False,
     )
     logger.info("Evaluating benchmark....")
     summary_df = get_benchmark_summary(

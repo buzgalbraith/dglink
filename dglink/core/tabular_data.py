@@ -8,15 +8,14 @@ Uses Gilda for entity recognition and INDRA for ontology typing.
 
 from .constants import (
     REPORT_PATH,
-    TABULAR_ENTITY_TYPES_LLM,
-    open_ai_client,
-    evaluation_response,
 )
 from .utils import write_graph
 from .nodes import NodeSet
 from .edges import EdgeSet
 import os
 from frictionless import Schema, Resource, formats, Package
+from .ColumnSelectors import heuristicSelector, LLMSelector
+from .TabularDataset import TabularDataset
 import pandas
 from pathlib import Path
 from functools import lru_cache
@@ -428,238 +427,24 @@ def load_file(group_identifier: str, fp: str):
     return dfs, read_states
 
 
-def get_llm_schema_matching_prompt(
-    entity_df: pandas.DataFrame,
-    col: str,
-    file_name: str,
-    table_cols: list,
-    max_samples: int = 5,
-) -> tuple[str, str]:
-    table_len = len(entity_df)
-    grounded_count = entity_df[f"{col}_name"].count()
-    rows_with_values = max(
-        entity_df[f"{col}_raw_text"].count(), 1
-    )  ## account for cases where there are no rows with values.
-    ## skip columns with no groundings
-    # if grounded_count == 0:
-    #     return '', ''
-    ## skip cols where less than 10% of rows that had entities were grounded.
-    if (grounded_count / max(rows_with_values, 1)) < 0.1:
-        return "", ""
-    ungrounded_count = table_len - entity_df[f"{col}_name"].count()
-    records = []
-    identified_entities = (
-        entity_df[f"{col}_type"].dropna().value_counts().sort_index().to_dict()
-    )
-    unique_identified_entities = (
-        entity_df.dropna(subset=f"{col}_type")
-        .groupby(f"{col}_type")[f"{col}_raw_text"]
-        .nunique()
-        .sort_index()
-        .to_dict()
-    )
-    for key in TABULAR_ENTITY_TYPES_LLM:
-        if key not in identified_entities:
-            identified_entities[key] = 0
-            unique_identified_entities[key] = 0
-    sample_df = entity_df[[f"{col}_raw_text", f"{col}_type", f"{col}_name"]].dropna(
-        subset=f"{col}_raw_text"
-    )
-    sample_size = min(max_samples, len(sample_df))
-    for _, row in sample_df.sample(n=sample_size).iterrows():
-        row_type = (
-            "Unable to ground"
-            if pandas.isna(row[f"{col}_type"])
-            else row[f"{col}_type"]
-        )
-        row_name = (
-            "Unable to ground"
-            if pandas.isna(row[f"{col}_name"])
-            else row[f"{col}_name"]
-        )
-        records.append(
-            {
-                "raw_text": row[f"{col}_raw_text"],
-                "grounded_entity_type": row_type,
-                "grounded_entity_name": row_name,
-            }
-        )
-    model_prompt = f"""
-    Table information:
-    - File name: {file_name}
-    - Table columns: {table_cols}
-    - Total rows: {table_len}
-
-    Column information:
-    - Column Name: {col}
-    - Number of missing rows in column: {table_len - rows_with_values}
-    - Number of rows that were unable to be grounded in column: {ungrounded_count}
-    - Column Distribution of rows by predicted entity type: {json.dumps(identified_entities, indent=6)}
-    - Column Distribution of unique rows by predicted entity type: {json.dumps(unique_identified_entities, indent=6)}
-    - Column Sample record: {json.dumps(records, indent=2)}
-    """
-
-    # model_context = f"Given the following table and column information, predict the Probability (so that all values some to 1) that the column represents entities of each of the following types {TABULAR_ENTITY_TYPES_LLM} as well as no entity type in the schema"
-    content_list = "\n    - ".join(TABULAR_ENTITY_TYPES_LLM + ["no_schema_match"])
-    model_context = f"""
-    You must output a probability distribution over the following entity types.
-    Each probability must be a float between 0 and 1.
-    All probabilities must sum to 1.
-
-    Valid entity types (output field names, must match exactly):
-    - {content_list}
-
-    The probabilities should reflect the semantic meaning of the column as a whole,
-    not individual rows.
-
-    Note: Rows that were unable to be grounded refers to cases where a unique ontology identifier could not be assigned,
-    but the raw values may still be valid entities
-    
-    Note: Use no_schema_match when the column does not predominantly contain biological entity names
-    or when the column semantics are unclear or non-entity (e.g., free text, measurements, IDs).
-    """
-    return model_context, model_prompt
 
 
-def call_llm_for_schema_matching(
-    llm_prompt: tuple[str, str], model: str
-) -> dict[str, float]:
-    call_context, call_prompt = llm_prompt
-    if call_prompt == "":
-        return {
-            entity_type: 0
-            for entity_type in TABULAR_ENTITY_TYPES_LLM + ["no_schema_match"]
-        }
-    try:
-        response = open_ai_client.responses.parse(
-            model=model,
-            input=[
-                {
-                    "role": "system",
-                    "content": call_context,
-                },
-                {"role": "user", "content": call_prompt},
-            ],
-            text_format=evaluation_response,
-        )
-    except BadRequestError:
-        raise ValueError(
-            f"Model {model} invalid perhaps try gpt-4o, gpt-4o-mini, gpt-5 or gpt-5-mini"
-        )
 
-    raw_probs = response.output_parsed
-    if raw_probs:
-        raw_probs = raw_probs.model_dump()
-    else:
-        raw_probs = dict()
-    values = np.array(list(raw_probs.values()))
-    normalized_probs = values / values.sum()
-    out = dict(zip(raw_probs.keys(), normalized_probs))
-    return out
-
-
-def process_schema_matching(
-    matching_cols: dict, entity_df: pandas.DataFrame, base_cols: list
-) -> tuple[pandas.DataFrame, list]:
-    """
-    use the schema match to:
-        1. drop cols if not matched
-        2. return only values for that col which were grounded to the matched schema type
-    """
-    for col in matching_cols:
-        entity_cols = [
-            f"{col}_entity",
-            f"{col}_type",
-            f"{col}_name",
-            f"{col}_raw_text",
-            f"{col}_column_name",
-            f"{col}_iri",
-        ]
-        ## if not matched to schema drop
-        if matching_cols[col] is None:
-            base_cols.remove(col)
-        ## otherwise set entities found with any other data type to na
-        else:
-            type_col = f"{col}_type"
-            index_mask = ~(
-                entity_df[type_col].notna()
-                & (entity_df[type_col].isin(matching_cols[col]))
-            )
-            entity_df.loc[index_mask, entity_cols] = pandas.NA
-    return entity_df, base_cols
-
-
-def llm_schema_match(
-    unmatched_df: pandas.DataFrame,
-    all_original_cols: list,
-    table_path: str,
-    max_samples: int,
-    confidence_threshold: float,
-    model: str,
-) -> tuple[pandas.DataFrame, list]:
-    schema_map = {}
-    matching_cols = []
-    for col in all_original_cols:
-        llm_prompt = get_llm_schema_matching_prompt(
-            entity_df=unmatched_df,
-            col=col,
-            file_name=Path(table_path).name,  ## pass just the name
-            max_samples=max_samples,
-            table_cols=all_original_cols,
-        )
-        llm_resp = call_llm_for_schema_matching(llm_prompt=llm_prompt, model=model)
-        ## check cases where it is confident that the col represents nothing or unconfined in everything
-        most_likely_entity_type: str = max(llm_resp, key=lambda k: llm_resp[k])
-        ## TODO: Decide how want to do cut off for llm schema matching ##
-        # if llm_resp.get('no_schema_match', 0) > confidence_threshold or max(llm_resp.values()) < confidence_threshold:
-        #     schema_map[col] = None
-
-        if (
-            llm_resp.get(most_likely_entity_type, 0) < confidence_threshold
-            or most_likely_entity_type == "no_schema_match"
-        ):
-            schema_map[col] = None
-        else:
-            schema_map[col] = [
-                key
-                for key in TABULAR_ENTITY_TYPES_LLM
-                if llm_resp.get(key, 0) > confidence_threshold
-            ]
-            matching_cols.append(col)
-    validated_dataset, matching_cols = process_schema_matching(
-        matching_cols=schema_map, entity_df=unmatched_df, base_cols=all_original_cols
-    )
-    return validated_dataset, matching_cols
 
 
 def quality_check_groundings(
     qc_method: str,
-    grounded_dataset: pandas.DataFrame,
-    original_dataset_cols: list,
-    dataset_path: str,
+    table : TabularDataset, 
     max_schema_matching_samples: int,
     schema_matching_confidence_threshold: float,
     model: str,
-) -> tuple[pandas.DataFrame, list]:
-    matched_dataset, retained_columns = (
-        grounded_dataset,
-        original_dataset_cols,
-    )
+) -> None:
     if qc_method == "heuristic":
-        matched_dataset, retained_columns = heuristic_quality_check(
-            grounded_dataset, original_dataset_cols
-        )
+        selector = heuristicSelector()
+        selector.execute(table, verbose=True)
     elif qc_method == "llm_schema_match":
-        matched_dataset, retained_columns = llm_schema_match(
-            grounded_dataset,
-            original_dataset_cols,
-            dataset_path,
-            max_samples=max_schema_matching_samples,
-            confidence_threshold=schema_matching_confidence_threshold,
-            model=model,
-        )
-    return matched_dataset, retained_columns
-
+        selector = LLMSelector(open_AI_model=model, target_records_for_call=max_schema_matching_samples, confidence_threshold=schema_matching_confidence_threshold)
+        selector.execute(table, verbose=True)
 
 def get_tabular_data(
     group_identifiers: list,
@@ -689,28 +474,26 @@ def get_tabular_data(
             for df, read_state in zip(dfs, read_states):
                 files_read.append(read_state)
                 if df is not None:
-                    base_cols = df.columns.to_list()
+                    tabular_dataset = TabularDataset(dataset_path=Path(fp), sheet_name=read_state.get("sheet"), table=df)
                     ## try to ground everything in the dataframe
-                    raw_groundings = df.apply(apply_ground, axis=1)
+                    tabular_dataset.table = tabular_dataset.table.apply(apply_ground, axis=1)
                     ## quality check groundings and only select those that pass ##
-                    filtered_df, base_cols = quality_check_groundings(
+                    quality_check_groundings(
                         qc_method=quality_check_method,
-                        grounded_dataset=raw_groundings,
-                        original_dataset_cols=base_cols,
-                        dataset_path=fp,
+                        table=tabular_dataset,
                         max_schema_matching_samples=max_quality_check_samples,
                         schema_matching_confidence_threshold=quality_check_confidence_threshold,
                         model=model,
                     )
                     node_set, edge_set = extract_df_graph(
-                        filtered_df,
-                        base_cols,
+                        tabular_dataset.table,
+                        tabular_dataset.entity_columns,
                         group_identifier,
                         file_id,
                         node_set=node_set,
                         edge_set=edge_set,
                     )
-                    for col in base_cols:
+                    for col in tabular_dataset.entity_columns:
                         cols_read.append(
                             {
                                 "group_identifier": group_identifier,
