@@ -5,20 +5,20 @@ services:
     ports:
       - "7687:7687"
       - "7474:7474"
-  backend:
+  semantic_search_backend:
     build:
       context: ./          # directory used as build context
       dockerfile: ./backend/Dockerfile 
-    container_name: semantic_search_fastapi_backend
+    container_name: semantic_search_standalone_fastapi_backend
     ports:
-      - "8000:8000"
-  frontend:
+      - "8001:8001"
+  semantic_search_frontend:
     build: ./frontend
-    container_name: semantic_search_flask_frontend
+    container_name: semantic_search_standalone_flask_frontend
     ports:
-      - "5000:5000"
+      - "5001:5001"
     depends_on:
-      - backend
+      - semantic_search_backend
       - neo-4j
     environment:
       NEO4J_URI: "bolt://neo4j:7687"

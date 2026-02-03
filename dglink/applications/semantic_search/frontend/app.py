@@ -4,8 +4,8 @@ import ast
 
 app = Flask(__name__)
 
-BACKEND_URL = "http://backend:8000/"
-
+# BACKEND_URL = "http://backend:8001/"
+BACKEND_URL = "http://semantic_search_backend:8001/"
 
 def process_results(raw_results):
     processed = []
@@ -91,4 +91,4 @@ def autocomplete():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=True)

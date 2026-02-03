@@ -9,7 +9,6 @@ from dglink import load_graph
 from dglink.core.utils import filter_edge_set
 from dglink.core.constants import SEMANTIC_SEARCH_RESOURCE_PATH
 
-
 RESOURCE_DIR = "dglink/applications/project_similarity/resources"
 
 
