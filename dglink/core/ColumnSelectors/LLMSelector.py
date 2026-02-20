@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class LLMSelector(columnSelector):
     name = 'LLM_selector'
-    def __init__(self, open_AI_model:str= "gpt-5-mini", target_records_for_call:int = 10, confidence_threshold:float = 0.5, min_ground_percentage:float=0.1) -> None:
+    def __init__(self, open_AI_model:str= "gpt-5-mini", target_records_for_call:int = 10, confidence_threshold:float = 0.5, min_ground_percentage:float=0.1, )-> None:
         super().__init__()
         self.open_AI_model = open_AI_model
         self.target_records_for_call = target_records_for_call
@@ -65,7 +65,7 @@ class LLMSelector(columnSelector):
         if verbose:
             logger.info(f'Has {len(table.original_columns)} which are {table.original_columns}')
             logger.info(f'Selected {len(table.entity_columns)} which are {table.entity_columns}')
-            logger.info(f'-'*50)
+            logger.info('-'*50)
     def process_response(self,
         matching_cols: dict, table:TabularDataset
     ):
@@ -156,11 +156,12 @@ class LLMSelector(columnSelector):
             if key not in identified_entities:
                 identified_entities[key] = 0
                 unique_identified_entities[key] = 0
-        sample_df = table.table[[f"{col}_raw_text", f"{col}_type", f"{col}_name"]].dropna(
-            subset=f"{col}_raw_text"
-        )
-        sample_size = min(self.target_records_for_call, len(sample_df))
-        for _, row in sample_df.sample(n=sample_size).iterrows():
+        logger.info("Getting priority sample")
+        priority_sample = table.get_priority_sample(col=col, target_size=self.target_records_for_call)
+        logger.info(f"Got priority sample of length {len(priority_sample)}")
+        for val in priority_sample:
+            idx = table.table[table.table[f"{col}_name"] == val].index[0]
+            row = table.table.iloc[idx]
             row_type = (
                 "Unable to ground"
                 if pandas.isna(row[f"{col}_type"])
