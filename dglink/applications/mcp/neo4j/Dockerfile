@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 # Needed to forego timezone configuration
 ENV DEBIAN_FRONTEND=noninteractive

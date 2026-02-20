@@ -24,23 +24,23 @@ if __name__ == "__main__":
     ## get a full list of studies
     # project_ids = get_all_nf_studies()
     project_ids = [
-    # "syn2343195",  ## large project
+    "syn2343195",  ## large project
     "syn5562324",  ## small project
     "syn27761862",  ## small project
-    # "syn4939874",  ## large project
-    # "syn4939876",  ## locked
-    # "syn4939906",  ## small
-    # "syn4939916",  ## locked
-    # "syn7217928",  ## large
-    # "syn8016635",  ## small
-    # "syn11638893",  ## locked
-    # "syn11817821",  ## large
-    # "syn21641813",  ## locked
-    # "syn21642027",  ## locked
-    # "syn21650493",  ## large
-    # "syn21984813",  ## large
-    # "syn23639889",  ## locked
-    # "syn51133914",  ## locked
+    "syn4939874",  ## large project
+    "syn4939876",  ## locked
+    "syn4939906",  ## small
+    "syn4939916",  ## locked
+    "syn7217928",  ## large
+    "syn8016635",  ## small
+    "syn11638893",  ## locked
+    "syn11817821",  ## large
+    "syn21641813",  ## locked
+    "syn21642027",  ## locked
+    "syn21650493",  ## large
+    "syn21984813",  ## large
+    "syn23639889",  ## locked
+    "syn51133914",  ## locked
     "syn52740594",  ## large
     ]
     ## add projects to KG as nodes

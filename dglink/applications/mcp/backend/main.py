@@ -47,7 +47,7 @@ async def initialize_openai():
         openai_mcp = MCPServerStdio(
             params={
                 "command": "uvx",
-                "args": ["mcp-neo4j-cypher@latest"],
+                "args": ["--with", "fastmcp<2.3.0" ,"mcp-neo4j-cypher@latest"],
                 "env": {
                     "NEO4J_URI": NEO4J_URI,
                     "NEO4J_USERNAME": NEO4J_USER,
@@ -93,7 +93,7 @@ async def initialize_anthropic():
         # Set up MCP connection for Anthropic
         server_params = StdioServerParameters(
             command="uvx",
-            args=["mcp-neo4j-cypher@latest"],
+            args=['--with' ,'fastmcp<2.3.0', "mcp-neo4j-cypher@latest"],
             env={
                 "NEO4J_URI": NEO4J_URI,
                 "NEO4J_USERNAME": NEO4J_USER,
