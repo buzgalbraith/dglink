@@ -3,7 +3,7 @@ this is a complete restructure of the assemble NF KG Method
 """
 
 from dglink import NodeSet, EdgeSet, get_projects, get_tabular_data, write_graph
-from dglink.portals.nf_data_portal import get_tabular_iterator, get_tabular_iterator, get_wikis, get_publications, get_tools, get_meta, get_all_nf_studies
+from dglink.portals.nf_data_portal import get_tabular_iterator, get_wikis, get_publications, get_tools, get_meta
 from dglink.portals.nf_data_portal.constants import NODE_ATTRIBUTES, EDGE_ATTRIBUTES, NF_STUDIES_BASE_URL, WIKI_FIELDS, UNGROUNDED_FIELDS, GROUND_FIELDS
 
 
