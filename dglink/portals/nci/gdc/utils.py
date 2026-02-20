@@ -13,7 +13,9 @@ from typing import Tuple, Iterator
 import pandas as pd
 
 
-def connect_cases_to_files(hits, file_to_cases: pl.DataFrame = None) -> pl.DataFrame:
+def connect_cases_to_files(
+    hits, file_to_cases: pl.DataFrame | None = None
+) -> pl.DataFrame:
     """
     connects all files from a case API call to their associated case id. Updates the data frame.
     """
@@ -31,16 +33,15 @@ def connect_cases_to_files(hits, file_to_cases: pl.DataFrame = None) -> pl.DataF
                     field, f"file_{field}_missing"
                 )
             records.append(file_record)
-    if len(records) == 0:
-        return file_to_cases
     cases_df = pl.from_dicts(records)
     if file_to_cases is None:
         return cases_df
+    if len(records) == 0:
+        return file_to_cases
     ## stack files and ensure uniqueness
     return file_to_cases.vstack(cases_df).unique()
 
 
-## TODO: Re-examine
 def get_sample_metadata(hits: list, node_set: NodeSet):
     """
     Manually pulls all metadata field for a sample from the cases end point. Could be better done with existing GDC graph.
@@ -66,6 +67,7 @@ def get_sample_metadata(hits: list, node_set: NodeSet):
             )
 
 
+# TODO: Expand logic
 def process_case_hierarchy(hits, node_set, edge_set):
     """extracts hierarchy from case and adds to graph"""
     for hit in hits:
@@ -86,8 +88,10 @@ def process_case_hierarchy(hits, node_set, edge_set):
             elif key.endswith("_ids"):
                 vals = hit.get(key, f"{key}_missing")
                 label = key.removesuffix("_ids")
+            ## ignore other cases
             else:
                 vals = []
+                label = ""
             ## add identified nodes & edges to graph
             for val in vals:
                 node_set.update_nodes(
@@ -115,14 +119,14 @@ def max_call_size(end_point):
 def get_case_hierarchy(
     node_set: NodeSet,
     edge_set: EdgeSet,
-    case_list: list = None,
-    number_cases: int = None,
+    case_list: list | None = None,
+    number_cases_arg: int | None = None,
     batch_length: int = 500,
 ):
     """connect cases to all down stream objects. Saves files as a tsv in `dglink/resources/reports/cases_to_files.tsv` , and connects all meta objects (samples, studies, projects, etc.) to case in the graph."""
     ## Filter for a specific list of cases
     if case_list is not None:
-        number_cases = len(case_list)
+        number_cases: int = len(case_list)
         filters = {
             "op": "and",
             "content": [
@@ -131,9 +135,9 @@ def get_case_hierarchy(
         }
     ## if no set of cases specified either process the first `number_cases` cases or process all.
     else:
-        number_cases = number_cases or max_call_size(CASES_ENDPNT)
+        number_cases = number_cases_arg or max_call_size(CASES_ENDPNT)
         filters = {}
-    params = {
+    params: dict[str, str | int] = {
         "filters": json.dumps(filters),
         "format": "JSON",
         "expand": "files,samples",  ## get associated files and expand samples
@@ -158,7 +162,8 @@ def get_case_hierarchy(
             write_graph(node_set, edge_set)
     write_graph(node_set, edge_set)
     os.makedirs(GDC_CACHE_DIR, exist_ok=True)
-    case_to_files.write_csv(cases_to_files_path, separator="\t")
+    if isinstance(case_to_files, pl.DataFrame):
+        case_to_files.write_csv(cases_to_files_path, separator="\t")
 
 
 def download_tabular_files(case_list: list):
@@ -243,51 +248,3 @@ def get_tabular_iterator(case_list: list) -> Iterator:
         [pl.col("file_paths"), pl.col("file_id")]
     )
     return case_files.iter_rows()
-
-    # for case in case_files.iter_rows(named=True):
-    #     case_id = case.get('case_id', 'case_id_missing')
-    #     dataset_paths = case.get('file_paths', [])
-    #     for dataset_path in dataset_paths:
-    #         print(dataset_path)
-    #         print(
-    #             os.path.exists(
-    #                 dataset_path
-    #             )
-    #         )
-
-    # print(
-    #     x.get('case_id'),
-    #     print(len(x.get('file_id'))),
-    #     print(len(x.get('file_file_name'))),
-    # )
-    # files_read = []
-    # cols_read = []
-    # for uuid, f_name, case_id in project_files:
-    #     dfs, read_states = load_file(uuid, f_name, case_id)
-    #     for df, read_state in zip(dfs, read_states):
-    #         files_read.append(read_state)
-    #         if df is not None:
-    #             base_cols = df.columns
-    #             ## ground data frame
-    #             entity_df = df.apply(apply_ground, axis=1)
-    #             filtered_df, base_cols = filter_df(entity_df, base_cols)
-    #             node_set, edge_set = extract_df_graph(
-    #                 filtered_df,
-    #                 base_cols,
-    #                 case_id,
-    #                 read_state["file_id"],
-    #                 node_set=node_set,
-    #                 edge_set=edge_set,
-    #             )
-    #             for col in base_cols:
-    #                 cols_read.append(
-    #                     {
-    #                         "case_id": case_id,
-    #                         "file_id": read_state["file_id"],
-    #                         "file_path": read_state["file_path"],
-    #                         "sheet": read_state["sheet"],
-    #                         "col": col,
-    #                     }
-    #                 )
-    # write_graph(node_set, edge_set)
-    # return [files_read, cols_read]

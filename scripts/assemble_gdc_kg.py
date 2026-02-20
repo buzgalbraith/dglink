@@ -37,7 +37,7 @@ if __name__ == "__main__":
         node_set=node_set,
         edge_set=edge_set,
         tabular_iterator=case_to_files,
-        quality_check_method='ml_schema_match'
+        quality_check_method="ml_schema_match",
         # quality_check_method='heuristic'
     )
     write_graph(node_set=node_set, edge_set=edge_set)

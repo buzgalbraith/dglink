@@ -50,8 +50,9 @@ FILE_FIELDS = [
     "file_name",
     "file_size",
 ]
+home_dir: str = os.getenv("HOME") or "/"
 GDC_CACHE_DIR = os.path.join(
-    os.getenv("HOME"),
+    home_dir,
     ".data",
     "gdc",
 )
