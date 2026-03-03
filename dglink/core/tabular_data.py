@@ -29,6 +29,8 @@ import json
 import numpy as np
 from openai import BadRequestError
 
+EXCLUSION_LIST = ["yes", "na", "large", "std", "dead"]
+
 
 logger = logging.getLogger(__name__)
 
@@ -229,14 +231,17 @@ def cached_annotate(val, col):
         ans = gilda.annotate(str(val))
         if ans:
             nsid = ans[0].matches[0].term
-            return (
-                normalize_curie(f"{nsid.db}:{nsid.id}"),
-                bio_ontology.get_type(nsid.db, nsid.id),
-                nsid.entry_name,
-                val,
-                col,
-                get_bioregistry_iri(nsid.db, nsid.id),
-            )
+            if nsid.norm_text in EXCLUSION_LIST:
+                return pandas.NA, pandas.NA, pandas.NA, val, col, pandas.NA
+            else:
+                return (
+                    normalize_curie(f"{nsid.db}:{nsid.id}"),
+                    bio_ontology.get_type(nsid.db, nsid.id),
+                    nsid.entry_name,
+                    val,
+                    col,
+                    get_bioregistry_iri(nsid.db, nsid.id),
+                )
         else:
             return pandas.NA, pandas.NA, pandas.NA, val, col, pandas.NA
     return pandas.NA, pandas.NA, pandas.NA, pandas.NA, pandas.NA, pandas.NA
@@ -427,14 +432,9 @@ def load_file(group_identifier: str, fp: str):
     return dfs, read_states
 
 
-
-
-
-
-
 def quality_check_groundings(
     qc_method: str,
-    table : TabularDataset, 
+    table: TabularDataset,
     max_schema_matching_samples: int,
     schema_matching_confidence_threshold: float,
     model: str,
@@ -443,8 +443,13 @@ def quality_check_groundings(
         selector = heuristicSelector()
         selector.execute(table, verbose=True)
     elif qc_method == "llm_schema_match":
-        selector = LLMSelector(open_AI_model=model, target_records_for_call=max_schema_matching_samples, confidence_threshold=schema_matching_confidence_threshold)
+        selector = LLMSelector(
+            open_AI_model=model,
+            target_records_for_call=max_schema_matching_samples,
+            confidence_threshold=schema_matching_confidence_threshold,
+        )
         selector.execute(table, verbose=True)
+
 
 def get_tabular_data(
     group_identifiers: list,
@@ -474,9 +479,15 @@ def get_tabular_data(
             for df, read_state in zip(dfs, read_states):
                 files_read.append(read_state)
                 if df is not None:
-                    tabular_dataset = TabularDataset(dataset_path=Path(fp), sheet_name=read_state.get("sheet"), table=df)
+                    tabular_dataset = TabularDataset(
+                        dataset_path=Path(fp),
+                        sheet_name=read_state.get("sheet"),
+                        table=df,
+                    )
                     ## try to ground everything in the dataframe
-                    tabular_dataset.table = tabular_dataset.table.apply(apply_ground, axis=1)
+                    tabular_dataset.table = tabular_dataset.table.apply(
+                        apply_ground, axis=1
+                    )
                     ## quality check groundings and only select those that pass ##
                     quality_check_groundings(
                         qc_method=quality_check_method,
