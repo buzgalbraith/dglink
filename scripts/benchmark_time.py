@@ -8,8 +8,8 @@ from dglink.core.tabular_data import (
     load_file,
     apply_ground,
 )
-from dglink.core.ColumnSelectors import LLMSelector, heuristicSelector
-from dglink.core.TabularDataset import TabularDataset
+from dglink.core.columnSelectors import LLMSelector, heuristicSelector
+from dglink.core.tabularDataset import tabularDataset
 import os
 from pathlib import Path
 from tqdm import tqdm
@@ -45,7 +45,7 @@ def run_benchmark(
         for df, read_states in zip(dfs, read_states):
             record = {}
             sheet_name = read_states.get("sheet", None)
-            table = TabularDataset(
+            table = tabularDataset(
                 dataset_path=Path(fp), sheet_name=sheet_name, table=df
             )
             ## try to ground everything in the dataframe
