@@ -5,13 +5,13 @@ import pandas
 
 
 from abc import ABC, abstractmethod
-from ...core.TabularDataset import TabularDataset
+from ...core.tabularDataset import tabularDataset
 
 class columnSelector(ABC):
     name:str = NotImplemented
 
     @abstractmethod
-    def execute(self, table:TabularDataset, verbose:bool = False):
+    def execute(self, table:tabularDataset, verbose:bool = False):
         """Run the column selector
         
         Parameters:
@@ -25,5 +25,5 @@ class columnSelector(ABC):
         """
     
     @abstractmethod
-    def check_column(self, table:TabularDataset, col:str, verbose:bool = False)->bool:
+    def check_column(self, table:tabularDataset, col:str, verbose:bool = False)->bool:
         """Check if a single column contains entities"""

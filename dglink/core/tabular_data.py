@@ -14,8 +14,8 @@ from .nodes import NodeSet
 from .edges import EdgeSet
 import os
 from frictionless import Schema, Resource, formats, Package
-from .ColumnSelectors import heuristicSelector, LLMSelector
-from .TabularDataset import TabularDataset
+from .columnSelectors import heuristicSelector, LLMSelector
+from .tabularDataset import tabularDataset
 import pandas
 from pathlib import Path
 from functools import lru_cache
@@ -434,7 +434,7 @@ def load_file(group_identifier: str, fp: str):
 
 def quality_check_groundings(
     qc_method: str,
-    table: TabularDataset,
+    table: tabularDataset,
     max_schema_matching_samples: int,
     schema_matching_confidence_threshold: float,
     model: str,
@@ -479,7 +479,7 @@ def get_tabular_data(
             for df, read_state in zip(dfs, read_states):
                 files_read.append(read_state)
                 if df is not None:
-                    tabular_dataset = TabularDataset(
+                    tabular_dataset = tabularDataset(
                         dataset_path=Path(fp),
                         sheet_name=read_state.get("sheet"),
                         table=df,

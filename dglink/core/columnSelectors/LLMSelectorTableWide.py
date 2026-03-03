@@ -2,7 +2,7 @@
 Select entity columns using LLMs
 """
 
-from dglink.core.TabularDataset import TabularDataset
+from dglink.core.tabularDataset import tabularDataset
 from .columnSelector import columnSelector, pandas
 from .LLMSelector import LLMSelector, evaluation_response
 from ...core.constants import TABULAR_ENTITY_TYPES_LLM, open_ai_client
@@ -33,7 +33,7 @@ class LLMSelectorTableWide(columnSelector):
         self.min_ground_percentage = min_ground_percentage
 
     def check_column(
-        self, table: TabularDataset, col: str, verbose: bool = False
+        self, table: tabularDataset, col: str, verbose: bool = False
     ) -> bool:
         """
         Does not really make sense to just do one column so this is run with the column-wise llm selector
@@ -46,7 +46,7 @@ class LLMSelectorTableWide(columnSelector):
         )
         return selector.check_column(table, col, verbose)
 
-    def execute(self, table: TabularDataset, verbose: bool = False):
+    def execute(self, table: tabularDataset, verbose: bool = False):
         llm_prompt = self.get_llm_prompt_batch(table=table)
         llm_resp = self.call_llm_batch(llm_prompt=llm_prompt)
         # Handle columns that were skipped (below min_ground_percentage)
@@ -80,7 +80,7 @@ class LLMSelectorTableWide(columnSelector):
             )
             logger.info("-" * 50)
 
-    def process_response(self, matching_cols: dict, table: TabularDataset):
+    def process_response(self, matching_cols: dict, table: tabularDataset):
         """
         use the schema match to:
             1. drop cols if not matched
@@ -112,7 +112,7 @@ class LLMSelectorTableWide(columnSelector):
         table.table.drop(columns=cols_to_drop, inplace=True)
         table.entity_columns = entity_cols
 
-    def get_llm_prompt_batch(self, table: TabularDataset) -> tuple[str, str]:
+    def get_llm_prompt_batch(self, table: tabularDataset) -> tuple[str, str]:
         table_len = len(table.table)
         column_infos = []
 

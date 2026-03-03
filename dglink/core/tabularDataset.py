@@ -6,7 +6,7 @@ import pandas
 from numpy.random import default_rng
 from typing import Any
 
-class TabularDataset():
+class tabularDataset():
     entity_columns:list[str] = NotImplemented
     def __init__(self, dataset_path:Path, sheet_name:str, table:pandas.DataFrame, seed:int = 101) -> None:
         self.dataset_path = dataset_path

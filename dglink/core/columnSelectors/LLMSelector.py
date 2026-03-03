@@ -1,7 +1,7 @@
 """
 Select entity columns using LLMs
 """
-from dglink.core.TabularDataset import TabularDataset
+from dglink.core.tabularDataset import tabularDataset
 from .columnSelector import columnSelector, pandas
 from ...core.constants import TABULAR_ENTITY_TYPES_LLM, open_ai_client
 
@@ -21,7 +21,7 @@ class LLMSelector(columnSelector):
         self.target_records_for_call = target_records_for_call
         self.confidence_threshold = confidence_threshold
         self.min_ground_percentage = min_ground_percentage
-    def check_column(self, table:TabularDataset, col: str, verbose: bool = False) -> bool:
+    def check_column(self, table:tabularDataset, col: str, verbose: bool = False) -> bool:
         llm_prompt = self.get_llm_prompt(col=col,table=table)
         llm_resp = self.call_llm(llm_prompt=llm_prompt)
         most_likely_entity_type: str = max(llm_resp, key=lambda k: llm_resp[k])
@@ -35,7 +35,7 @@ class LLMSelector(columnSelector):
         if verbose:
             logger.info(f"{col} is_entity = {is_entity}")
         return is_entity
-    def execute(self, table: TabularDataset, verbose: bool = False):
+    def execute(self, table: tabularDataset, verbose: bool = False):
         score_map = {}
         matching_cols = []
         for col in table.original_columns:
@@ -67,7 +67,7 @@ class LLMSelector(columnSelector):
             logger.info(f'Selected {len(table.entity_columns)} which are {table.entity_columns}')
             logger.info('-'*50)
     def process_response(self,
-        matching_cols: dict, table:TabularDataset
+        matching_cols: dict, table:tabularDataset
     ):
         """
         use the schema match to:
@@ -133,7 +133,7 @@ class LLMSelector(columnSelector):
         normalized_probs = values / values.sum()
         out = dict(zip(raw_probs.keys(), normalized_probs))
         return out
-    def get_llm_prompt(self, table:TabularDataset, col)->tuple[str,str]:
+    def get_llm_prompt(self, table:tabularDataset, col)->tuple[str,str]:
         table_len = len(table.table)
         grounded_count = table.table[f"{col}_name"].count()
         rows_with_values = max(table.table[f"{col}_raw_text"].count(), 1)  

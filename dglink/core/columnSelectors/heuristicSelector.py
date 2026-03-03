@@ -1,7 +1,7 @@
 """
 Select entity columns using heuristics
 """
-from .columnSelector import columnSelector, pandas, TabularDataset
+from .columnSelector import columnSelector, pandas, tabularDataset
 
 
 import logging
@@ -20,7 +20,7 @@ class heuristicSelector(columnSelector):
         self.nan_percentage = nan_percentage
         self.max_entity_types = max_entity_types
     
-    def execute(self, table:TabularDataset, verbose:bool = False):
+    def execute(self, table:tabularDataset, verbose:bool = False):
         """Filter grounded entity table.table to remove low-quality or overly heterogeneous columns based on heuristics
 
         Applies two quality filters:
@@ -61,7 +61,7 @@ class heuristicSelector(columnSelector):
         table.table.drop(columns=cols_to_drop, inplace=True)
         table.entity_columns = entity_cols
 
-    def check_column(self, table:TabularDataset, col:str, verbose:bool = False)->bool:
+    def check_column(self, table:tabularDataset, col:str, verbose:bool = False)->bool:
         """Check if a single column contains entities"""
 
         not_entity = (table.table[f"{col}_type"].nunique() > self.max_entity_types) or (
