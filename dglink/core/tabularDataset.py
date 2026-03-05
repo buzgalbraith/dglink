@@ -60,7 +60,7 @@ class tabularDataset():
             self._build_priority_weights()
         assert isinstance(self._precomputed_sample, list)   
         col_sample:list = []
-        unique_entries = set(self.table[f"{col}_name"].unique())
+        unique_entries = set(self.table[f"{col}_raw_text"].unique())
         sample_size = min(target_size, len(unique_entries))
         for key, _ in self._precomputed_sample: 
             if key in unique_entries:
