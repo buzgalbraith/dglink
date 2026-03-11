@@ -160,7 +160,7 @@ class LLMSelector(columnSelector):
         user_prompt = textwrap.dedent(f"""
             Column name: {col}
             Example values:
-            {json.dumps(sample.values[:, 0].tolist(), indent=2)}
+            {json.dumps([str(v) for v in sample.values[:, 0].tolist()], indent=2)}
         """).strip()
         if self.use_gilda_info:
             gilda_groundings = json.dumps(sample.values[:, 1].tolist(), indent=2)

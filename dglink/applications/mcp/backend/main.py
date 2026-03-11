@@ -6,7 +6,7 @@ import asyncio
 import os
 from typing import Optional
 from contextlib import AsyncExitStack
-
+import textwrap
 # OpenAI imports
 from agents import Agent, Runner
 from agents.mcp import MCPServerStdio
@@ -146,16 +146,40 @@ async def stream_anthropic_query(query: str):
         )
 
     print("Starting check")
+    ## General response format ## 
     messages = [
         {
             "role": "user",
-            "content": 'Attached is a knowledge graph of scraped from all data on the NF Data portal. Try to answer the user query directly with out going to far off track.'
+            # "content": 'Attached is a knowledge graph scraped from all data on the NF Data portal. Try to answer the user query directly with out going to far off track.'
+            "content": 'Attached is a knowledge graph scraped from all data on the NF Data portal. Try to answer the user query as directly as possible.'
         },      
         {
             "role": "user",
             "content": query
         }
     ]
+    ## abbreviated response format response format ## 
+    abbreviated = False
+    if abbreviated:   
+        messages = [
+            {
+                "role": "user",
+                "content": textwrap.dedent(f"""
+                    You have access to a Neo4j knowledge graph built from the NF Data Portal,
+                    containing biomedical entities, studies, and datasets related to Neurofibromatosis.
+
+                    Rules:
+                    - Answer the user's question directly and concisely.  
+                    - Do not explain what you are about to do before doing it.
+                    - Do not summarize or restate the question.
+                    - Do not add closing remarks like "I hope this helps" or "Let me know if you need more."
+                    - If the answer requires data from the graph, query it and report only the relevant results.
+                    - If you cannot answer from the graph, say so briefly.
+
+                    User query: {query}
+                """).strip()
+            }
+        ]
 
     # Get available tools
     response = await anthropic_session.list_tools()
@@ -296,7 +320,7 @@ async def chat(request: ChatRequest):
             # Stream the response back
             async def generate_anthropic():
                 async for chunk in stream_anthropic_query(user_query):
-                    yield chunk 
+                    yield chunk
 
             return StreamingResponse(generate_anthropic(), media_type="text/plain")
 
