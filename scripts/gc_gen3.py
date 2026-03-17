@@ -14,7 +14,7 @@ NCI_GQL_ENDPOINT = "https://general.datacommons.cancer.gov/v1/graphql/"
 NCI_GEN3_ENDPOINT = 'https://nci-crdc.datacommons.io'
 
 
-class GQLClient:
+class gqlClient:
     def __init__(self, endpoint,):
         self.endpoint = endpoint
         self.transport = RequestsHTTPTransport(
@@ -51,9 +51,9 @@ class gen3Client():
             download_list=download_list,
             show_progress=show_progress)
        manager.download(download_list, save_directory=save_directory, show_progress = show_progress)
-class generalCommonsClient():
+class nciGeneralCommonsClient():
     def __init__(self, gen3_credential_file:str = None):
-        self.gql_client = GQLClient(NCI_GQL_ENDPOINT)
+        self.gql_client = gqlClient(NCI_GQL_ENDPOINT)
         self.gen3_client = gen3Client(NCI_GEN3_ENDPOINT, gen3_credential_file)
     def get_studies(self, first:int =72, offset:int = 0) -> list[dict]:
         """get studies in a range"""
@@ -124,7 +124,7 @@ class generalCommonsClient():
         self.gen3_client.download_files(file_ids=file_ids, save_directory=save_directory, show_progress=show_progress)
         
 if __name__ == "__main__":
-    client = generalCommonsClient(gen3_credential_file='nci_general_commons_credentials')
+    client = nciGeneralCommonsClient(gen3_credential_file='nci_general_commons_credentials')
     print("Getting Studies")
     studies = client.get_all_studies()
     test_accession = studies[0].get('phs_accession')
