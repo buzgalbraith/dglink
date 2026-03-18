@@ -7,12 +7,30 @@ from gen3.auth import Gen3Auth
 from gen3.file import Gen3File
 from gen3.tools.download.drs_download import DownloadManager, Downloadable
 
+
 import logging
 logger = logging.getLogger(__name__)
+
+import os
+import polars as pl 
+home_dir: str = os.getenv("HOME") or "/"
+HC_CACHE_DIR = os.path.join(
+    home_dir,
+    ".data",
+    "nci_general_commons",
+)
+os.makedirs(HC_CACHE_DIR, exist_ok=True)
 
 NCI_GQL_ENDPOINT = "https://general.datacommons.cancer.gov/v1/graphql/"
 NCI_GEN3_ENDPOINT = 'https://nci-crdc.datacommons.io'
 
+DOWNLOAD_FILE_TYPES = [
+    'CSV',
+    'XLS',
+    'XLSX',
+    'ODS',
+    'TXT'
+]
 
 class gqlClient:
     def __init__(self, endpoint,):
@@ -43,8 +61,8 @@ class gen3Client():
             refresh_file=credential_file 
         )
         self.file_client = Gen3File(self.auth)
-    def download_files(self, file_ids:list[dict], save_directory = "./Downloads", show_progress:bool = True):       
-       download_list = [ Downloadable(object_id=f["file_id"].strip()) for f in file_ids]
+    def download_files(self, file_ids:list[str], save_directory = "./Downloads", show_progress:bool = True):       
+       download_list = [ Downloadable(object_id=f) for f in file_ids]
        manager = DownloadManager(
             hostname=self.hostname,
             auth=self.auth,
@@ -120,16 +138,27 @@ class nciGeneralCommonsClient():
             offset += page_size
             print(len(all_study_files))
         return all_study_files
-    def download_files(self, file_ids:list[dict], save_directory = "./downloads", show_progress:bool = True):
+    def download_files(self, file_ids:list[str], save_directory = "./downloads", show_progress:bool = True):
         self.gen3_client.download_files(file_ids=file_ids, save_directory=save_directory, show_progress=show_progress)
         
 if __name__ == "__main__":
     client = nciGeneralCommonsClient(gen3_credential_file='nci_general_commons_credentials')
     print("Getting Studies")
     studies = client.get_all_studies()
-    test_accession = studies[0].get('phs_accession')
     print("Getting files")
-    study_files = client.get_study_files(test_accession)
-    print(len(study_files))
-    print("Downloading files")
-    client.download_files(file_ids=study_files)
+    records = []
+    for study in studies:
+        if study.get("study_access") != 'Open':
+            continue
+        print(study.get("study_name"))
+        study_accession = study.get('phs_accession')
+        study_files = client.get_study_files(study_accession, page_size=1000)
+        records += study_files
+    study_files_df = pl.from_dicts(records)
+    study_files_df.write_csv(
+        os.path.join(HC_CACHE_DIR, 'study_to_files.tsv'),
+        separator='\t'
+    )
+    study_files_df = study_files_df.filter(pl.col("file_type").is_in(DOWNLOAD_FILE_TYPES))
+    files_to_download = study_files_df['file_id'].to_list() 
+    client.download_files(file_ids=files_to_download)
