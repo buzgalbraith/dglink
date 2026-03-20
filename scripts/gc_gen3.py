@@ -1,146 +1,13 @@
 """
 This script will have a basic example of pulling code from the NCI General Commons (GC) with Gen3
 """
-from gql import gql, Client
-from gql.transport.requests import RequestsHTTPTransport
-from gen3.auth import Gen3Auth
-from gen3.file import Gen3File
-from gen3.tools.download.drs_download import DownloadManager, Downloadable
+
+from dglink.portals.nci.gc import nciGeneralCommonsClient
+from dglink.portals.nci.gc.constants import NCI_GC_CACHE_DIR, NCI_TABULAR_FILE_TYPES
+import polars as pl
+import os 
 
 
-import logging
-logger = logging.getLogger(__name__)
-
-import os
-import polars as pl 
-home_dir: str = os.getenv("HOME") or "/"
-HC_CACHE_DIR = os.path.join(
-    home_dir,
-    ".data",
-    "nci_general_commons",
-)
-os.makedirs(HC_CACHE_DIR, exist_ok=True)
-
-NCI_GQL_ENDPOINT = "https://general.datacommons.cancer.gov/v1/graphql/"
-NCI_GEN3_ENDPOINT = 'https://nci-crdc.datacommons.io'
-
-DOWNLOAD_FILE_TYPES = [
-    'CSV',
-    'XLS',
-    'XLSX',
-    'ODS',
-    'TXT'
-]
-
-class gqlClient:
-    def __init__(self, endpoint,):
-        self.endpoint = endpoint
-        self.transport = RequestsHTTPTransport(
-            url=endpoint,
-            verify=True,
-        )
-        self.client = Client(
-            transport=self.transport,
-            execute_timeout=30,
-            fetch_schema_from_transport=True, 
-        )
-    def execute(self, query, variable_values, max_retries:int = 3):
-        for attempt in range(max_retries):
-            try:
-                return self.client.execute(query, variable_values=variable_values)
-            except Exception as e:
-                logger.warning(f"Query attempt {attempt + 1} failed: {e}")
-                if attempt == max_retries - 1:
-                    raise
-class gen3Client():
-    def __init__(self, endpoint : str, credential_file:str=None):
-        self.endpoint = endpoint
-        self.hostname = endpoint.removeprefix("https://")
-        self.auth = Gen3Auth(
-            endpoint=self.endpoint, 
-            refresh_file=credential_file 
-        )
-        self.file_client = Gen3File(self.auth)
-    def download_files(self, file_ids:list[str], save_directory = "./Downloads", show_progress:bool = True):       
-       download_list = [ Downloadable(object_id=f) for f in file_ids]
-       manager = DownloadManager(
-            hostname=self.hostname,
-            auth=self.auth,
-            download_list=download_list,
-            show_progress=show_progress)
-       manager.download(download_list, save_directory=save_directory, show_progress = show_progress)
-class nciGeneralCommonsClient():
-    def __init__(self, gen3_credential_file:str = None):
-        self.gql_client = gqlClient(NCI_GQL_ENDPOINT)
-        self.gen3_client = gen3Client(NCI_GEN3_ENDPOINT, gen3_credential_file)
-    def get_studies(self, first:int =72, offset:int = 0) -> list[dict]:
-        """get studies in a range"""
-        base_call = gql("""
-                        query GetStudies($first: Int, $offset: Int) {
-                            studies(
-                                first: $first,
-                                offset: $offset
-                            ) {
-                                phs_accession
-                                study_name
-                                study_acronym
-                                study_id
-                                funding_source_program_name # if this is non-empty has a program
-                                study_access # if Open can work with
-                            }
-                        }
-                    """)
-        return self.gql_client.execute(
-            base_call, 
-            {
-                'first' : first,
-                'offset' : offset
-            }
-        ).get('studies', [])
-    def get_all_studies(self) -> list[dict]:
-        """get all studies"""
-        all_studies, offset, page_size = [], 0, 100
-        while True:
-            batch = self.get_studies(first=page_size, offset=offset)
-            if not batch:
-                break
-            all_studies.extend(batch)
-            offset += page_size
-        return all_studies
-    def get_study_files(self, phs_accession:str, page_size:int = 500):
-        """get a list of all files associated with a given study"""
-        base_call = gql("""
-                        query GetFiles($phs: String!, $first: Int, $offset: Int) {
-                            files(
-                                phs_accession: $phs,
-                                first: $first,
-                                offset: $offset
-                            ) {
-                                file_id
-                                file_name
-                                file_type
-                                file_url_in_cds
-                                # participant_ids
-                            }
-                        }
-                    """)
-        all_study_files, offset= [], 0
-        while True:
-            batch = self.gql_client.execute(base_call, {
-                'phs' : phs_accession,
-                'first' : page_size,
-                'offset' : offset
-                }
-            ).get('files', [])
-            if not batch:
-                break
-            all_study_files.extend(batch)
-            offset += page_size
-            print(len(all_study_files))
-        return all_study_files
-    def download_files(self, file_ids:list[str], save_directory = "./downloads", show_progress:bool = True):
-        self.gen3_client.download_files(file_ids=file_ids, save_directory=save_directory, show_progress=show_progress)
-        
 if __name__ == "__main__":
     client = nciGeneralCommonsClient(gen3_credential_file='nci_general_commons_credentials')
     print("Getting Studies")
@@ -154,11 +21,10 @@ if __name__ == "__main__":
         study_accession = study.get('phs_accession')
         study_files = client.get_study_files(study_accession, page_size=1000)
         records += study_files
-    study_files_df = pl.from_dicts(records)
-    study_files_df.write_csv(
-        os.path.join(HC_CACHE_DIR, 'study_to_files.tsv'),
-        separator='\t'
-    )
-    study_files_df = study_files_df.filter(pl.col("file_type").is_in(DOWNLOAD_FILE_TYPES))
-    files_to_download = study_files_df['file_id'].to_list() 
-    client.download_files(file_ids=files_to_download)
+    study_files_df = pl.from_dicts(records).filter(pl.col("file_type").is_in(NCI_TABULAR_FILE_TYPES))
+    file_ids = study_files_df['file_id'].to_list()
+    step_size = 250
+    save_directory = os.path.join(NCI_GC_CACHE_DIR, 'files')
+    for i in range(0, len(file_ids), step_size):
+        batch_file_ids = file_ids[i: i + step_size]
+        res = client.download_files(file_ids=batch_file_ids, save_directory=save_directory)
