@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class LLMSelector(columnSelector):
     def __init__(
         self,
-        provider="openai",
+        provider:str ="openai",
         model: str = "gpt-5-mini",
         target_records_for_call: int = 10,
         confidence_threshold: float = 0.5,

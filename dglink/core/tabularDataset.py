@@ -1,23 +1,50 @@
 """
 Class for holding a tabular dataset and meta information during processing
 """
+from dglink.core.constants import INDRA_BIOLINK_EXPERIMENTAL_DATA_TYPE_MAP
 from pathlib import Path
 import pandas
 from numpy.random import default_rng
 from typing import Any
+from functools import lru_cache
+from indra.ontology.bio import bio_ontology
+from bioregistry import normalize_curie, get_bioregistry_iri
+import gilda 
+import logging 
+
+logger = logging.getLogger(__name__)
+
+TERM_EXCLUSION_LIST = ["yes", "na", "large", "std", "dead"]
+COLUMN_EXCLUSION_LIST = ["Vendor"]
 
 class tabularDataset():
     entity_columns:list[str] = NotImplemented
-    def __init__(self, dataset_path:Path, sheet_name:str, table:pandas.DataFrame, seed:int = 101) -> None:
+    def __init__(self, dataset_path:Path, sheet_name:str, table:pandas.DataFrame, terms_to_exclude:list[str]=TERM_EXCLUSION_LIST, columns_to_exclude:list[str] = COLUMN_EXCLUSION_LIST, seed:int = 101, ) -> None:
         self.dataset_path = dataset_path
         self.sheet_name = sheet_name
         self.table = table
-        self.original_columns = table.columns.to_list()
+        self.terms_to_exclude = terms_to_exclude
+        self.columns_to_exclude = [x.lower() for x in columns_to_exclude]
+        self.original_columns, self.dropped_columns = self._check_column_names()
         self.seed = seed
+        self.biolink_entity_types = False ## initialized as false, but set as true if table grounded with this 
         self._rng = default_rng(seed=self.seed)
         self._priority_weights : dict[Any, float] | None = None
         self._table_frequencies : dict[Any, float] | None = None
         self._precomputed_sample : list[tuple[Any, float]] | None = None
+
+    def _check_column_names(self):
+        """checks a tables column values and drops any in the self.columns_to_exclude stores the rest in a list"""
+        original_cols, dropped_columns = [], []
+        for col in self.table.columns:
+            if col.lower() in self.columns_to_exclude:
+                dropped_columns.append(col)
+            else:
+                original_cols.append(col)
+        if len(dropped_columns) > 0:
+            logger.warning(f"Removing {dropped_columns} as they are in columns_to_exclude = {self.columns_to_exclude}")
+            self.table.drop(columns=dropped_columns, inplace=True)
+        return original_cols, dropped_columns
     def _build_table_frequencies(self):
         """Pre-compute frequency of each value across entire table - upfront"""
         self._table_frequencies = {}
@@ -68,3 +95,76 @@ class tabularDataset():
                 if len(col_sample) >= sample_size:
                     break  
         return col_sample
+    def ground_table(self, biolink_entity_types:bool = False):
+        """Ground the table using gilda"""
+        self.table = self.table.apply(self._apply_ground, axis=1)
+        if biolink_entity_types:
+            self.biolink_entity_types = True
+            type_cols = [f'{x}_type' for x in self.original_columns]
+            self.table[type_cols] = self.table[type_cols].map(lambda x: INDRA_BIOLINK_EXPERIMENTAL_DATA_TYPE_MAP.get(x, x))
+
+    def _apply_ground(self, row):
+        """Apply entity grounding to all columns in a DataFrame row.
+
+        Transforms a row of raw text values into grounded entity information by calling
+        cached_annotate on each cell. Creates new columns with suffixes: _entity, _type,
+        _name, _raw_text, _column_name, _iri.
+
+        Args:
+            row: pandas Series representing one row of the DataFrame
+
+        Returns:
+            pandas Series with grounded entity information for all columns
+
+        Note:
+            This function is designed to be used with DataFrame.apply(axis=1)
+        """
+        result = {}
+        for col in row.index:
+            (
+                result[f"{col}_entity"],
+                result[f"{col}_type"],
+                result[f"{col}_name"],
+                result[f"{col}_raw_text"],
+                result[f"{col}_column_name"],
+                result[f"{col}_iri"],
+            ) = self._cached_annotate(row[col], col)
+        return pandas.Series(result)
+
+    @lru_cache(maxsize=None)
+    def _cached_annotate(self, val, col):
+        """Ground a cell value to biomedical ontology terms using Gilda (cached).
+
+        Uses Gilda to identify biomedical entities in text and normalizes them to
+        standard ontology terms. Results are cached to avoid redundant API calls.
+
+        Args:
+            val: Cell value to ground (will be converted to string)
+            col: Column name for tracking provenance
+
+        Returns:
+            Tuple of (curie, entity_type, name, raw_text, column_name, iri)
+            Returns tuple of pandas.NA values if grounding fails or value is null
+
+        Note:
+            Uses INDRA bio_ontology for entity typing and bioregistry for IRI generation.
+            Only the top-ranked Gilda match is used.
+        """
+        if pandas.notna(val):
+            ans = gilda.annotate(str(val))
+            if ans:
+                nsid = ans[0].matches[0].term
+                if nsid.norm_text in self.terms_to_exclude:
+                    return pandas.NA, pandas.NA, pandas.NA, val, col, pandas.NA
+                else:
+                    return (
+                        normalize_curie(f"{nsid.db}:{nsid.id}"),
+                        bio_ontology.get_type(nsid.db, nsid.id),
+                        nsid.entry_name,
+                        val,
+                        col,
+                        get_bioregistry_iri(nsid.db, nsid.id),
+                    )
+            else:
+                return pandas.NA, pandas.NA, pandas.NA, val, col, pandas.NA
+        return pandas.NA, pandas.NA, pandas.NA, pandas.NA, pandas.NA, pandas.NA

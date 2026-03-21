@@ -118,19 +118,35 @@ class NodeSet:
                         val = set(str(val).replace('"', "").replace("'", "").split(";"))
 
                     self.nodes[curie][attribute] = val
-
-    def write_node_set(self, path):
+    
+    def write_node_set(self, path, pascalify: bool = False):
+        if pascalify:
+            self.pascalify_nodes()
         with open(path, "w") as f:
             f.write("\t".join(self.attributes) + "\n")
             for curie in self.nodes:
-                write_str = f""
+                write_str = ""
                 for col in self.attributes:
                     val = self.nodes[curie][col]
                     if type(val) == set:
                         if len(val) > 20:
-                            val = list(val)[:20]  ## limit max number of elements to 20
-                        val = f'"{";".join(val)}"'
-                    ## take out any weird line breaks
+                            val = list(val)[:20]
+                        joined = ";".join(v for v in val if v)  # also skip empty strings within the set
+                        val = f'"{joined}"' if joined else ""
+                    elif val is None or val == 'None':
+                        val = ''
+                    write_str += f"{val}".replace("\n", "") + "\t"
+                write_str = write_str.replace('""', '')
+                f.write(write_str[:-1] + "\n")   
 
-                    write_str += val.replace("\n", "") + "\t"
-                f.write(write_str[:-1] + "\n")
+    def pascalify_nodes(self):
+        ## prevent being called twice in case already done 
+        pascalify = lambda x: "".join(w.capitalize() for w in x.replace("biolink:", "").split("_"))
+        nodes = {}
+        for node_id, node_rep in self.nodes.items():
+            node_rep = node_rep.copy() 
+            raw_label = node_rep[':LABEL']
+            node_rep[':LABEL'] = pascalify(raw_label)
+            node_rep['raw_label'] = raw_label
+            nodes[node_id] = node_rep
+        self.nodes = nodes

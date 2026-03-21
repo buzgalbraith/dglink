@@ -35,6 +35,7 @@ def write_graph(
     resource_path=RESOURCE_PATH,
     edge_name="edges.tsv",
     node_name="nodes.tsv",
+    pascalify:bool = False,
     source_filter: bool = False,
     strict: bool = False,
     source_name: str = None,
@@ -51,27 +52,27 @@ def write_graph(
         ns, es = get_graph_for_source(
             node_set=node_set, edge_set=edge_set, source_name=source_name, strict=strict
         )
-        ns.write_node_set(os.path.join(resource_path, f"nodes_{write_name}.tsv"))
-        es.write_edge_set(os.path.join(resource_path, f"edges_{write_name}.tsv"))
+        ns.write_node_set(os.path.join(resource_path, f"nodes_{write_name}.tsv"), pascalify=pascalify)
+        es.write_edge_set(os.path.join(resource_path, f"edges_{write_name}.tsv"), pascalify=pascalify)
     elif mixed:
         ns, es = get_graph_for_source(node_set=node_set, edge_set=edge_set, mixed=True)
-        ns.write_node_set(os.path.join(resource_path, "nodes_mixed.tsv"))
-        es.write_edge_set(os.path.join(resource_path, "edges_mixed.tsv"))
+        ns.write_node_set(os.path.join(resource_path, "nodes_mixed.tsv"), pascalify=pascalify)
+        es.write_edge_set(os.path.join(resource_path, "edges_mixed.tsv"), pascalify=pascalify)
 
     else:
-        node_set.write_node_set(os.path.join(resource_path, node_name))
-        edge_set.write_edge_set(os.path.join(resource_path, edge_name))
+        node_set.write_node_set(os.path.join(resource_path, node_name), pascalify=pascalify)
+        edge_set.write_edge_set(os.path.join(resource_path, edge_name), pascalify=pascalify)
     ## save all nodes and edges from multiple sources
 
 
-def filter_edge_set(edge_set: EdgeSet, filter_for: str):
+def filter_edge_set(edge_set: EdgeSet, filter_for: str, pascalify:bool = False,):
     """filter out edges of a certain type"""
     filtered_edge_set = EdgeSet()
     for edge_id in edge_set.edges:
         edge = edge_set.edges[edge_id]
         if edge[":TYPE"] != filter_for:
             filtered_edge_set.edges[edge_id] = edge
-    filtered_edge_set.write_edge_set(os.path.join(RESOURCE_PATH, "edges.tsv"))
+    filtered_edge_set.write_edge_set(os.path.join(RESOURCE_PATH, "edges.tsv"), pascalify=pascalify)
     return filtered_edge_set
 
 

@@ -56,3 +56,17 @@ TABULAR_ENTITY_TYPES_LLM = [
     "protein_family_complex",
     "human_gene_other",
 ]
+INDRA_BIOLINK_EXPERIMENTAL_DATA_TYPE_MAP = {
+    "human_gene_protein": "biolink:GeneOrGeneProduct",  ## set taxon to human
+    "human_gene_other": "biolink:Gene",  ## this one is always a gene but we do not anything else about it
+    "nonhuman_gene_protein": "biolink:GeneOrGeneProduct",  ## want to try to set taxon with uniprot, set as either human mouse rat or other
+    "small_molecule": "biolink:SmallMolecule",
+    "disease": "biolink:Disease",
+    "cellular_location": "biolink:CellularComponent",
+    "anatomical_region": "biolink:GrossAnatomicalStructure",
+    "organism": "biolink:OrganismTaxon",
+    "biological_process": "biolink:BiologicalProcess",
+    "small_molecule": "biolink:SmallMolecule",
+    "human_rna": "biolink:RNAProduct",
+    "protein_family_complex": "biolink:MacromolecularComplexOrProteinFamily",  ## this is just generalizing
+}

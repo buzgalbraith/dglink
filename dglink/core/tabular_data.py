@@ -29,56 +29,8 @@ import json
 import numpy as np
 from openai import BadRequestError
 
-EXCLUSION_LIST = ["yes", "na", "large", "std", "dead"]
-
 
 logger = logging.getLogger(__name__)
-
-
-def heuristic_quality_check(
-    df, base_cols, nan_percentage=0.1, max_types=8
-) -> tuple[pandas.DataFrame, list]:
-    """Filter grounded entity DataFrame to remove low-quality or overly heterogeneous columns based on heuristics
-
-    Applies two quality filters:
-    1. Removes columns where fewer than nan_percentage of rows were successfully grounded
-    2. Removes columns containing more than max_types distinct entity types (too heterogeneous)
-
-    Args:
-        df: DataFrame with grounded entity columns (entity, type, name, raw_text, column_name, iri)
-        base_cols: List of original column names before grounding suffixes were added
-        nan_percentage: Minimum proportion of non-null values required to keep column (default: 0.1)
-        max_types: Maximum number of distinct entity types allowed per column (default: 5)
-
-    Returns:
-        Tuple of (filtered DataFrame, filtered list of base column names)
-
-    Example:
-        >>> # Keep only columns with ≥10% grounded and ≤5 entity types
-        >>> filtered_df, filtered_cols = filter_df(entity_df, ['gene', 'disease'], 0.1, 5)
-    """
-    ## filter out cols with less than 10% rows successfully grounded
-    # res = df.loc[:, df.count() / len(df) >= nan_percentage]
-    base_cols = [x for x in base_cols if f"{x}_type" in df.columns]
-    ## filter out columns with more than some set number of max entity types
-    cols_to_drop = []
-    for base in base_cols:
-        if (df[f"{base}_type"].nunique() > max_types) or (
-            df[f"{base}_name"].count() / len(df) <= nan_percentage
-        ):
-            cols_to_drop.extend(
-                [
-                    f"{base}_type",
-                    f"{base}_entity",
-                    f"{base}_name",
-                    f"{base}_raw_text",
-                    f"{base}_column_name",
-                    f"{base}_iri",
-                ]
-            )
-    final = df.drop(columns=cols_to_drop)
-    base_cols = [x for x in base_cols if f"{x}_type" in final.columns]
-    return final, base_cols
 
 
 def get_frictionless_package(pth):
@@ -200,7 +152,9 @@ def frictionless_file_reader(pth: str, max_size_bytes=100 * 1024 * 1024):
     for res in pack.resources:
         ## type check to make things type safe remove is this cause issue
         if not isinstance(res, TableResource):
-            raise ValueError(f"this should be a table not {type(res)}")  ## change this
+            # import ipdb; ipdb.set_trace()
+            # raise ValueError(f"this should be a table not {type(res)}")  
+            continue
         try:
             df_dict[res.name] = pandas.DataFrame(res.read_rows())
         except:
@@ -208,76 +162,9 @@ def frictionless_file_reader(pth: str, max_size_bytes=100 * 1024 * 1024):
     return df_dict
 
 
-@lru_cache(maxsize=None)
-def cached_annotate(val, col):
-    """Ground a cell value to biomedical ontology terms using Gilda (cached).
-
-    Uses Gilda to identify biomedical entities in text and normalizes them to
-    standard ontology terms. Results are cached to avoid redundant API calls.
-
-    Args:
-        val: Cell value to ground (will be converted to string)
-        col: Column name for tracking provenance
-
-    Returns:
-        Tuple of (curie, entity_type, name, raw_text, column_name, iri)
-        Returns tuple of pandas.NA values if grounding fails or value is null
-
-    Note:
-        Uses INDRA bio_ontology for entity typing and bioregistry for IRI generation.
-        Only the top-ranked Gilda match is used.
-    """
-    if pandas.notna(val):
-        ans = gilda.annotate(str(val))
-        if ans:
-            nsid = ans[0].matches[0].term
-            if nsid.norm_text in EXCLUSION_LIST:
-                return pandas.NA, pandas.NA, pandas.NA, val, col, pandas.NA
-            else:
-                return (
-                    normalize_curie(f"{nsid.db}:{nsid.id}"),
-                    bio_ontology.get_type(nsid.db, nsid.id),
-                    nsid.entry_name,
-                    val,
-                    col,
-                    get_bioregistry_iri(nsid.db, nsid.id),
-                )
-        else:
-            return pandas.NA, pandas.NA, pandas.NA, val, col, pandas.NA
-    return pandas.NA, pandas.NA, pandas.NA, pandas.NA, pandas.NA, pandas.NA
-
-
-def apply_ground(row):
-    """Apply entity grounding to all columns in a DataFrame row.
-
-    Transforms a row of raw text values into grounded entity information by calling
-    cached_annotate on each cell. Creates new columns with suffixes: _entity, _type,
-    _name, _raw_text, _column_name, _iri.
-
-    Args:
-        row: pandas Series representing one row of the DataFrame
-
-    Returns:
-        pandas Series with grounded entity information for all columns
-
-    Note:
-        This function is designed to be used with DataFrame.apply(axis=1)
-    """
-    result = {}
-    for col in row.index:
-        (
-            result[f"{col}_entity"],
-            result[f"{col}_type"],
-            result[f"{col}_name"],
-            result[f"{col}_raw_text"],
-            result[f"{col}_column_name"],
-            result[f"{col}_iri"],
-        ) = cached_annotate(row[col], col)
-    return pandas.Series(result)
-
 
 def extract_df_graph(
-    df, cols, group_identifier, file_id, node_set: NodeSet, edge_set: EdgeSet
+    table:tabularDataset, group_identifier, file_id, node_set: NodeSet, edge_set: EdgeSet, pascalify_types:bool = False,
 ) -> tuple[NodeSet, EdgeSet]:
     """Extract nodes and edges from grounded entity DataFrame into knowledge graph.
 
@@ -300,9 +187,10 @@ def extract_df_graph(
         Tracks provenance by storing raw text, column names, and file IDs in node attributes.
         Edge types are dynamically created based on entity type (e.g., "has_protein").
     """
+    pascalify = lambda x: "".join(w.capitalize() for w in x.strip("biolink:").split("_"))
     source = set(["tabular_data", "experimental_data"])
-    for _, row in df.iterrows():
-        for col in cols:
+    for _, row in table.table.iterrows():
+        for col in table.entity_columns:
             entity = row[f"{col}_entity"]
             entity_type = row[f"{col}_type"]
             if (not pandas.isna(entity)) & (not pandas.isna(entity_type)):
@@ -435,18 +323,14 @@ def load_file(group_identifier: str, fp: str):
 def quality_check_groundings(
     qc_method: str,
     table: tabularDataset,
-    max_schema_matching_samples: int,
-    schema_matching_confidence_threshold: float,
-    model: str,
+    **kwargs
 ) -> None:
     if qc_method == "heuristic":
-        selector = heuristicSelector()
+        selector = heuristicSelector(**kwargs)
         selector.execute(table, verbose=True)
     elif qc_method == "llm_schema_match":
         selector = LLMSelector(
-            open_AI_model=model,
-            target_records_for_call=max_schema_matching_samples,
-            confidence_threshold=schema_matching_confidence_threshold,
+            **kwargs
         )
         selector.execute(table, verbose=True)
 
@@ -458,9 +342,7 @@ def get_tabular_data(
     tabular_iterator: Iterator,
     write_reports: bool = True,
     quality_check_method: str = "heuristic",
-    max_quality_check_samples: int = 10,
-    quality_check_confidence_threshold: float = 0.5,
-    model: str = "gpt-4o",
+    **kwargs
 ) -> list[pandas.DataFrame]:
     """Process tabular data files from multiple groups and build knowledge graph.
 
@@ -485,20 +367,15 @@ def get_tabular_data(
                         table=df,
                     )
                     ## try to ground everything in the dataframe
-                    tabular_dataset.table = tabular_dataset.table.apply(
-                        apply_ground, axis=1
-                    )
+                    tabular_dataset.ground_table(biolink_entity_types=True)
                     ## quality check groundings and only select those that pass ##
                     quality_check_groundings(
                         qc_method=quality_check_method,
                         table=tabular_dataset,
-                        max_schema_matching_samples=max_quality_check_samples,
-                        schema_matching_confidence_threshold=quality_check_confidence_threshold,
-                        model=model,
+                        **kwargs
                     )
                     node_set, edge_set = extract_df_graph(
-                        tabular_dataset.table,
-                        tabular_dataset.entity_columns,
+                        tabular_dataset,
                         group_identifier,
                         file_id,
                         node_set=node_set,
