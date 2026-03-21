@@ -193,4 +193,4 @@ if __name__ == "__main__":
                 }
             )
     ## write results ##
-    write_graph(node_set=node_set, edge_set=edge_set, resource_path="nci_gc_graph")
+    write_graph(node_set=node_set, edge_set=edge_set, resource_path="nci_gc_graph", pascalify = False)
