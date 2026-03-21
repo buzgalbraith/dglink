@@ -28,6 +28,7 @@ NODE_ATTRIBUTES = [
     "name",
     "iri",
     "source:string[]",
+    "raw_label", ## holds original label in case we use pascalify to make node labels look nice ##
     ## Program fields 
     "program_description", 
     "num_participants",
@@ -66,6 +67,10 @@ NODE_ATTRIBUTES = [
     "progression_or_recurrence",
     "last_known_disease_status",
     "crdc_id",
+    ## tabular data fields ##
+    "raw_texts:string[]",
+    "columns:string[]",
+    "file_id:string[]",
 ]
 EDGE_ATTRIBUTES = [
     ## core fields - all edges should have ths other fields are optional
@@ -73,4 +78,5 @@ EDGE_ATTRIBUTES = [
     ":END_ID",
     ":TYPE",
     "source:string[]",
+    "raw_type",
 ]
