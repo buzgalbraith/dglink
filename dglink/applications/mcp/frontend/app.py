@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 # Backend API configuration - use environment variable for Docker, fallback to localhost
-BACKEND_URL = os.getenv('BACKEND_URL', 'http://localhost:8000')
+MCP_BACKEND_URL = os.getenv('MCP_BACKEND_URL', 'http://localhost:8000')
 
 
 @app.route('/')
@@ -22,7 +22,7 @@ def chat():
         
         # Forward request to your backend
         response = requests.post(
-            f'{BACKEND_URL}/chat',
+            f'{MCP_BACKEND_URL}/chat',
             json={
                 'message': user_message,
                 'provider': model_provider

@@ -23,6 +23,12 @@ NEO4J_USER = os.getenv('NEO4J_USER', 'neo4j')
 NEO4J_PASSWORD = os.getenv('NEO4J_PASSWORD', 'password')
 NEO4J_DATABASE = os.getenv('NEO4J_DATABASE', 'neo4j')
 
+
+# config variable 
+PORTAL_NAME= os.getenv('PORTAL_NAME', 'NF Data Portal')
+MAX_TURNS = int(os.getenv('MAX_TURNS', '50'))
+ABBREVIATED_RESPONSE = os.getenv('ABBREVIATED_RESPONSE', '0')
+abbreviated = bool(int(ABBREVIATED_RESPONSE))
 # Global variables
 openai_mcp = None
 openai_agent = None
@@ -33,6 +39,28 @@ anthropic_exit_stack = None
 class ChatRequest(BaseModel):
     message: str
     provider: str = "openai"
+
+def get_base_prompt():
+    base_prompt = textwrap.dedent(f"""
+        You are a helpful scientist with access to a Neo4j database of content containing biomedical entities, studies, and datasets from the {PORTAL_NAME}.
+        Use the Neo4j database and your scientific knowledge to answer the users questions. 
+        Try to answer the user query directly with out going to far off track
+            """
+        ).strip()
+    if abbreviated:
+        base_prompt+= textwrap.dedent(f"""
+                    Rules:
+                    - Answer the user's question directly and concisely.  
+                    - Do not explain what you are about to do before doing it.
+                    - Do not summarize or restate the question.
+                    - Do not add closing remarks like "I hope this helps" or "Let me know if you need more."
+                    - If the answer requires data from the graph, query it and report only the relevant results.
+                    - If you cannot answer from the graph, say so briefly.
+
+                """).strip()
+    print(f'USING abbreviated={abbreviated} for responses!!!!!!')
+    print(f"BASE prompt:\n{base_prompt}")
+    return base_prompt
 
 async def initialize_openai():
     """Initialize OpenAI agent with MCP"""
@@ -63,15 +91,12 @@ async def initialize_openai():
 
         # Wait for initialization
         await asyncio.sleep(2)
-
+        base_prompt = get_base_prompt()
         # Create OpenAI agent
         openai_agent = Agent(
             name="Assistant",
-            # model='gpt-5-chat-latest',
             model='gpt-5',
-            # model='gpt-5-mini',
-            # instructions="You are a helpful assistant with access to a Neo4j database. Use the Neo4j database tools to answer questions about the data.",
-            instructions="You are a helpful scientist with access to a Neo4j database of content scraped for the Neurofibromatosis data portal. Use the Neo4j database and tools to answer questions about the portal and Neurofibromatosis. Try to answer the user query directly with out going to far off track.",
+            instructions=base_prompt,
             mcp_servers=[openai_mcp],
         )
         print("OpenAI Agent (gpt-5-chat-latest) Ready!")
@@ -149,37 +174,14 @@ async def stream_anthropic_query(query: str):
     ## General response format ## 
     messages = [
         {
-            "role": "user",
-            # "content": 'Attached is a knowledge graph scraped from all data on the NF Data portal. Try to answer the user query directly with out going to far off track.'
-            "content": 'Attached is a knowledge graph scraped from all data on the NF Data portal. Try to answer the user query as directly as possible.'
+            "role": "assistant",
+            "content": get_base_prompt()
         },      
         {
             "role": "user",
             "content": query
         }
     ]
-    ## abbreviated response format response format ## 
-    abbreviated = False
-    if abbreviated:   
-        messages = [
-            {
-                "role": "user",
-                "content": textwrap.dedent(f"""
-                    You have access to a Neo4j knowledge graph built from the NF Data Portal,
-                    containing biomedical entities, studies, and datasets related to Neurofibromatosis.
-
-                    Rules:
-                    - Answer the user's question directly and concisely.  
-                    - Do not explain what you are about to do before doing it.
-                    - Do not summarize or restate the question.
-                    - Do not add closing remarks like "I hope this helps" or "Let me know if you need more."
-                    - If the answer requires data from the graph, query it and report only the relevant results.
-                    - If you cannot answer from the graph, say so briefly.
-
-                    User query: {query}
-                """).strip()
-            }
-        ]
 
     # Get available tools
     response = await anthropic_session.list_tools()
@@ -335,9 +337,7 @@ async def chat(request: ChatRequest):
 
             # Stream the response back
             async def generate_openai():
-                # For now, run and yield result
-                # The openai-agents library doesn't expose streaming in the same way
-                result = await Runner.run(openai_agent, user_query)
+                result = await Runner.run(openai_agent, user_query, max_turns=MAX_TURNS)
                 # Simulate streaming by yielding in chunks
                 text = result.final_output
                 chunk_size = 50

@@ -36,4 +36,4 @@ services:
       - backend
       - neo-4j
     environment:
-      - BACKEND_URL=http://backend:8000
+      - MCP_BACKEND_URL=http://backend:8000

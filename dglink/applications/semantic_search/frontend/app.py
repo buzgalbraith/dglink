@@ -1,12 +1,11 @@
 from flask import Flask, render_template, request, jsonify
 import requests
 import ast
-
+import os
 app = Flask(__name__)
 
-# BACKEND_URL = "http://backend:8001/"
-BACKEND_URL = "http://semantic_search_backend:8001/"
-
+# BACKEND_URL = "http://semantic_search_backend:8001/"
+SEMANTIC_SEARCH_BACKEND_URL = os.getenv('SEMANTIC_SEARCH_BACKEND_URL', 'http://semantic_search_backend:8001/')
 def process_results(raw_results):
     processed = []
     for row in raw_results:
@@ -60,7 +59,7 @@ def index():
         other_agent = request.form.get("OtherAgent")
         query_type = request.form.get("QueryType")
         response = requests.get(
-            f"{BACKEND_URL}/query",
+            f"{SEMANTIC_SEARCH_BACKEND_URL}/query",
             params={
                 "agent": agent,
                 "relation": relation,
@@ -80,7 +79,7 @@ def autocomplete():
     query = request.args.get("query", "")
     completion_type = request.args.get("inputId", "").lower()
     response = requests.get(
-        f"{BACKEND_URL}/autoComplete",
+        f"{SEMANTIC_SEARCH_BACKEND_URL}/autoComplete",
         params={
             "query": query,
             "completion_type": completion_type,
