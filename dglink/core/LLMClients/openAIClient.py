@@ -1,20 +1,24 @@
 """
-Ollama API adapter implementation.
+OpenAI API adapter implementation.
 
-Handles Ollama-specific API calls with structured JSON schema output.
-Uses Ollama's native structured output support via the `format` parameter.
+Handles OpenAI-specific API calls with structured JSON schema output.
 """
 
 import time
 import logging
 from typing import Type
 from pydantic import BaseModel
+import os
 
+from openai import OpenAI
 from openai.types.responses.parsed_response import ParsedResponse
 
 
 from .LLMClient import LLMClient
-from dglink.core.constants import open_ai_client
+
+open_ai_client = OpenAI(
+    api_key=os.environ.get("OPENAI_API_KEY"),
+)
 
 logger = logging.getLogger(__name__)
 REASONING_MODELS = {"gpt-5", "gpt-5-mini", "o1", "o3", "o3-mini", "o4-mini"}

@@ -1,12 +1,6 @@
 import os
 from pathlib import Path
-from openai import OpenAI
-from pydantic import BaseModel
 
-open_ai_client = OpenAI(
-    # This is the default and can be omitted
-    api_key=os.environ.get("OPENAI_API_KEY"),
-)
 
 DGLINK_CACHE = Path.joinpath(Path(os.getenv("HOME") or '.'), ".dglink")
 RESOURCE_PATH = "dglink/resources/graph/"
