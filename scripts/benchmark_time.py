@@ -6,7 +6,6 @@ import polars as pl
 from dglink.core.constants import REPORT_PATH
 from dglink.core.tabular_data import (
     load_file,
-    apply_ground,
 )
 from dglink.core.columnSelectors import LLMSelector, heuristicSelector
 from dglink.core.tabularDataset import tabularDataset
@@ -49,7 +48,7 @@ def run_benchmark(
                 dataset_path=Path(fp), sheet_name=sheet_name, table=df
             )
             ## try to ground everything in the dataframe
-            table.table = table.table.apply(apply_ground, axis=1)
+            table.ground_table(biolink_entity_types=True)
             llm_times = []
             hierarchal_times = []
             n_cols = max(len(table.original_columns), 1)

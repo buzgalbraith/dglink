@@ -111,9 +111,9 @@ class LLMSelector(columnSelector):
     def initialize_llm_client(self) -> LLMClient:
         """load the client for the correct model provider."""
         if self.provider == "openai":
-            return openAIClient()
+            return openAIClient(model = self.model)
         elif self.provider == "ollama":
-            return ollamaClient()
+            return ollamaClient(model = self.model)
         else:
             raise ValueError(f"{self.provider} is not a recognized model provider.")
 

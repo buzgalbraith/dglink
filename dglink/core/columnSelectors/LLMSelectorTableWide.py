@@ -4,8 +4,9 @@ Select entity columns using LLMs
 
 from dglink.core.tabularDataset import tabularDataset
 from .columnSelector import columnSelector, pandas
-from .LLMSelector import LLMSelector, evaluation_response
-from ...core.constants import TABULAR_ENTITY_TYPES_LLM, open_ai_client
+from .LLMSelector import LLMSelector
+from ..LLMClients.openAIClient import open_ai_client
+from ...core.constants import TABULAR_ENTITY_TYPES_LLM
 
 import json
 from pydantic import BaseModel
@@ -39,9 +40,10 @@ class LLMSelectorTableWide(columnSelector):
         Does not really make sense to just do one column so this is run with the column-wise llm selector
         """
         selector = LLMSelector(
-            self.open_AI_model,
-            self.target_records_for_call,
-            self.confidence_threshold,
+            provider='ollama',
+            model = self.open_AI_model,
+            target_records_for_call=self.target_records_for_call,
+            confidence_threshold=self.confidence_threshold,
             self.min_ground_percentage,
         )
         return selector.check_column(table, col, verbose)

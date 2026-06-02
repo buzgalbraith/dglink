@@ -16,7 +16,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-benchmark_path = os.path.join(REPORT_PATH, "benchmarking_columns.tsv")
+benchmark_path = os.path.join(REPORT_PATH, "benchmarking_columns_diverse_annotated.tsv")
+
+# benchmark_path = 'false_postives.tsv'
 
 
 def run_benchmark(
@@ -41,15 +43,16 @@ def run_benchmark(
                 f"Overwriting the evaluated benchmark saved at {write_path}!!"
             )
     records = []
-    for benchmark_row in tqdm(
+    for i, benchmark_row in enumerate(tqdm(
         benchmark.iter_rows(named=True),
         total=len(benchmark),
         desc="running benchmark evaluation",
         unit="benchmark column ",
-    ):
+    )):
         record = {}
         group_id = benchmark_row.get("group_identifier", "")
         fp = benchmark_row.get("fp", "")
+        # fp = benchmark_row.get("file_path", "")
         target_sheet = benchmark_row.get("sheet", "")
         dfs, read_states = load_file(group_identifier=group_id, fp=fp)
         sheet_idx = 0
@@ -60,20 +63,41 @@ def run_benchmark(
         record["column"] = column
         table = tabularDataset(dataset_path=Path(fp), sheet_name=target_sheet, table=df)
         ## try to ground everything in the dataframe
+        logger.info(f"{column} True Label is {benchmark_row.get('is_entity_col')}")
+        # table.table = table.table.apply(apply_ground, axis=1)
         table.ground_table(biolink_entity_types=True)
         selector = heuristicSelector()
         record["heuristic_vote"] = selector.check_column(table=table, col=column, verbose=True)
-        selector = LLMSelector()
-        record["llm_vote"] = selector.check_column(table=table, col=column, verbose=True)
-        if record["heuristic_vote"]:
-            record["hiercahal_vote"] = record["llm_vote"]
-        else:
-            record["hiercahal_vote"] = False
+        for provider, model in llm_models:
+            selector = LLMSelector(provider=provider, model=model, use_gilda_info=False, priority_sample=False)
+            record[f"{model}_no_gilda_no_ps_vote"] = selector.check_column(table=table, col=column, verbose=True)
+            selector = LLMSelector(provider=provider, model=model, use_gilda_info=True, priority_sample=False)
+            record[f"{model}_gilda_no_ps_vote"] = selector.check_column(table=table, col=column, verbose=True)
+            selector = LLMSelector(provider=provider, model=model, use_gilda_info=False, priority_sample=True)
+            record[f"{model}_no_gilda_ps_vote"] = selector.check_column(table=table, col=column, verbose=True)
+            selector = LLMSelector(provider=provider, model=model, use_gilda_info=True, priority_sample=True)
+            record[f"{model}_gilda_ps_vote"] = selector.check_column(table=table, col=column, verbose=True)
+            if record["heuristic_vote"]:
+                record[f"hiercahal_{model}_no_gilda_no_ps_vote"] = record[f"{model}_no_gilda_no_ps_vote"]
+                record[f"hiercahal_{model}_gilda_no_ps_vote"] = record[f"{model}_gilda_no_ps_vote"]
+                record[f"hiercahal_{model}_no_gilda_ps_vote"] = record[f"{model}_no_gilda_ps_vote"]
+                record[f"hiercahal_{model}_gilda_ps_vote"] = record[f"{model}_gilda_ps_vote"]
+            else:
+                record[f"hiercahal_{model}_no_gilda_vote"] = False
+                record[f"hiercahal_{model}_gilda_vote"] = False
         record["is_entity_col"] = benchmark_row.get("is_entity_col")
         record["sheet"] = target_sheet
         record["group_identifier"] = group_id
         record["file_path"] = fp
         records.append(record)
+        ## incremental save
+        if i%10 == 0:
+            write_df = pl.from_dicts(records)
+            write_df.write_csv(
+                write_path,
+                separator="\t",
+            )
+
     write_df = pl.from_dicts(records)
     write_df.write_csv(
         write_path,
@@ -147,6 +171,7 @@ def get_benchmark_summary(
     methods_summary = []
     evaluated_benchmark_df = evaluated_benchmark_df.cast({pl.Int64: pl.Boolean})
     for method in method_cols:
+        print(method)
         methods_summary.append(
             evaluate_col(col_name=method, evaluated_df=evaluated_benchmark_df)
         )
@@ -172,17 +197,37 @@ def get_benchmark_summary(
 
 
 if __name__ == "__main__":
-    llm_models = ["gpt-4o", "gpt-4o-mini", "gpt-5", "gpt-5-mini"]
-    llm_models = []
+    llm_models = [('openai' ,"gpt-5-mini"), ('ollama', 'gpt-oss:20b')]
+    llm_models = [('ollama', 'qvac/medpsy-4b')]
+    llm_models = [
+                    # ('openai' ,"gpt-5-mini"),
+                    # ('ollama', 'gpt-oss:20b'),
+                    # ('ollama', 'qvac/medpsy-4b'),
+                    ('ollama', 'hf.co/qvac/MedPsy-4B-GGUF:Q8_0'),
+                 ]
+
     benchmark = pl.read_csv(benchmark_path, separator="\t")
+
     logger.info("Running benchmark....")
     benchmarked_df = run_benchmark(
         benchmark=benchmark,
         overwrite=True,
         load=False,
     )
+    # benchmarked_df = pl.read_csv('dglink/resources/reports/evaluated_benchmark.tsv', separator='\t')
+
+
     logger.info("Evaluating benchmark....")
     summary_df = get_benchmark_summary(
         evaluated_benchmark_df=benchmarked_df, union=False, intersection=False
     )
-    logger.info(f"Summary results\n {summary_df}")
+    # with pl.Config(float_precision=3):
+    #     print(summary_df)
+    #     summary_df.mark
+    # from IPython.display import display, Markdown
+    # with pl.Config() as cfg:
+    #     cfg.set_tbl_formatting('ASCII_MARKDOWN')
+    #     cfg.set_float_precision(3)
+    #     print(summary_df)
+        # display(Markdown(repr(summary_df)))
+    # logger.info(f"Summary results\n {summary_df}")
