@@ -2,7 +2,7 @@ from .core.nodes import NodeSet
 from .core.edges import EdgeSet
 from .core.utils import load_graph, write_graph, write_graph_and_artifacts_default
 from .core.projects import get_projects
-from .core.tabular_data import get_tabular_data
+# from .core.tabular_data import get_tabular_data
 import logging
 
 logging.basicConfig(

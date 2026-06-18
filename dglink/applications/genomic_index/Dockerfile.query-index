@@ -1,0 +1,31 @@
+FROM ubuntu:22.04
+
+WORKDIR /sw
+
+## install CLI packages
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    git \
+    zlib1g-dev \
+    libbz2-dev \
+    libssl-dev \
+    libboost-all-dev \
+    vim \
+    && rm -rf /var/lib/apt/lists/*
+
+## install SDSL
+RUN git clone https://github.com/simongog/sdsl-lite.git
+RUN cd sdsl-lite && ./install.sh /usr/local
+
+## install mantis
+RUN git clone https://github.com/splatlab/mantis.git
+RUN mkdir /sw/mantis/build && \
+    cd /sw/mantis/build && \
+    cmake .. -DCMAKE_CXX_FLAGS="-include cstdint -include cstddef -include string" && \
+    make install
+
+## copy scripts
+COPY dglink/applications/genomic_index/scripts /sw/scripts
+
+ENTRYPOINT ["/bin/bash", "/sw/scripts/query_index.sh"]

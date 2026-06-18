@@ -1,6 +1,13 @@
 import synapseclient
 import os 
-syn = synapseclient.login()
+token = os.getenv("SYNAPSE_AUTHTOKEN")
+if token:
+    syn = synapseclient.login(authToken=token)
+else:
+    try:
+        syn = synapseclient.login()
+    except:
+        raise ValueError("Can not authenticate to synapse, either set credentials in ~/.synapseConfig or set $SYNAPSE_AUTHTOKEN in your environment")
 
 NF_STUDIES_BASE_URL = (
     "https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId"
