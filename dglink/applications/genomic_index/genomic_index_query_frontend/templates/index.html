@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Genomic index query</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f5f5f4;
+      color: #1c1c1a;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+    .page { max-width: 760px; margin: 0 auto; }
+    h1 { font-size: 1.2rem; font-weight: 500; margin-bottom: 0.25rem; }
+    .subtitle { font-size: 0.875rem; color: #6b6b68; margin-bottom: 1.5rem; }
+    .card {
+      background: #fff;
+      border: 0.5px solid #ddddd8;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    label { font-size: 0.8125rem; color: #6b6b68; display: block; margin-bottom: 6px; }
+    textarea {
+      width: 100%;
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: 0.75rem;
+      background: #fafaf8;
+      border: 0.5px solid #ddddd8;
+      border-radius: 8px;
+      padding: 10px 12px;
+      resize: vertical;
+      min-height: 140px;
+      line-height: 1.6;
+      color: #1c1c1a;
+      transition: border-color 0.15s;
+    }
+    textarea:focus { outline: none; border-color: #a0a09c; }
+    .options-row { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; align-items: flex-end; }
+    .opt { display: flex; flex-direction: column; gap: 5px; }
+    select, input[type="number"] {
+      font-size: 0.8125rem;
+      background: #fafaf8;
+      color: #1c1c1a;
+      border: 0.5px solid #ddddd8;
+      border-radius: 8px;
+      padding: 6px 10px;
+    }
+    select:focus, input[type="number"]:focus { outline: none; border-color: #a0a09c; }
+    input[type="number"] { width: 76px; }
+    .actions { display: flex; align-items: center; gap: 10px; margin-top: 1rem; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #fff; color: #1c1c1a;
+      border: 0.5px solid #b0b0aa;
+      border-radius: 8px; padding: 8px 16px;
+      font-size: 0.875rem; cursor: pointer;
+      transition: background 0.12s;
+    }
+    .btn:hover { background: #f5f5f4; }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-clear { background: none; border: none; color: #6b6b68; font-size: 0.8125rem; cursor: pointer; }
+    .btn-clear:hover { color: #1c1c1a; }
+    .pill {
+      font-size: 0.75rem; padding: 2px 10px; border-radius: 999px;
+      border: 0.5px solid #ddddd8; color: #6b6b68; margin-left: auto;
+    }
+    .pill.valid { background: #eaf3de; color: #3b6d11; border-color: #c0dd97; }
+    .pill.invalid { background: #fcebeb; color: #a32d2d; border-color: #f7c1c1; }
+    .error-banner {
+      background: #fcebeb; border: 0.5px solid #f7c1c1;
+      border-radius: 8px; padding: 10px 14px;
+      font-size: 0.875rem; color: #a32d2d; margin-top: 0.5rem;
+    }
+    #results { margin-top: 0.5rem; }
+    .results-header { font-size: 0.8125rem; color: #6b6b68; margin-bottom: 10px; }
+    .result-card {
+      background: #fff; border: 0.5px solid #ddddd8;
+      border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 8px;
+    }
+    .result-id { font-family: 'Menlo','Consolas',monospace; font-size: 0.7rem; color: #6b6b68; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .result-gene { font-size: 0.9375rem; font-weight: 500; }
+    .badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .badge { font-size: 0.6875rem; padding: 2px 8px; border-radius: 6px; border: 0.5px solid #ddddd8; background: #fafaf8; color: #6b6b68; }
+    .badge.hit { background: #e6f1fb; color: #185fa5; border-color: #b5d4f4; }
+    hr { border: none; border-top: 0.5px solid #ddddd8; margin: 1rem 0; }
+    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid #ddddd8; border-top-color: #6b6b68; border-radius: 50%; animation: spin 0.6s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <h1>Genomic index query</h1>
+  <p class="subtitle">Paste a FASTA sequence or raw nucleotide string to search the index</p>
+
+  <div class="card">
+    <label>Sequence input <span id="statusPill" class="pill" style="display:none;float:right;"></span></label>
+    <textarea id="seqInput"
+      placeholder=">header|optional&#10;ACGTACGTACGT...&#10;&#10;or paste a raw nucleotide sequence directly"
+      spellcheck="false" autocorrect="off" autocapitalize="off"></textarea>
+
+    <div id="errorBanner" class="error-banner" style="display:none;"></div>
+
+    <div class="options-row">
+      <div class="opt">
+        <label>Index</label>
+        <select id="indexSelect">
+          <option value="mantis">Mantis</option>
+          <option value="squeakr">Squeakr</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+      <div class="opt">
+        <label>k-mer size</label>
+        <input type="number" id="kmerSize" value="31" min="15" max="63" step="2">
+      </div>
+      <div class="opt">
+        <label>Threshold</label>
+        <input type="number" id="threshold" value="0.8" min="0" max="1" step="0.05">
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="queryBtn" onclick="runQuery()">
+        Search index
+      </button>
+      <button class="btn-clear" onclick="clearAll()">Clear</button>
+    </div>
+  </div>
+
+  <div id="results" style="display:none;">
+    <hr>
+    <p class="results-header" id="resultsHeader"></p>
+    <div id="resultsBody"></div>
+  </div>
+</div>
+
+<script>
+const VALID = /^[ACGTNacgtn\s>|.\-\w]+$/;
+
+document.getElementById('seqInput').addEventListener('input', function() {
+  const pill = document.getElementById('statusPill');
+  const val = this.value;
+  if (!val.trim()) { pill.style.display = 'none'; return; }
+  const stripped = val.replace(/^>.*$/mg, '').replace(/\s/g, '');
+  const ok = stripped.length > 0 && /^[ACGTNacgtn]+$/.test(stripped);
+  pill.style.display = 'inline';
+  pill.className = 'pill ' + (ok ? 'valid' : 'invalid');
+  pill.textContent = ok ? 'valid' : 'invalid characters';
+});
+
+function clearAll() {
+  document.getElementById('seqInput').value = '';
+  document.getElementById('statusPill').style.display = 'none';
+  document.getElementById('errorBanner').style.display = 'none';
+  document.getElementById('results').style.display = 'none';
+}
+
+async function runQuery() {
+  const seq = document.getElementById('seqInput').value.trim();
+  const k = parseInt(document.getElementById('kmerSize').value);
+  const threshold = parseFloat(document.getElementById('threshold').value);
+  const index = document.getElementById('indexSelect').value;
+  const btn = document.getElementById('queryBtn');
+  const errBanner = document.getElementById('errorBanner');
+
+  if (!seq) return;
+  errBanner.style.display = 'none';
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Querying...';
+
+  try {
+    const res = await fetch('/query', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sequence: seq, k, threshold, index })
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      errBanner.textContent = data.error || 'Query failed.';
+      errBanner.style.display = 'block';
+      document.getElementById('results').style.display = 'none';
+    } else {
+      renderResults(data);
+    }
+  } catch (err) {
+    errBanner.textContent = 'Network error: ' + err.message;
+    errBanner.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Search index';
+  }
+}
+
+function renderResults(data) {
+  const { results, meta } = data;
+  const section = document.getElementById('results');
+  const header = document.getElementById('resultsHeader');
+  const body = document.getElementById('resultsBody');
+
+  section.style.display = 'block';
+  header.textContent = `${meta.sequence_count} sequence${meta.sequence_count !== 1 ? 's' : ''} — ${meta.total_kmers.toLocaleString()} k-mers (k=${meta.k}) — threshold ${meta.threshold} — ${meta.index}`;
+
+body.innerHTML = results.map(r => {
+  const best = r.hits[0] ?? null;
+
+  const hitBadges = r.hits.map(f => `
+    <span class="badge hit" title="${f.sample_id}: ${f.kmer_hits} k-mer hits">
+      ${f.sample_id} — ${(f.hit_fraction * 100).toFixed(1)}%
+    </span>`).join('');
+
+  return `
+    <div class="result-card">
+      <div class="result-id">${r.query?.header || 'raw sequence'}</div>
+      <div class="result-gene">${r.gene_symbol || r.id}</div>
+      <div class="badges">
+        <span class="badge ${r.hits.length ? 'hit' : ''}">
+          ${r.hits.length} sample${r.hits.length !== 1 ? 's' : ''} matched
+        </span>
+        <span class="badge">${r.num_kmers.toLocaleString()} k-mers</span>
+        <span class="badge">${r.query?.length?.toLocaleString() ?? '—'} bp</span>
+        ${r.biotype ? `<span class="badge">${r.biotype}</span>` : ''}
+        ${best ? `<span class="badge">best: ${best.sample_id} (${(best.hit_fraction * 100).toFixed(1)}%)</span>` : ''}
+      </div>
+      ${hitBadges ? `<div class="badges" style="margin-top:6px;">${hitBadges}</div>` : ''}
+    </div>`;
+}).join('');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+services:
+  genomic_index_query_backend:
+    build:
+      context: ./          # directory used as build context
+      dockerfile: ./genomic_index_query_backend/Dockerfile
+    container_name: genomic-index-query-backend
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./mantis_index:/sw/mantis_index
+  genomic_index_query_frontend:
+    build: ./genomic_index_query_frontend
+    container_name: genomic-index-query-frontend
+    ports:
+      - "5001:5001"
+    depends_on:
+      - genomic_index_query_backend
+    environment:
+      - GENOMIC_INDEX_QUERY_BACKEND_URL=http://genomic_index_query_backend:8001

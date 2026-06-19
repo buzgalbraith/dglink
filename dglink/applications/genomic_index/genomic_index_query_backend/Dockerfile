@@ -4,6 +4,9 @@ WORKDIR /sw
 
 ## install CLI packages
 RUN apt-get update && apt-get install -y \
+    python3.10 \
+    python3.10-dev \
+    python3-pip \
     build-essential \
     cmake \
     git \
@@ -26,6 +29,13 @@ RUN mkdir /sw/mantis/build && \
     make install
 
 ## copy scripts
-COPY dglink/applications/genomic_index/scripts /sw/scripts
+COPY scripts /sw/scripts
 
-ENTRYPOINT ["/bin/bash", "/sw/scripts/query_index.sh"]
+## python setup
+COPY genomic_index_query_backend/requirements.txt /sw/requirements.txt
+RUN pip install -r /sw/requirements.txt
+COPY genomic_index_query_backend/main.py /sw/main.py
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8001"]
+
+

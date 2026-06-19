@@ -207,3 +207,5 @@ __marimo__/
 
 # Vscode 
 .vscode/
+**/.env
+**/mantis_index
