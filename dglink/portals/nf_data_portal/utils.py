@@ -3,10 +3,12 @@ from dglink.core.constants import TABULAR_FILE_TYPES, DGLINK_CACHE, REPORT_PATH
 import polars as pl
 import pandas
 from synapseutils import walk
+from synapseclient.models import File
 
 import os
 import re
 from pathlib import Path
+import asyncio
 from typing import Iterator, Union
 import tqdm
 import logging 
@@ -43,6 +45,7 @@ def safe_download(syn_id:str)->str|None:
         entity = syn.get(syn_id, ifcollision="keep.local") ## keep local file if already downloaded ie do not re-download.
         return entity.path
     except Exception:
+        logger.warning(f"Could not download file {syn_id}", exc_info=True)
         return None
 
 def fetch_nf_tabular_files()->pl.DataFrame:
@@ -70,7 +73,6 @@ def fetch_nf_tabular_files()->pl.DataFrame:
         tabular_project_files = project_files.filter(
             pl.col("file_name").str.contains(file_types_pattern)
         )
-        # download tabular files when possible (note that this file was saved TODO: look into if things are working )
         tabular_project_files = tabular_project_files.with_columns(
             file_path=pl.col('file_syn_id').map_elements(
                 safe_download,
@@ -235,8 +237,10 @@ def crawl_project_files(
                 "file",
             ],
         )
-    except:
-        logger.warning(f"Could not read files for project with id {project_syn_id}")
+    except Exception:
+        logger.warning(
+            f"Could not read files for project with id {project_syn_id}", exc_info=True
+        )
         file_name_iter = [
             [
                 "",
@@ -261,3 +265,34 @@ def crawl_project_files(
     )
     return known_files
 
+
+def get_file_annotations(file_ids:list)->dict[str, dict]:
+    """Use the Synapse file object to pull file annotations for a list of synapse ids 
+    Args:
+        file_ids: a list of file syn ids. 
+        
+    Returns:
+        dict[str, dict] a dictionary mapping syn ids to a dictionary of their annotations
+
+    
+    """
+    logger.info("pulling annotations...")
+    async def _safe_get(fid):
+        try:
+            return fid, await File(id=fid, download_file=False).get_async()
+        except Exception as e:
+            logger.warning(f"Skipping {fid}: {e}")
+            return fid, None
+
+    async def fetch_open_annotations(file_ids, batch_size=50):
+        results = {}
+        for i in tqdm.tqdm(range(0, len(file_ids), batch_size)):
+            batch = file_ids[i:i+batch_size]
+            tasks = [_safe_get(fid) for fid in batch]
+            outcomes = await asyncio.gather(*tasks)
+            
+            for fid, entity in outcomes:
+                if entity is not None:
+                    results[fid] = entity.annotations
+        return results
+    return asyncio.run(fetch_open_annotations(file_ids))

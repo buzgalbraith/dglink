@@ -3,4 +3,5 @@ from .meta import get_meta
 from .publications import get_publications
 from .tools import get_tools
 from .wiki import get_wikis
+from .fastq import get_fastq_metadata
 from .utils import get_tabular_iterator, get_all_nf_studies

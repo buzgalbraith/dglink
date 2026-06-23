@@ -1,8 +1,8 @@
 ## query a pre-existing Mantis index with Docker
-docker build \
-	-t query-index \
-	-f query-index/Dockerfile.query-index \
-	.
+# docker build \
+# 	-t query-index \
+# 	-f dglink/applications/genomic_index/Dockerfile.query-index \
+# 	.
 query_file=${1:-"input_txns.fa"}
 docker run --rm -it \
         --env-file dglink/applications/genomic_index/.env \

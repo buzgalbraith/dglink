@@ -2,9 +2,14 @@
 this is a complete restructure of the assemble NF KG Method
 """
 
-from dglink import NodeSet, EdgeSet, get_projects, get_tabular_data, write_graph
-from dglink.portals.nf_data_portal import get_tabular_iterator, get_wikis, get_publications, get_tools, get_meta
+import gilda
+from dglink import NodeSet, EdgeSet, get_projects, write_graph
+from dglink.core.tabular_data import get_tabular_data
+from dglink.portals.nf_data_portal import get_tabular_iterator, get_wikis, get_publications, get_tools, get_meta, get_fastq_metadata
 from dglink.portals.nf_data_portal.constants import NODE_ATTRIBUTES, EDGE_ATTRIBUTES, NF_STUDIES_BASE_URL, WIKI_FIELDS, UNGROUNDED_FIELDS, GROUND_FIELDS
+
+
+
 
 
 import logging
@@ -24,24 +29,26 @@ if __name__ == "__main__":
     ## get a full list of studies
     # project_ids = get_all_nf_studies()
     project_ids = [
-    "syn2343195",  ## large project
-    "syn5562324",  ## small project
-    "syn27761862",  ## small project
-    "syn4939874",  ## large project
-    "syn4939876",  ## locked
-    "syn4939906",  ## small
-    "syn4939916",  ## locked
-    "syn7217928",  ## large
-    "syn8016635",  ## small
-    "syn11638893",  ## locked
-    "syn11817821",  ## large
-    "syn21641813",  ## locked
-    "syn21642027",  ## locked
-    "syn21650493",  ## large
-    "syn21984813",  ## large
-    "syn23639889",  ## locked
-    "syn51133914",  ## locked
-    "syn52740594",  ## large
+        'syn11374354', 
+        'syn25881328',
+    # "syn2343195",  ## large project
+    # "syn5562324",  ## small project
+    # "syn27761862",  ## small project
+    # "syn4939874",  ## large project
+    # "syn4939876",  ## locked
+    # "syn4939906",  ## small
+    # "syn4939916",  ## locked
+    # "syn7217928",  ## large
+    # "syn8016635",  ## small
+    # "syn11638893",  ## locked
+    # "syn11817821",  ## large
+    # "syn21641813",  ## locked
+    # "syn21642027",  ## locked
+    # "syn21650493",  ## large
+    # "syn21984813",  ## large
+    # "syn23639889",  ## locked
+    # "syn51133914",  ## locked
+    # "syn52740594",  ## large
     ]
     ## add projects to KG as nodes
     node_set, edge_set = get_projects(
@@ -51,6 +58,7 @@ if __name__ == "__main__":
         studies_base_url=NF_STUDIES_BASE_URL,
         write_set=True,
     )
+ 
     # process the tabular data 
     tabular_iterator = get_tabular_iterator(project_list=project_ids)
     reports = get_tabular_data(
@@ -59,6 +67,8 @@ if __name__ == "__main__":
         edge_set = edge_set,
         tabular_iterator=tabular_iterator
     )
+    ## add metadata from the FastQ sequencing files
+    node_set, edge_set = get_fastq_metadata(project_list=project_ids, node_set=node_set, edge_set=edge_set, write_set=True)
     ## load in wikis
     node_set, edge_set = get_wikis(
         node_set=node_set,

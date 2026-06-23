@@ -219,6 +219,8 @@ body.innerHTML = results.map(r => {
     <div class="result-card">
       <div class="result-id">${r.query?.header || 'raw sequence'}</div>
       <div class="result-gene">${r.gene_symbol || r.id}</div>
+      ${r.result_url ? `<div class="KG-view"><a href="${r.result_url}" target="_blank" rel="noopener noreferrer">View in KG</a></div>` : ''}
+      ${r.ensemble_url ? `<div class="esmbl-view"><a href="${r.ensemble_url}" target="_blank" rel="noopener noreferrer">View in Ensembl</a></div>` : ''}
       <div class="badges">
         <span class="badge ${r.hits.length ? 'hit' : ''}">
           ${r.hits.length} sample${r.hits.length !== 1 ? 's' : ''} matched

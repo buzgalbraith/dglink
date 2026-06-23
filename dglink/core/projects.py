@@ -19,9 +19,7 @@ def get_projects(
     write_set: bool = False,
 ):
     logger.info("loading in project nodes")
-    to_url = lambda x: (
-        f"{studies_base_url}={x}" if studies_base_url is not None else ""
-    )
+    to_url = lambda x: studies_base_url.replace("{study_id}", x) if studies_base_url is not None else ""
     for project_id in tqdm.tqdm(project_ids):
         node_set.update_nodes(
             {

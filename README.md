@@ -4,11 +4,13 @@ DGLink introduces semantic interoperability within data portals through automate
 
 ## Applications
 
-1. MCP: Leverage This application provides a chat interface that connects to a Neo4j database using the Model Context Protocol (MCP). It supports both OpenAI (GPT) and Anthropic (Claude) models with real-time streaming responses and markdown rendering.
+1. MCP: A chat interface that connects to a Neo4j database using the Model Context Protocol (MCP). It supports both OpenAI (GPT) and Anthropic (Claude) models with real-time streaming responses and markdown rendering.
 
-2. Semantic search: Run semantic queries on the knowledge graph via a simple to use web-UI.
+1. Semantic search: Run semantic queries on the knowledge graph via a simple to use web-UI.
 
-## Brining up both applications 
+1. Genomic search index: Query for transcripts within the portal's FastQ files using a [Mantis](https://github.com/splatlab/mantis) sequence-search index, with hits linked back to the knowledge graph.
+
+## Bringing up the applications
 - `cd dglink/applications`
 - `docker compose up --build`
 ## MCP Application - LLM Chat Interface with Neo4j
@@ -40,3 +42,36 @@ DGLink introduces semantic interoperability within data portals through automate
 3. Connect to the services.
 ### Connecting to the semantic search service
 - semantic search UI [http://localhost:5001/](http://localhost:5001/)
+
+## Genomic Search Index
+
+Build a [Mantis](https://github.com/splatlab/mantis) sequence-search index over the FastQ files in the NF Data Portal, then query it for transcripts of interest. Hits are linked back to the knowledge graph served from Neo4j.
+
+### Building the index
+
+The index is built in a Docker container that pulls the FastQ files, builds the Squeakr count structures, and assembles the Mantis index:
+
+```
+bash scripts/genomic_index/build_index.sh
+```
+
+This writes the index to `dglink/applications/genomic_index/mantis_index`.
+
+### Querying the index via the command line
+
+Pass a FASTA file of query transcripts (defaults to `input_txns.fa`):
+
+```
+bash scripts/genomic_index/query_index.sh [query_file.fa]
+```
+
+### Bringing up the query service
+The index can also be queried via a web-UI which can be brought up by running 
+1. Go into the genomic index directory with `cd dglink/applications/genomic_index`
+2. Bring up the service (building images if required) with `docker compose up --build`
+3. Connect to the services.
+
+### Accessing the genomic index service
+- **Frontend UI**: http://localhost:5001
+- **Backend API**: http://localhost:8001
+- **Neo4j Browser**: http://localhost:7474

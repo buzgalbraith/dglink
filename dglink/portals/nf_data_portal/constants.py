@@ -10,9 +10,8 @@ else:
         raise ValueError("Can not authenticate to synapse, either set credentials in ~/.synapseConfig or set $SYNAPSE_AUTHTOKEN in your environment")
 
 NF_STUDIES_BASE_URL = (
-    "https://nf.synapse.org/Explore/Studies/DetailsPage/StudyDetails?studyId"
+    "https://nf.synapse.org/Explore/Studies/{study_id}/Details"
 )
-
 NODE_ATTRIBUTES = [
     ## core fields - all nodes should have ths other fields are optional
     "curie:ID",
@@ -45,6 +44,12 @@ NODE_ATTRIBUTES = [
     "DOI",
     ## nf data portal tool fields (maybe move elsewhere)
     "tool_type",
+    ## genomic fields 
+    'assay',
+    'nf1Genotype',
+    'nf2Genotype',
+    'diagnosis',
+    'tumorType'
 ]
 EDGE_ATTRIBUTES = [
     ## core fields - all edges should have ths other fields are optional
@@ -86,3 +91,16 @@ NF_DATA_PORTAL_CACHE_DIR = os.path.join(
     ".data",
     "nf_data_portal",
 )
+
+SPECIMEN_FIELDS = {
+    'age': "PatientAge",
+    'sex' : "PatientSex"
+}
+
+EXPERIMENT_FIELDS = [
+'assay',
+'nf1Genotype',
+'nf2Genotype',
+'diagnosis',
+'tumorType'
+]

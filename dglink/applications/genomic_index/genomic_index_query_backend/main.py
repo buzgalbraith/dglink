@@ -8,14 +8,22 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 import re 
 import json
+import os 
+from neo4j import GraphDatabase
+from urllib.parse import urlencode
 
 logger = logging.getLogger()
 
+driver = GraphDatabase.driver(
+    "bolt://neo-4j:7687",
+    auth=(os.environ.get("NEO4J_URI"), os.environ.get("NEO4J_PASSWORD")),
+)
 AVAILABLE_INDEXES = ["mantis"]
 
 @dataclass
 class SequenceQuery:
     id : str
+    ensembl_id: str| None
     header : str|None
     seq: str
     length: int
@@ -36,10 +44,12 @@ class QueryResult:
     num_kmers: int
     id : str
     gene_symbol: str|None
+    ensemble_url: str|None
     transcript_id: str|None
     biotype:str|None
     seq: str
     header : str|None
+    result_url: str
     hits: list[SampleHit] = field(default_factory=list)
 
 
@@ -53,6 +63,16 @@ class QueryResult:
 
 def _clean_sample_id(path: str) -> str:
     return Path(path).stem
+
+def get_gene_url(emedbl_id: str) -> str | None:
+
+    base_id = emedbl_id.split('.')[0]
+    
+    if emedbl_id.startswith('ENSMUSG'):
+        return f"https://www.ensembl.org/Mus_musculus/Gene/Summary?g={base_id}"
+    elif emedbl_id.startswith('ENSG'):
+        return f"https://www.ensembl.org/Homo_sapiens/Gene/Summary?g={base_id}"
+    return None
 
 def parse_res(raw: str, queries:list[SequenceQuery],  threshold: float = 0.0) -> list[QueryResult]:
     """
@@ -85,6 +105,13 @@ def parse_res(raw: str, queries:list[SequenceQuery],  threshold: float = 0.0) ->
                 hit_fraction=frac,
             ))
         hits.sort(key=lambda h: h.hit_fraction, reverse=True)
+        print("-"*100)
+        if query.ensembl_id:
+            ensmbl_url = get_gene_url(query.ensembl_id)
+        else:
+            ensmbl_url = ""
+        print("-"*100)
+        url = query_kg([f'"{x.sample_id}"' for x in hits])
         results.append(QueryResult(qnum=qnum,
                                    num_kmers=num_kmers,
                                    id=query.id,
@@ -93,6 +120,8 @@ def parse_res(raw: str, queries:list[SequenceQuery],  threshold: float = 0.0) ->
                                    biotype=query.biotype,
                                    seq=query.seq, 
                                    header = query.header,
+                                   ensemble_url=ensmbl_url,
+                                   result_url=url,
                                    hits=hits))
 
     results.sort(key=lambda r: r.qnum)
@@ -146,6 +175,7 @@ def parse_fasta(raw: str) -> list[SequenceQuery]:
                 header= record.description,
                 seq= seq_str,
                 length= len(seq_str),
+                ensembl_id=parts[1] if len(parts) > 0 else record.id,
                 gene_symbol= parts[5] if len(parts) > 5 else record.id,
                 transcript_id= parts[0] if parts else record.id,
                 biotype= parts[7] if len(parts) > 7 else None,
@@ -164,6 +194,7 @@ def parse_fasta(raw: str) -> list[SequenceQuery]:
                 SequenceQuery(
                 id= f"query_{i}",
                 header= None,
+                ensembl_id=None,
                 seq= seq_str,
                 length= len(seq_str),
                 gene_symbol= "Raw query",
@@ -204,9 +235,27 @@ def query(query_input, k, threshold, index):
         }
     })
 
-        
+
+def neo4j_url(query, host="http://localhost:7474", run=False):
+    cmd = "play" if run else "edit"
+    params = urlencode({"cmd": cmd, "arg": query})
+    return f"{host}/browser/?{params}"
+
+def query_kg(syn_id: list[str] = None):
+    q = f"""
+        MATCH (p:Project)-[:has_specimen]->(s:specimen)-[]->(e)
+        WHERE e.curie = {' OR e.curie = '.join(syn_id)}
+        MATCH (s)-[]->(related)
+        WHERE related:anatomical_region OR related:organism
+        RETURN p, s, e, related
+        """
+    return neo4j_url(q)
+    # records, _, _ = driver.execute_query(q,
+    #     database_="neo4j",
+    # )
+    # print(neo4j_url(q,)    )      # loads into editor
+    # print(neo4j_url(q,  run=True)) # runs immediately 
     
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
-
