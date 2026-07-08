@@ -1,7 +1,7 @@
-from .columnSelector import columnSelector
-from .schemas import biological_entity
-from dglink.core.tabularDataset import tabularDataset
-from dglink.core.LLMClients import ollamaClient, openAIClient, LLMClient
+from .column_selector import ColumnSelector
+from .schemas import BiologicalEntity
+from dglink.core.tabular_dataset import TabularDataset
+from dglink.core.llm_clients import OllamaClient, OpenAIClient, LLMClient
 from pydantic import BaseModel
 from typing import Type
 from pandas import DataFrame
@@ -12,7 +12,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class LLMSelector(columnSelector):
+class LLMSelector(ColumnSelector):
     def __init__(
         self,
         provider:str ="openai",
@@ -20,7 +20,7 @@ class LLMSelector(columnSelector):
         target_records_for_call: int = 10,
         confidence_threshold: float = 0.5,
         min_ground_percentage: float = 0.1,
-        schema: Type[BaseModel] = biological_entity,
+        schema: Type[BaseModel] = BiologicalEntity,
         max_retries: int = 3,
         retry_delay: float = 1.0,
         temperature: float = 0.0,
@@ -43,7 +43,7 @@ class LLMSelector(columnSelector):
         self.llm_client: LLMClient = self.initialize_llm_client()
 
     def execute(
-        self, table: tabularDataset, verbose: bool = False, table_wide: bool = False
+        self, table: TabularDataset, verbose: bool = False, table_wide: bool = False
     ):
         col_map = []
         for col in table.original_columns:
@@ -80,7 +80,7 @@ class LLMSelector(columnSelector):
             logger.info("-" * 50)
 
     def check_column(
-        self, table: tabularDataset, col: str, verbose: bool = False
+        self, table: TabularDataset, col: str, verbose: bool = False
     ) -> bool:
         sample = self._get_samples(table, col)
         system_prompt, user_prompt = self._get_prompts(col, sample)
@@ -111,13 +111,13 @@ class LLMSelector(columnSelector):
     def initialize_llm_client(self) -> LLMClient:
         """load the client for the correct model provider."""
         if self.provider == "openai":
-            return openAIClient()
+            return OpenAIClient()
         elif self.provider == "ollama":
-            return ollamaClient()
+            return OllamaClient()
         else:
             raise ValueError(f"{self.provider} is not a recognized model provider.")
 
-    def process_response(self, col_map: list, table: tabularDataset):
+    def process_response(self, col_map: list, table: TabularDataset):
         """
         use the schema match to:
             1. drop cols if not matched
@@ -175,7 +175,7 @@ class LLMSelector(columnSelector):
             """).strip()
         return system_prompt, user_prompt
 
-    def _get_samples(self, table: tabularDataset, col: str) -> DataFrame:
+    def _get_samples(self, table: TabularDataset, col: str) -> DataFrame:
         df = table.table
         cols = (
             [f"{col}_raw_text"]

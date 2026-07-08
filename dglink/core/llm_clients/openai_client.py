@@ -14,7 +14,7 @@ from openai import OpenAI
 from openai.types.responses.parsed_response import ParsedResponse
 
 
-from .LLMClient import LLMClient
+from .llm_client import LLMClient
 
 open_ai_client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 REASONING_MODELS = {"gpt-5", "gpt-5-mini", "o1", "o3", "o3-mini", "o4-mini"}
 
 
-class openAIClient(LLMClient):
+class OpenAIClient(LLMClient):
     """
     Ollama implementation of LLM client adapter.
     """

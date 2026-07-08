@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 TERM_EXCLUSION_LIST = ["yes", "na", "large", "std", "dead"]
 COLUMN_EXCLUSION_LIST = ["Vendor"]
 
-class tabularDataset():
+class TabularDataset():
     entity_columns:list[str] = NotImplemented
     def __init__(self, dataset_path:Path, sheet_name:str, table:pandas.DataFrame, terms_to_exclude:list[str]=TERM_EXCLUSION_LIST, columns_to_exclude:list[str] = COLUMN_EXCLUSION_LIST, seed:int = 101, ) -> None:
         self.dataset_path = dataset_path

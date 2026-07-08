@@ -2,14 +2,14 @@
 This script will have a basic example of pulling code from the NCI General Commons (GC) with Gen3
 """
 
-from dglink.portals.nci.gc import nciGeneralCommonsClient
+from dglink.portals.nci.gc import NciGeneralCommonsClient
 from dglink.portals.nci.gc.constants import NCI_GC_CACHE_DIR, NCI_TABULAR_FILE_TYPES
 import polars as pl
 import os 
 
 
 if __name__ == "__main__":
-    client = nciGeneralCommonsClient(gen3_credential_file='nci_general_commons_credentials')
+    client = NciGeneralCommonsClient(gen3_credential_file='nci_general_commons_credentials')
     print("Getting Studies")
     studies = client.get_all_studies()
     print("Getting files")

@@ -295,7 +295,7 @@ def object_search(
 
 
 @app.get("/autoComplete")
-def Autocomplete(query: str, completion_type: str, k: int = 100):
+def autocomplete(query: str, completion_type: str, k: int = 100):
     if completion_type != "relation":
         res = ["".join(x) for x in node_prefix_set.iter(prefix=query)][:k]
         if len(res) > 0:

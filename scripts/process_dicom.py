@@ -50,17 +50,17 @@ def process_dicom(
     if not project_granularity:
         ## annotations do not have series identifier so using all this info as a proxy ##
         assay = annotations.get("assay", ["assay_missing"])[0]
-        specimenID = annotations.get("specimenID", ["specimenID_missing"])[0]
-        individualID = annotations.get("individualID", ["individualID_missing"])[0]
-        experimentalTimepoint = annotations.get(
+        specimen_id = annotations.get("specimenID", ["specimenID_missing"])[0]
+        individual_id = annotations.get("individualID", ["individualID_missing"])[0]
+        experimental_timepoint = annotations.get(
             "experimentalTimepoint", ["experimentalTimepoint_missing"]
         )[0]
         series_identifier = (
             project_id,
             assay,
-            specimenID,
-            individualID,
-            experimentalTimepoint,
+            specimen_id,
+            individual_id,
+            experimental_timepoint,
         )
     ## try to process one series per study
     else:

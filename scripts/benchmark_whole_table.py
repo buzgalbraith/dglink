@@ -8,9 +8,9 @@ from dglink.core.tabular_data import (
     load_file,
     apply_ground,
 )
-from dglink.core.columnSelectors import LLMSelector, heuristicSelector
-from dglink.core.columnSelectors.LLMSelectorTableWide import LLMSelectorTableWide
-from dglink.core.tabularDataset import tabularDataset
+from dglink.core.column_selectors import LLMSelector, HeuristicSelector
+from dglink.core.column_selectors.llm_selector_table_wide import LLMSelectorTableWide
+from dglink.core.tabular_dataset import TabularDataset
 import os
 from pathlib import Path
 from tqdm import tqdm
@@ -60,10 +60,10 @@ def run_benchmark(
             sheet_idx += 1
         df = dfs[sheet_idx]
         record["column"] = column
-        table = tabularDataset(dataset_path=Path(fp), sheet_name=target_sheet, table=df)
+        table = TabularDataset(dataset_path=Path(fp), sheet_name=target_sheet, table=df)
         ## try to ground everything in the dataframe
         table.table = table.table.apply(apply_ground, axis=1)
-        selector = heuristicSelector(max_entity_types=3)
+        selector = HeuristicSelector(max_entity_types=3)
         selector = LLMSelectorTableWide()
         record["is_entity_col"] = benchmark_row.get("is_entity_col")
         selector.execute(table=table, verbose=True)

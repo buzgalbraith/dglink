@@ -8,7 +8,7 @@ from gen3.tools.download.drs_download import DownloadManager, Downloadable
 import os
 
 
-class gen3Client:
+class Gen3Client:
     def __init__(self, endpoint: str, credential_file: str = None):
         self.endpoint = endpoint
         self.hostname = endpoint.removeprefix("https://")

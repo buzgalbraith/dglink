@@ -2,10 +2,12 @@
 Select entity columns using LLMs
 """
 
-from dglink.core.tabularDataset import tabularDataset
-from .columnSelector import columnSelector, pandas
-from .LLMSelector import LLMSelector, evaluation_response
-from ...core.constants import TABULAR_ENTITY_TYPES_LLM, open_ai_client
+from dglink.core.tabular_dataset import TabularDataset
+from .column_selector import ColumnSelector, pandas
+from .llm_selector import LLMSelector
+from .schemas import EvaluationResponse
+from ...core.constants import TABULAR_ENTITY_TYPES_LLM
+from ..llm_clients.openai_client import open_ai_client
 
 import json
 from pydantic import BaseModel
@@ -16,7 +18,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class LLMSelectorTableWide(columnSelector):
+class LLMSelectorTableWide(ColumnSelector):
     name = "table_wide_LLM_selector"
 
     def __init__(
@@ -33,7 +35,7 @@ class LLMSelectorTableWide(columnSelector):
         self.min_ground_percentage = min_ground_percentage
 
     def check_column(
-        self, table: tabularDataset, col: str, verbose: bool = False
+        self, table: TabularDataset, col: str, verbose: bool = False
     ) -> bool:
         """
         Does not really make sense to just do one column so this is run with the column-wise llm selector
@@ -46,7 +48,7 @@ class LLMSelectorTableWide(columnSelector):
         )
         return selector.check_column(table, col, verbose)
 
-    def execute(self, table: tabularDataset, verbose: bool = False):
+    def execute(self, table: TabularDataset, verbose: bool = False):
         llm_prompt = self.get_llm_prompt_batch(table=table)
         llm_resp = self.call_llm_batch(llm_prompt=llm_prompt)
         # Handle columns that were skipped (below min_ground_percentage)
@@ -80,7 +82,7 @@ class LLMSelectorTableWide(columnSelector):
             )
             logger.info("-" * 50)
 
-    def process_response(self, matching_cols: dict, table: tabularDataset):
+    def process_response(self, matching_cols: dict, table: TabularDataset):
         """
         use the schema match to:
             1. drop cols if not matched
@@ -112,7 +114,7 @@ class LLMSelectorTableWide(columnSelector):
         table.table.drop(columns=cols_to_drop, inplace=True)
         table.entity_columns = entity_cols
 
-    def get_llm_prompt_batch(self, table: tabularDataset) -> tuple[str, str]:
+    def get_llm_prompt_batch(self, table: TabularDataset) -> tuple[str, str]:
         table_len = len(table.table)
         column_infos = []
 
@@ -218,7 +220,7 @@ class LLMSelectorTableWide(columnSelector):
                     },
                     {"role": "user", "content": call_prompt},
                 ],
-                text_format=evaluation_response_batch,
+                text_format=EvaluationResponseBatch,
             )
         except BadRequestError:
             raise ValueError(
@@ -260,13 +262,13 @@ class LLMSelectorTableWide(columnSelector):
         return normalized_result
 
 
-class ColumnEvaluation(evaluation_response):
+class ColumnEvaluation(EvaluationResponse):
     """slight override with added column name attribute"""
 
     column_name: str
 
 
-class evaluation_response_batch(BaseModel):
+class EvaluationResponseBatch(BaseModel):
     """Response model for batch column evaluation"""
 
     columns: list[ColumnEvaluation]

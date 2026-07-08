@@ -2,21 +2,21 @@
 Client for querying and downloading data from the NCI General Commons (GC).
 """
 
-from dglink.core.apiClients import gen3Client, gqlClient
+from dglink.core.api_clients import Gen3Client, GqlClient
 from .constants import NCI_GQL_ENDPOINT, NCI_GEN3_ENDPOINT, NCI_GC_CACHE_DIR
 import polars as pl
 import os
 from gql import gql
 
 
-class nciGeneralCommonsClient:
+class NciGeneralCommonsClient:
     def __init__(self, gen3_credential_file: str = None):
         """
         Args:
             gen3_credential_file: Path to file with NCI Gen3 credential file can be obtained from (https://nci-crdc.datacommons.io/login)
         """
-        self.gql_client = gqlClient(NCI_GQL_ENDPOINT)
-        self.gen3_client = gen3Client(NCI_GEN3_ENDPOINT, gen3_credential_file)
+        self.gql_client = GqlClient(NCI_GQL_ENDPOINT)
+        self.gen3_client = Gen3Client(NCI_GEN3_ENDPOINT, gen3_credential_file)
 
     def get_all_studies(self, only_open:bool = False) -> list[dict]:
         """Get a list of all studies from the NCI GC, and their metadata"""

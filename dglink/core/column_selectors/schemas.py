@@ -6,7 +6,7 @@ from pydantic import BaseModel
 
 
 ## current schema target based ish of of BioLink
-class biological_entity(BaseModel):
+class BiologicalEntity(BaseModel):
     GeneOrGeneProduct: float
     MolecularEntity: float
     Disease: float
@@ -18,7 +18,7 @@ class biological_entity(BaseModel):
 
 
 ## older schema target
-class evaluation_response(BaseModel):
+class EvaluationResponse(BaseModel):
     human_rna: float
     small_molecule: float
     anatomical_region: float

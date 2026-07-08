@@ -10,7 +10,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class gqlClient:
+class GqlClient:
     def __init__(
         self,
         endpoint,

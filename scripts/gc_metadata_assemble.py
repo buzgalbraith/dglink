@@ -1,8 +1,8 @@
 from dglink import NodeSet, EdgeSet, write_graph
-from dglink.portals.nci.gc import nciGeneralCommonsClient
+from dglink.portals.nci.gc import NciGeneralCommonsClient
 from dglink.portals.nci.gc.constants import NODE_ATTRIBUTES, EDGE_ATTRIBUTES
 
-client = nciGeneralCommonsClient(gen3_credential_file='nci_general_commons_credentials')
+client = NciGeneralCommonsClient(gen3_credential_file='nci_general_commons_credentials')
 
 lazzy_get = lambda d, x: f"{d.get(x, f'{x}_missing')}"
 

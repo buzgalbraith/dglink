@@ -14,8 +14,8 @@ from .nodes import NodeSet
 from .edges import EdgeSet
 import os
 from frictionless import Schema, Resource, formats, Package
-from .columnSelectors import heuristicSelector, LLMSelector
-from .tabularDataset import tabularDataset
+from .column_selectors import HeuristicSelector, LLMSelector
+from .tabular_dataset import TabularDataset
 import pandas
 from pathlib import Path
 from functools import lru_cache
@@ -164,7 +164,7 @@ def frictionless_file_reader(pth: str, max_size_bytes=100 * 1024 * 1024):
 
 
 def extract_df_graph(
-    table:tabularDataset, group_identifier, file_id, node_set: NodeSet, edge_set: EdgeSet, pascalify_types:bool = False,
+    table:TabularDataset, group_identifier, file_id, node_set: NodeSet, edge_set: EdgeSet, pascalify_types:bool = False,
 ) -> tuple[NodeSet, EdgeSet]:
     """Extract nodes and edges from grounded entity DataFrame into knowledge graph.
 
@@ -322,11 +322,11 @@ def load_file(group_identifier: str, fp: str):
 
 def quality_check_groundings(
     qc_method: str,
-    table: tabularDataset,
+    table: TabularDataset,
     **kwargs
 ) -> None:
     if qc_method == "heuristic":
-        selector = heuristicSelector(**kwargs)
+        selector = HeuristicSelector(**kwargs)
         selector.execute(table, verbose=True)
     elif qc_method == "llm_schema_match":
         selector = LLMSelector(
@@ -361,7 +361,7 @@ def get_tabular_data(
             for df, read_state in zip(dfs, read_states):
                 files_read.append(read_state)
                 if df is not None:
-                    tabular_dataset = tabularDataset(
+                    tabular_dataset = TabularDataset(
                         dataset_path=Path(fp),
                         sheet_name=read_state.get("sheet"),
                         table=df,

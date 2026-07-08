@@ -2,10 +2,10 @@
 Select entity columns using LLMs
 """
 
-from dglink.core.tabularDataset import tabularDataset
-from .columnSelector import columnSelector, pandas
+from dglink.core.tabular_dataset import TabularDataset
+from .column_selector import ColumnSelector, pandas
 from ...core.constants import TABULAR_ENTITY_TYPES_LLM, open_ai_client
-from .schemas import evaluation_response
+from .schemas import EvaluationResponse
 
 import json
 from openai import BadRequestError
@@ -15,7 +15,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class LLMSelector(columnSelector):
+class LLMSelector(ColumnSelector):
     name = "LLM_selector"
 
     def __init__(
@@ -32,7 +32,7 @@ class LLMSelector(columnSelector):
         self.min_ground_percentage = min_ground_percentage
 
     def check_column(
-        self, table: tabularDataset, col: str, verbose: bool = False
+        self, table: TabularDataset, col: str, verbose: bool = False
     ) -> bool:
         llm_prompt = self.get_llm_prompt(col=col, table=table)
         llm_resp = self.call_llm(llm_prompt=llm_prompt)
@@ -48,7 +48,7 @@ class LLMSelector(columnSelector):
             logger.info(f"{col} is_entity = {is_entity}")
         return is_entity
 
-    def execute(self, table: tabularDataset, verbose: bool = False):
+    def execute(self, table: TabularDataset, verbose: bool = False):
         score_map = {}
         matching_cols = []
         for col in table.original_columns:
@@ -81,7 +81,7 @@ class LLMSelector(columnSelector):
             )
             logger.info("-" * 50)
 
-    def process_response(self, matching_cols: dict, table: tabularDataset):
+    def process_response(self, matching_cols: dict, table: TabularDataset):
         """
         use the schema match to:
             1. drop cols if not matched
@@ -130,7 +130,7 @@ class LLMSelector(columnSelector):
                     },
                     {"role": "user", "content": call_prompt},
                 ],
-                text_format=evaluation_response,
+                text_format=EvaluationResponse,
             )
         except BadRequestError:
             raise ValueError(
@@ -147,7 +147,7 @@ class LLMSelector(columnSelector):
         out = dict(zip(raw_probs.keys(), normalized_probs))
         return out
 
-    def get_llm_prompt(self, table: tabularDataset, col) -> tuple[str, str]:
+    def get_llm_prompt(self, table: TabularDataset, col) -> tuple[str, str]:
         table_len = len(table.table)
         grounded_count = table.table[f"{col}_name"].count()
         rows_with_values = max(table.table[f"{col}_raw_text"].count(), 1)

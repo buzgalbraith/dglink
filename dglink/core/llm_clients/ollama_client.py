@@ -13,12 +13,12 @@ from pydantic import BaseModel
 from ollama import chat, ChatResponse
 
 
-from .LLMClient import LLMClient
+from .llm_client import LLMClient
 
 logger = logging.getLogger(__name__)
 
 
-class ollamaClient(LLMClient):
+class OllamaClient(LLMClient):
     """
     Ollama implementation of LLM client adapter.
     """

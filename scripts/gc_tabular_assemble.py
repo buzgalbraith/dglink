@@ -1,6 +1,6 @@
 ## this package ##
 from dglink.portals.nci.gc.constants import NCI_GC_CACHE_DIR, NCI_TABULAR_FILE_TYPES, NODE_ATTRIBUTES, EDGE_ATTRIBUTES
-from dglink.portals.nci.gc import nciGeneralCommonsClient
+from dglink.portals.nci.gc import NciGeneralCommonsClient
 from dglink.core.tabular_data import get_tabular_data
 from dglink import load_graph, write_graph
 
@@ -12,7 +12,7 @@ import polars as pl
 from pathlib import Path
 
 ## initiate ##
-client = nciGeneralCommonsClient('nci_general_commons_credentials')
+client = NciGeneralCommonsClient('nci_general_commons_credentials')
 study_files_path = Path(NCI_GC_CACHE_DIR).joinpath("study_to_files.tsv")
 # node_set = NodeSet(attributes=NODE_ATTRIBUTES)
 # edge_set  = EdgeSet(attributes=EDGE_ATTRIBUTES)
