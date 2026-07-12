@@ -4,10 +4,7 @@ Goal is to evaluate a benchmarking dataset generated from `scripts/assemble_benc
 
 import polars as pl
 from dglink.core.constants import REPORT_PATH
-from dglink.core.tabular_data import (
-    load_file,
-    apply_ground,
-)
+from dglink.core.tabular_data import load_file
 from dglink.core.column_selectors import LLMSelector, HeuristicSelector
 from dglink.core.tabular_dataset import TabularDataset
 import os
@@ -61,15 +58,15 @@ def run_benchmark(
         record["column"] = column
         table = TabularDataset(dataset_path=Path(fp), sheet_name=target_sheet, table=df)
         ## try to ground everything in the dataframe
-        table.table = table.table.apply(apply_ground, axis=1)
+        table.ground_table()
         selector = HeuristicSelector()
         record["heuristic_vote"] = selector.check_column(table=table, col=column, verbose=True)
         selector = LLMSelector()
         record["llm_vote"] = selector.check_column(table=table, col=column, verbose=True)
         if record["heuristic_vote"]:
-            record["hiercahal_vote"] = record["llm_vote"]
+            record["hierarchical_vote"] = record["llm_vote"]
         else:
-            record["hiercahal_vote"] = False
+            record["hierarchical_vote"] = False
         record["is_entity_col"] = benchmark_row.get("is_entity_col")
         record["sheet"] = target_sheet
         record["group_identifier"] = group_id

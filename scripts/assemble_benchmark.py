@@ -3,12 +3,13 @@ randomly sample columns for a schema matching benchmark dataset
 """
 
 import polars as pl
-from dglink.core.tabular_data import load_file
+from dglink.core.tabular_data import load_file, quality_check_groundings
+from dglink.core.tabular_dataset import TabularDataset
 import tqdm
 from numpy.random import default_rng
-from dglink.core.tabular_data import apply_ground, quality_check_groundings
 from dglink.core.constants import REPORT_PATH
 import os
+from pathlib import Path
 
 
 benchmark_tables = 250
@@ -43,17 +44,15 @@ if __name__ == "__main__":
         col = df.columns[col_idx]
         ## check how heuristic grounding would deal ##
         small_df = df[[col]]
-        base_cols = small_df.columns.to_list()
-        raw_groundings = small_df.apply(apply_ground, axis=1)
-        _, entity_cols = quality_check_groundings(
-            qc_method="heuristic",
-            grounded_dataset=raw_groundings,
-            original_dataset_cols=base_cols,
-            dataset_path=fp,
-            max_schema_matching_samples=4,
-            schema_matching_confidence_threshold=0.5,
-            model="",
+        table = TabularDataset(
+            dataset_path=Path(fp),
+            sheet_name=read_state.get("sheet"),
+            table=small_df,
         )
+        ## try to ground everything in the dataframe
+        table.ground_table()
+        ## heuristic quality check populates table.entity_columns ##
+        quality_check_groundings(qc_method="heuristic", table=table)
         ## add records to df ##
         records.append(
             {
@@ -61,7 +60,7 @@ if __name__ == "__main__":
                 "sheet": read_state.get("sheet"),
                 "column": col,
                 "group_identifier": group_id,
-                "heuristic_vote": col in entity_cols,
+                "heuristic_vote": col in table.entity_columns,
                 "is_entity_col": "unchecked",
             }
         )

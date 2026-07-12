@@ -4,10 +4,7 @@ Goal is to evaluate a benchmarking dataset generated from `scripts/assemble_benc
 
 import polars as pl
 from dglink.core.constants import REPORT_PATH
-from dglink.core.tabular_data import (
-    load_file,
-    apply_ground,
-)
+from dglink.core.tabular_data import load_file
 from dglink.core.column_selectors import LLMSelector, HeuristicSelector
 from dglink.core.tabular_dataset import TabularDataset
 import os
@@ -49,7 +46,7 @@ def run_benchmark(
                 dataset_path=Path(fp), sheet_name=sheet_name, table=df
             )
             ## try to ground everything in the dataframe
-            table.table = table.table.apply(apply_ground, axis=1)
+            table.ground_table()
             llm_times = []
             hierarchal_times = []
             n_cols = max(len(table.original_columns), 1)
