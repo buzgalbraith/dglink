@@ -19,14 +19,12 @@ def get_entities_from_wiki(
     """pull entities from a projects wiki, and add links to them to the graph."""
     ## add a node for that wiki, and a link between the project and this wiki node.
     wiki_id = f"{study_wiki.ownerId}:Wiki"
-    to_url = lambda x: (
-        f"{studies_base_url}={x.ownerId}" if studies_base_url is not None else ""
-    )
+    to_url = lambda x: studies_base_url.replace("{study_id}", x) if studies_base_url is not None else ""
     node_set.update_nodes(
         {
             "curie:ID": wiki_id,
             ":LABEL": "Wiki",
-            "study_url": to_url(study_wiki),
+            "study_url": to_url(study_wiki.ownerId),
             "source:string[]": "wiki",
         }
     )
@@ -79,16 +77,15 @@ def get_wikis(
     for project_id in tqdm.tqdm(project_ids):
         try:
             study_wiki = syn.getWiki(project_id)
-        except:
+            node_set, edge_set = get_entities_from_wiki(
+                study_wiki=study_wiki,
+                wiki_fields=wiki_fields,
+                node_set=node_set,
+                edge_set=edge_set,
+                studies_base_url=studies_base_url,
+            )
+        except Exception:
             logger.warning(f"Project: {project_id} wiki could not be loaded ")
-            study_wiki = None
-        node_set, edge_set = get_entities_from_wiki(
-            study_wiki=study_wiki,
-            wiki_fields=wiki_fields,
-            node_set=node_set,
-            edge_set=edge_set,
-            studies_base_url=studies_base_url,
-        )
     if write_set:
         write_graph(
             node_set=node_set,

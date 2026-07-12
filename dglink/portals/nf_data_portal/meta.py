@@ -98,7 +98,7 @@ def get_meta(
                 node_set=node_set,
                 edge_set=edge_set,
             )
-        except:
+        except Exception:
             logger.warning(f"Project: {project_id} metadata could not be loaded ")
     if write_set:
         write_graph(
