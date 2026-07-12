@@ -103,7 +103,7 @@ Response:
 - **Anthropic Integration**: Uses native Anthropic SDK with direct MCP client session
   - Implements streaming API with real-time token delivery
   - Manual tool calling loop for MCP integration
-  - Model: Claude Sonnet 4 (claude-sonnet-4-20250514)
+  - Model: Claude Sonnet 4 (claude-opus-4-8)
 - **OpenAI Integration**: Uses `openai-agents` library with MCP server integration
   - Agent-based architecture with MCP server connection
   - Model: GPT-4o

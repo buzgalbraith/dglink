@@ -82,7 +82,10 @@ async def initialize_openai():
                     "NEO4J_PASSWORD": NEO4J_PASSWORD,
                     "NEO4J_DATABASE": NEO4J_DATABASE
                 }
-            }
+            },
+            # uvx cold-starting the neo4j MCP server can take well over the
+            # SDK default of 5s; give the handshake room so init doesn't time out.
+            client_session_timeout_seconds=60,
         )
 
         # Connect to the server
@@ -197,7 +200,7 @@ async def stream_anthropic_query(query: str):
 
         # Stream the response
         with anthropic_client.messages.stream(
-            model="claude-sonnet-4-20250514",
+            model="claude-opus-4-8",
             max_tokens=4000,
             messages=messages,
             tools=available_tools

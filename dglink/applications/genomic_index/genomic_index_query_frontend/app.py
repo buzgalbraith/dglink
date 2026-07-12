@@ -8,12 +8,20 @@ logger = logging.getLogger()
 app = Flask(__name__)
 
 # Backend API configuration - use environment variable for Docker, fallback to localhost
-BACKEND_URL = os.getenv('GENOMIC_INDEX_QUERY_BACKEND_URL', 'http://localhost:8001')
+BACKEND_URL = os.getenv('GENOMIC_INDEX_QUERY_BACKEND_URL', 'http://localhost:8002')
+
+# Shared DGLink navigation (see mcp/frontend/app.py). Defaults to the
+# docker-compose localhost ports; override via env for other deployments.
+NAV = {
+    'chat': os.getenv('NAV_CHAT_URL', 'http://localhost:5000/'),
+    'sequence': os.getenv('NAV_SEQUENCE_URL', 'http://localhost:5002/'),
+    'query': os.getenv('NAV_QUERY_URL', 'http://localhost:5001/'),
+}
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', nav=NAV, active='sequence')
 
 @app.route('/chat', methods=['GET', 'POST'])
 def chat():
@@ -86,4 +94,4 @@ def query():
         return jsonify({"error": str(e)}), resp.status_code
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5002, debug=True)

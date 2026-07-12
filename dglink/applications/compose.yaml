@@ -68,3 +68,26 @@ services:
     env_file:
     - path: ./.env
       required: true
+  genomic_index_query_backend:
+    build:
+      context: ./genomic_index          # directory used as build context
+      dockerfile: ./genomic_index_query_backend/Dockerfile
+    container_name: genomic-index-query-backend
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./genomic_index/mantis_index:/sw/mantis_index
+      - ${NEO4J_TARGET}/graph:/app/resources
+    env_file:
+    - path: ./.env
+      required: true
+  genomic_index_query_frontend:
+    build: ./genomic_index/genomic_index_query_frontend
+    container_name: genomic-index-query-frontend
+    ports:
+      - "5002:5002"
+    depends_on:
+      - genomic_index_query_backend
+    env_file:
+    - path: ./.env
+      required: true

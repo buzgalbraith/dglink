@@ -1,397 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DGLink Chat</title>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f5f5f5;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header {
-            background: white;
-            padding: 1rem 2rem;
-            border-bottom: 1px solid #e0e0e0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header h1 {
-            font-size: 1.5rem;
-            color: #333;
-        }
-
-        .model-selector {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .model-selector select {
-            padding: 0.5rem 1rem;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            cursor: pointer;
-        }
-
-        .chat-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 2rem;
-            overflow: hidden;
-        }
-
-        .messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .message {
-            display: flex;
-            gap: 1rem;
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .message.user {
-            justify-content: flex-end;
-        }
-
-        .message-content {
-            max-width: 70%;
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            line-height: 1.6;
-            font-size: ${FONT_SIZE}rem;
-        }
-
-        .message.user .message-content {
-            background: #007bff;
-            color: white;
-        }
-
-        .message.assistant .message-content {
-            background: white;
-            color: #333;
-            border: 1px solid #e0e0e0;
-        }
-
-        /* Markdown styling */
-        .message-content h1, .message-content h2, .message-content h3 {
-            margin-top: 1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .message-content h1 { font-size: 1.5rem; }
-        .message-content h2 { font-size: 1.3rem; }
-        .message-content h3 { font-size: 1.1rem; }
-
-        .message-content ul, .message-content ol {
-            margin-left: 1.5rem;
-            margin-top: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .message-content li {
-            margin-bottom: 0.25rem;
-        }
-
-        .message-content code {
-            background: #f5f5f5;
-            padding: 0.2rem 0.4rem;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-        }
-
-        .message-content pre {
-            background: #f5f5f5;
-            padding: 1rem;
-            border-radius: 6px;
-            overflow-x: auto;
-            margin: 0.5rem 0;
-        }
-
-        .message-content pre code {
-            background: none;
-            padding: 0;
-        }
-
-        .message-content strong {
-            font-weight: 600;
-        }
-
-        .message-content em {
-            font-style: italic;
-        }
-
-        .message-content p {
-            margin-bottom: 0.5rem;
-        }
-
-        .message-content blockquote {
-            border-left: 3px solid #ddd;
-            padding-left: 1rem;
-            margin-left: 0;
-            color: #666;
-        }
-
-        .message-label {
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 0.25rem;
-        }
-
-        .input-container {
-            background: white;
-            padding: 1rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            display: flex;
-            gap: 1rem;
-            align-items: flex-end;
-        }
-
-        #messageInput {
-            flex: 1;
-            padding: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-family: inherit;
-            resize: none;
-            min-height: 60px;
-            max-height: 200px;
-        }
-
-        #messageInput:focus {
-            outline: none;
-            border-color: #007bff;
-        }
-
-        #sendButton {
-            padding: 1rem 2rem;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.2s;
-            white-space: nowrap;
-        }
-
-        #sendButton:hover:not(:disabled) {
-            background: #0056b3;
-        }
-
-        #sendButton:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .loading {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #007bff;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-
-        .error {
-            background: #ffebee !important;
-            color: #c62828 !important;
-            border: 1px solid #ef9a9a !important;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DGLink · Chat Assistant</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="/static/dglink.css">
+  <style>:root { --chat-font: ${FONT_SIZE}rem; }</style>
 </head>
 <body>
-    <div class="header">
-        <h1>DGLink Chat</h1>
-        <div class="model-selector">
-            <label for="providerSelect">Model Provider:</label>
-            <select id="providerSelect">
-                <option value="anthropic">Anthropic (Claude)</option>
-                <option value="openai">OpenAI (GPT)</option>
-            </select>
-        </div>
+  <header class="site-header">
+    <a class="brand" href="{{ nav.chat }}">
+      <svg class="brand-logo" width="26" height="26" viewBox="0 0 24 24" fill="none">
+        <line x1="6.5" y1="6.5" x2="16.5" y2="12" stroke="#2f9e8f" stroke-width="1.7"/>
+        <line x1="6.5" y1="17.5" x2="16.5" y2="12" stroke="#2f9e8f" stroke-width="1.7"/>
+        <circle cx="6" cy="6" r="2.6" fill="#2fb3a2"/>
+        <circle cx="6" cy="18" r="2.6" fill="#e08a3c"/>
+        <circle cx="17" cy="12" r="2.6" fill="#d8d1c4"/>
+      </svg>
+      <span class="brand-name">DGLink</span>
+    </a>
+    <nav class="site-nav">
+      <a href="{{ nav.chat }}" class="{{ 'active' if active == 'chat' else '' }}">Chat Assistant</a>
+      <a href="{{ nav.sequence }}" class="{{ 'active' if active == 'sequence' else '' }}">Sequence Search</a>
+      <a href="{{ nav.query }}" class="{{ 'active' if active == 'query' else '' }}">Query Builder</a>
+    </nav>
+  </header>
+  <div class="accent-stripe"></div>
+
+  <div class="chat">
+    <div class="chat-toolbar">
+      <label for="providerSelect">Model</label>
+      <select id="providerSelect" class="provider-select">
+        <option value="anthropic">Anthropic (Claude)</option>
+        <option value="openai">OpenAI (GPT)</option>
+      </select>
     </div>
 
-    <div class="chat-container">
-        <div class="messages" id="messages"></div>
-        
-        <div class="input-container">
-            <textarea 
-                id="messageInput" 
-                placeholder="Type your message here..."
-                rows="1"
-            ></textarea>
-            <button id="sendButton">Send</button>
-        </div>
+    <div class="messages" id="messages"></div>
+
+    <div class="composer">
+      <textarea id="messageInput" placeholder="Ask a question about the knowledge graph…" rows="1"></textarea>
+      <button id="sendButton" class="btn btn-primary">Send</button>
     </div>
+  </div>
 
-    <script>
-        const messagesDiv = document.getElementById('messages');
-        const messageInput = document.getElementById('messageInput');
-        const sendButton = document.getElementById('sendButton');
-        const providerSelect = document.getElementById('providerSelect');
+  <script>
+    const messagesDiv = document.getElementById('messages');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    const providerSelect = document.getElementById('providerSelect');
 
-        // Store conversation history
-        let conversationHistory = [];
+    let conversationHistory = [];
 
-        // Auto-resize textarea
-        messageInput.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 200) + 'px';
+    const AVATAR = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <line x1="6.5" y1="6.5" x2="16.5" y2="12" stroke="#2f9e8f" stroke-width="1.7"/>
+        <line x1="6.5" y1="17.5" x2="16.5" y2="12" stroke="#2f9e8f" stroke-width="1.7"/>
+        <circle cx="6" cy="6" r="2.6" fill="#2fb3a2"/>
+        <circle cx="6" cy="18" r="2.6" fill="#e08a3c"/>
+        <circle cx="17" cy="12" r="2.6" fill="#d8d1c4"/>
+      </svg>`;
+
+    messageInput.addEventListener('input', function () {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 200) + 'px';
+    });
+
+    messageInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    sendButton.addEventListener('click', sendMessage);
+
+    function addMessage(content, role) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${role}`;
+
+      if (role === 'assistant') {
+        const avatar = document.createElement('div');
+        avatar.className = 'avatar';
+        avatar.innerHTML = AVATAR;
+        messageDiv.appendChild(avatar);
+      }
+
+      const body = document.createElement('div');
+      body.className = 'msg-body';
+      if (role === 'user') {
+        body.textContent = content;
+      } else {
+        body.innerHTML = content ? marked.parse(content) : '';
+      }
+
+      messageDiv.appendChild(body);
+      messagesDiv.appendChild(messageDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      return body;
+    }
+
+    async function sendMessage() {
+      const message = messageInput.value.trim();
+      if (!message) return;
+
+      messageInput.disabled = true;
+      sendButton.disabled = true;
+
+      addMessage(message, 'user');
+      messageInput.value = '';
+      messageInput.style.height = 'auto';
+
+      const responseBody = addMessage('', 'assistant');
+      responseBody.innerHTML = '<span class="loading-dot"></span> Thinking…';
+
+      try {
+        const response = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: message,
+            provider: providerSelect.value,
+            history: conversationHistory
+          })
         });
 
-        // Handle Enter key (Shift+Enter for new line)
-        messageInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
+        if (!response.ok) throw new Error('Network response was not ok');
 
-        sendButton.addEventListener('click', sendMessage);
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let fullResponse = '';
+        responseBody.innerHTML = '';
 
-        function addMessage(content, role) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${role}`;
-
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'message-content';
-
-            if (role === 'assistant') {
-                const label = document.createElement('div');
-                label.className = 'message-label';
-                label.textContent = providerSelect.value === 'anthropic' ? 'Claude' : 'ChatGPT';
-                contentDiv.appendChild(label);
-            }
-
-            const text = document.createElement('div');
-            // Use plain text for user messages, markdown for assistant
-            if (role === 'user') {
-                text.textContent = content;
-            } else {
-                text.innerHTML = content ? marked.parse(content) : '';
-            }
-            contentDiv.appendChild(text);
-
-            messageDiv.appendChild(contentDiv);
-            messagesDiv.appendChild(messageDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            return text;
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          fullResponse += decoder.decode(value, { stream: true });
+          responseBody.innerHTML = marked.parse(fullResponse);
+          messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        async function sendMessage() {
-            const message = messageInput.value.trim();
-            if (!message) return;
+        conversationHistory.push({ role: 'user', content: message });
+        conversationHistory.push({ role: 'assistant', content: fullResponse });
+      } catch (error) {
+        responseBody.textContent = 'Error: ' + error.message;
+        responseBody.classList.add('error');
+      }
 
-            // Disable input
-            messageInput.disabled = true;
-            sendButton.disabled = true;
-
-            // Add user message
-            addMessage(message, 'user');
-            messageInput.value = '';
-            messageInput.style.height = 'auto';
-
-            // Add loading indicator
-            const responseText = addMessage('', 'assistant');
-            responseText.innerHTML = '<span class="loading"></span> Thinking...';
-
-            try {
-                const response = await fetch('/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        message: message,
-                        provider: providerSelect.value,
-                        history: conversationHistory
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-                let fullResponse = '';
-
-                responseText.innerHTML = '';
-
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-
-                    const chunk = decoder.decode(value, { stream: true });
-                    fullResponse += chunk;
-
-                    // Render markdown as it streams in
-                    responseText.innerHTML = marked.parse(fullResponse);
-                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                }
-
-                // Add user message to history
-                conversationHistory.push({
-                    role: 'user',
-                    content: message
-                });
-
-                // Add assistant response to history
-                conversationHistory.push({
-                    role: 'assistant',
-                    content: fullResponse
-                });
-
-            } catch (error) {
-                responseText.textContent = 'Error: ' + error.message;
-                responseText.parentElement.classList.add('error');
-            }
-
-            // Re-enable input
-            messageInput.disabled = false;
-            sendButton.disabled = false;
-            messageInput.focus();
-        }
-    </script>
+      messageInput.disabled = false;
+      sendButton.disabled = false;
+      messageInput.focus();
+    }
+  </script>
 </body>
 </html>

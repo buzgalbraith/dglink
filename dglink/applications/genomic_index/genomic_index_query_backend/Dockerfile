@@ -36,6 +36,6 @@ COPY genomic_index_query_backend/requirements.txt /sw/requirements.txt
 RUN pip install -r /sw/requirements.txt
 COPY genomic_index_query_backend/main.py /sw/main.py
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8001"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8002"]
 
 

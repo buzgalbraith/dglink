@@ -175,7 +175,7 @@ def parse_fasta(raw: str) -> list[SequenceQuery]:
                 header= record.description,
                 seq= seq_str,
                 length= len(seq_str),
-                ensembl_id=parts[1] if len(parts) > 0 else record.id,
+                ensembl_id=parts[1] if len(parts) > 1 else record.id,
                 gene_symbol= parts[5] if len(parts) > 5 else record.id,
                 transcript_id= parts[0] if parts else record.id,
                 biotype= parts[7] if len(parts) > 7 else None,
@@ -258,4 +258,4 @@ def query_kg(syn_id: list[str] = None):
     
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    uvicorn.run(app, host="0.0.0.0", port=8002)
