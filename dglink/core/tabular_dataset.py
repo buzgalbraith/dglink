@@ -12,11 +12,22 @@ from indra.ontology.bio import bio_ontology
 from bioregistry import normalize_curie, get_bioregistry_iri
 import gilda
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 
 TERM_EXCLUSION_LIST = ["yes", "na", "large", "std", "dead"]
 COLUMN_EXCLUSION_LIST = ["Vendor"]
+
+_HEX_ESCAPE_RE = re.compile(r"\\x([0-9a-fA-F]{2})")
+_SPACE_SUBSTITUTE_RE = re.compile(r"[_~]+")
+
+
+def normalize_for_grounding(text: str) -> str:
+    """Undo VCF/ClinVar-style space substitution so Gilda can tokenize values  e.g. 'Raine~syndrome' -> 'Raine syndrome'."""
+    text = _HEX_ESCAPE_RE.sub(lambda m: chr(int(m.group(1), 16)), text)
+    text = _SPACE_SUBSTITUTE_RE.sub(" ", text)
+    return text.strip()
 
 
 class TabularDataset:
@@ -178,7 +189,7 @@ class TabularDataset:
             Only the top-ranked Gilda match is used.
         """
         if pandas.notna(val):
-            ans = gilda.annotate(str(val))
+            ans = gilda.annotate(normalize_for_grounding(str(val)))
             if ans:
                 nsid = ans[0].matches[0].term
                 if nsid.norm_text in self.terms_to_exclude:

@@ -4,7 +4,10 @@ Helper client for interfacing with Gen3 APIs
 
 from gen3.auth import Gen3Auth
 from gen3.file import Gen3File
+from gen3.submission import Gen3Submission
 from gen3.tools.download.drs_download import DownloadManager, Downloadable
+
+
 import os
 
 
@@ -14,6 +17,7 @@ class Gen3Client:
         self.hostname = endpoint.removeprefix("https://")
         self.auth = Gen3Auth(endpoint=self.endpoint, refresh_file=credential_file)
         self.file_client = Gen3File(self.auth)
+        self.submission_client = Gen3Submission(self.auth)
 
     def download_files(
         self,

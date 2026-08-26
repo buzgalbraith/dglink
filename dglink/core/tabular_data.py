@@ -33,6 +33,23 @@ from openai import BadRequestError
 logger = logging.getLogger(__name__)
 
 
+def _is_utf8(pth: Path, sample_size: int = 1_000_000) -> bool:
+    """Best-effort check for whether a file decodes cleanly as UTF-8.
+
+    Frictionless's encoding auto-detection has a known false-positive on UTF-7 for
+    plain ASCII/UTF-8 files whose content contains runs of '+' (a UTF-7 shift-sequence
+    marker) - e.g. genomic annotation columns like 'GERP++_RS'. Forcing UTF-8 for files
+    that genuinely are UTF-8 avoids that misdetection without touching files that are
+    actually encoded some other way (those still fall back to Frictionless's detector).
+    """
+    try:
+        with open(pth, "rb") as f:
+            f.read(sample_size).decode("utf-8")
+        return True
+    except UnicodeDecodeError:
+        return False
+
+
 def get_frictionless_package(pth):
     """Load a tabular file into a Frictionless Package for robust multi-format parsing.
 
@@ -58,6 +75,8 @@ def get_frictionless_package(pth):
     pac = Package()
     format = pth.suffix
     control_func = lambda x: None
+    ## utf-8 encoding is preferred but can also try to infer it directly ##
+    encoding = "utf-8" if _is_utf8(pth) else None
     if pth.suffix in [".xlsx", ".xls"]:
         ## try to directly load as a package
         try:
@@ -96,19 +115,21 @@ def get_frictionless_package(pth):
             first_line = tmp.readline()
         # Check tab-separated first (more specific)
         if len(first_line.split("\t")) > 1:
-            pac.add_resource(Resource(pth, format="tsv"))
+            pac.add_resource(Resource(pth, format="tsv", encoding=encoding))
             format = ".tsv"
         # Then check comma-separated
         elif len(first_line.split(",")) > 1:
-            pac.add_resource(Resource(pth, format="csv"))
+            pac.add_resource(Resource(pth, format="csv", encoding=encoding))
             format = ".csv"
         # Fallback: let Frictionless auto-detect
         else:
-            pac.add_resource(Resource(pth))
+            pac.add_resource(Resource(pth, encoding=encoding))
     else:
-        pac.add_resource(Resource(pth))
+        pac.add_resource(Resource(pth, encoding=encoding))
     for res in pac.resources:
-        raw_schema = Schema.describe(res.path, control=control_func(res), format=format)
+        raw_schema = Schema.describe(
+            res.path, control=control_func(res), format=format, encoding=encoding
+        )
         to_drop = [field.name for field in raw_schema.fields if field.type != "string"]
         for x in to_drop:
             raw_schema.remove_field(x)
