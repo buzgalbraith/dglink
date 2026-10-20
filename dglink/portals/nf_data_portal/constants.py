@@ -17,6 +17,7 @@ NODE_ATTRIBUTES = [
     ## core fields - all nodes should have ths other fields are optional
     "curie:ID",
     ":LABEL",
+    "raw_label",  ## NF Data Portal native type (e.g. "initiative") kept alongside the Biolink category
     "name",
     "iri",
     "source:string[]",
@@ -57,6 +58,7 @@ EDGE_ATTRIBUTES = [
     ":START_ID",
     ":END_ID",
     ":TYPE",
+    "raw_type",  ## NF Data Portal native relation preserved alongside the Biolink predicate
     "source:string[]",
     ## tabular provenance — which file / column / raw text a tabular-extracted entity was
     ## found in (extract_df_graph now puts these on the group -> entity edge, not the node;
@@ -102,3 +104,66 @@ NF_DATA_PORTAL_CACHE_DIR = os.path.join(
 SPECIMEN_FIELDS = {"age": "PatientAge", "sex": "PatientSex"}
 
 EXPERIMENT_FIELDS = ["assay", "nf1Genotype", "nf2Genotype", "diagnosis", "tumorType"]
+
+
+## --- Biolink mapping ------------------------------------------------------
+## NF Data Portal native entity type -> concrete Biolink category (the native distinction is
+## kept in `raw_label`). 
+NF_LABEL_TO_BIOLINK = {
+    "Project": "biolink:Study",
+    "initiative": "biolink:Study",
+    "relatedStudies": "biolink:Study",
+    "institutions": "biolink:Agent",
+    "fundingAgency": "biolink:Agent",
+    "publication": "biolink:Publication",
+    "tool": "biolink:NamedThing",  ## refined per row by NF_TOOL_TYPE_TO_BIOLINK
+    "Wiki": "biolink:DatasetSummary",
+    "specimen": "biolink:MaterialSample",
+    "sample": "biolink:MaterialSample",  ## VCF samples
+    "sequencing_experiment": "biolink:Procedure",
+    "DICOM_series": "biolink:Dataset",
+    "genetic_variant": "biolink:SequenceVariant",
+    ## VCF header nodes, to be folded into file properties
+    "VCF_file_format": "biolink:NamedThing",
+    "VCF_reference": "biolink:NamedThing",
+    "VCF_command": "biolink:NamedThing",
+}
+
+## NF tools table `resourceType` -> Biolink category. Antibody, Genetic Reagent and
+## Biobank have no Biolink class and fall back to NF_DEFAULT_BIOLINK_CATEGORY.
+NF_TOOL_TYPE_TO_BIOLINK = {
+    "Cell Line": "biolink:CellLine",
+    "Animal Model": "biolink:IndividualOrganism",
+}
+
+NF_DEFAULT_BIOLINK_CATEGORY = "biolink:NamedThing"
+
+## NF Data Portal native edge type -> Biolink predicate. The native relation is kept in
+## `raw_type`. Study -> grounded entity edges (has_{INDRA type}) use
+## GROUP_ENTITY_BIOLINK_PREDICATE from dglink.core.constants, same as tabular data.
+NF_EDGE_TO_BIOLINK = {
+    ## study metadata (Study -> X)
+    "has_initiative": "biolink:part_of",
+    "has_relatedStudies": "biolink:related_to_at_instance_level",
+    "predicted_relatedStudies_GL": "biolink:related_to_at_instance_level",
+    "has_institutions": "biolink:related_to_at_instance_level",  ## contributor is Agent -> ICE
+    "has_fundingAgency": "biolink:related_to_at_instance_level",
+    "has_diseaseFocus": "biolink:related_to_at_instance_level",
+    "has_manifestation": "biolink:related_to_at_instance_level",
+    "has_parentId": "biolink:part_of",  ## to be folded into a Study property
+    "hasWiki": "biolink:has_output",
+    "published": "biolink:has_output",
+    "usesTool": "biolink:has_input",
+    "mentions": "biolink:mentions",  ## Wiki -> entity
+    ## samples and experiments
+    "has_specimen": "biolink:has_input",  ## Study -> MaterialSample
+    "has_sample": "biolink:has_input",  ## Study -> MaterialSample (VCF)
+    "has_sequencing_experiment": "biolink:has_input",  ## Procedure -> MaterialSample, needs flipping in fastq.py
+    "has_organism": "biolink:in_taxon",
+    "has_dicom": "biolink:has_output",  ## Study -> Dataset
+    "has_genetic_variant": "biolink:related_to_at_instance_level",  ## has_sequence_variant needs a GenomicEntity subject
+    ## VCF header edges, to be folded into file properties
+    "has_vcf_format": "biolink:related_to_at_instance_level",
+    "has_vcf_reference": "biolink:related_to_at_instance_level",
+    "has_vcf_command": "biolink:related_to_at_instance_level",
+}
