@@ -12,15 +12,30 @@ Run as a script against a graph directory::
 
 from collections import Counter
 from functools import lru_cache
+from importlib.resources import files
 import re
 import sys
 
 import bmt
 
+## pinned in pyproject.toml; the schema is read from the installed biolink-model
+## package rather than bmt's default (an older release fetched from GitHub)
+BIOLINK_MODEL_VERSION = "4.4.3"
+BIOLINK_PREDICATE_MAP_URL = (
+    "https://raw.githubusercontent.com/biolink/biolink-model/"
+    f"v{BIOLINK_MODEL_VERSION}/predicate_mapping.yaml"
+)
+
 
 @lru_cache(maxsize=1)
 def _toolkit() -> "bmt.Toolkit":
-    return bmt.Toolkit()
+    schema = files("biolink_model.schema").joinpath("biolink_model.yaml")
+    toolkit = bmt.Toolkit(schema=str(schema), predicate_map=BIOLINK_PREDICATE_MAP_URL)
+    if toolkit.get_model_version() != BIOLINK_MODEL_VERSION:
+        raise RuntimeError(
+            f"installed biolink-model is {toolkit.get_model_version()}, expected {BIOLINK_MODEL_VERSION}"
+        )
+    return toolkit
 
 
 def _candidate_names(label: str):
