@@ -1,5 +1,6 @@
 from .constants import syn, NF_DATA_PORTAL_CACHE_DIR
 from dglink.core.constants import TABULAR_FILE_TYPES, DGLINK_CACHE, REPORT_PATH
+from .constants import NF_CURIE_PREFIX
 import polars as pl
 import pandas
 from synapseutils import walk
@@ -296,3 +297,6 @@ def get_file_annotations(file_ids:list)->dict[str, dict]:
                     results[fid] = entity.annotations
         return results
     return asyncio.run(fetch_open_annotations(file_ids))
+def nf_curie(uuid: str) -> str:
+    """Prefix a raw NF UUID as a `nfdataportal:` CURIE (Biolink requires CURIE node ids)."""
+    return f"{NF_CURIE_PREFIX}:{uuid}"

@@ -17,6 +17,8 @@ def get_projects(
     edge_set: EdgeSet,
     studies_base_url: str,
     write_set: bool = False,
+    label: str = "biolink:Study",
+    raw_label: str = "Project",
 ):
     logger.info("loading in project nodes")
     to_url = lambda x: studies_base_url.replace("{study_id}", x) if studies_base_url is not None else ""
@@ -24,7 +26,8 @@ def get_projects(
         node_set.update_nodes(
             {
                 "curie:ID": project_id,
-                ":LABEL": "Project",
+                ":LABEL": label,
+                "raw_label": raw_label,
                 "study_url": to_url(project_id),
                 "source:string[]": "projects",
             }

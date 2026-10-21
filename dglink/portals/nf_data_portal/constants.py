@@ -20,9 +20,17 @@ NODE_ATTRIBUTES = [
     "raw_label",  ## NF Data Portal native type (e.g. "initiative") kept alongside the Biolink category
     "name",
     "iri",
+    "grounded:boolean",
     "source:string[]",
     ## Synapse project field
     "study_url",
+    "studyStatus:string[]",
+    "parentId:string[]",
+    "dataStatus:string[]",
+    "dataType:string[]",
+    "grantDOI:string[]",
+    "diseaseFocus:string[]",  ## raw portal values; grounded values are also edges
+    "manifestation:string[]",
     ## tabular data fields
     "raw_texts:string[]",
     "columns:string[]",
@@ -53,12 +61,13 @@ NODE_ATTRIBUTES = [
     "diagnosis",
     "tumorType",
 ]
+
 EDGE_ATTRIBUTES = [
     ## core fields - all edges should have ths other fields are optional
     ":START_ID",
     ":END_ID",
     ":TYPE",
-    "raw_type",  ## NF Data Portal native relation preserved alongside the Biolink predicate
+    "raw_type:string[]",  ## NF Data Portal native relation preserved alongside the Biolink predicate
     "source:string[]",
     ## tabular provenance — which file / column / raw text a tabular-extracted entity was
     ## found in (extract_df_graph now puts these on the group -> entity edge, not the node;
@@ -82,16 +91,45 @@ GROUND_FIELDS = [
     "diseaseFocus",
 ]
 
-UNGROUNDED_FIELDS = [
+## Biolink categories a grounding may have per field; anything else is treated as ungrounded
+NF_GROUND_FIELD_CATEGORIES = {
+    "diseaseFocus": {"biolink:Disease"},
+    "manifestation": {
+        "biolink:Disease",
+        "biolink:PhenotypicFeature",
+        "biolink:BiologicalProcess",
+        "biolink:NamedThing",
+    },
+}
+
+## category for values that do not ground
+NF_UNGROUNDED_CATEGORY = {
+    "diseaseFocus": "biolink:Disease",
+    "manifestation": "biolink:DiseaseOrPhenotypicFeature",
+}
+
+## partial groundings must cover at least this share of the value
+NF_GROUNDING_MIN_SPAN_FRACTION = 0.5
+
+METADATA_NODES = [
     "fundingAgency",
-    "studyStatus",
     "initiative",
-    "relatedStudies",
+    "institutions",
+]
+
+## placeholder values (compared lower-cased) are kept as Study attributes only, never as
+## nodes, so they do not link unrelated studies
+NF_PLACEHOLDER_VALUES = {"multiple", "other", "unknown", "not applicable", "not reported"}
+
+
+PROJECT_ATTRS = [
+    "studyStatus",
     "parentId",
     "dataStatus",
-    "institutions",
     "dataType",
     "grantDOI",
+    "diseaseFocus",
+    "manifestation",
 ]
 
 WIKI_FIELDS = ["markdown", "title"]
@@ -112,7 +150,6 @@ EXPERIMENT_FIELDS = ["assay", "nf1Genotype", "nf2Genotype", "diagnosis", "tumorT
 NF_LABEL_TO_BIOLINK = {
     "Project": "biolink:Study",
     "initiative": "biolink:Study",
-    "relatedStudies": "biolink:Study",
     "institutions": "biolink:Agent",
     "fundingAgency": "biolink:Agent",
     "publication": "biolink:Publication",
@@ -120,7 +157,7 @@ NF_LABEL_TO_BIOLINK = {
     "Wiki": "biolink:DatasetSummary",
     "specimen": "biolink:MaterialSample",
     "sample": "biolink:MaterialSample",  ## VCF samples
-    "sequencing_experiment": "biolink:Procedure",
+    "sequencing_experiment": "biolink:Dataset",
     "DICOM_series": "biolink:Dataset",
     "genetic_variant": "biolink:SequenceVariant",
     ## VCF header nodes, to be folded into file properties
@@ -151,19 +188,21 @@ NF_EDGE_TO_BIOLINK = {
     "has_diseaseFocus": "biolink:related_to_at_instance_level",
     "has_manifestation": "biolink:related_to_at_instance_level",
     "has_parentId": "biolink:part_of",  ## to be folded into a Study property
-    "hasWiki": "biolink:has_output",
-    "published": "biolink:has_output",
-    "usesTool": "biolink:has_input",
+    "hasWiki": "biolink:has_part",
+    "published": "biolink:has_part",
+    "usesTool": "biolink:related_to_at_instance_level",
     "mentions": "biolink:mentions",  ## Wiki -> entity
     ## samples and experiments
-    "has_specimen": "biolink:has_input",  ## Study -> MaterialSample
-    "has_sample": "biolink:has_input",  ## Study -> MaterialSample (VCF)
-    "has_sequencing_experiment": "biolink:has_input",  ## Procedure -> MaterialSample, needs flipping in fastq.py
-    "has_organism": "biolink:in_taxon",
-    "has_dicom": "biolink:has_output",  ## Study -> Dataset
+    "has_specimen": "biolink:has_part",  ## Study -> MaterialSample
+    "has_sample": "biolink:has_part",  ## Study -> MaterialSample (VCF)
+    "has_sequencing_experiment": "biolink:has_part",  ## Procedure -> MaterialSample, needs flipping in fastq.py
+    "has_organism": "biolink:related_to_at_instance_level",
+    "has_dicom": "biolink:has_part",  ## Study -> Dataset
     "has_genetic_variant": "biolink:related_to_at_instance_level",  ## has_sequence_variant needs a GenomicEntity subject
     ## VCF header edges, to be folded into file properties
     "has_vcf_format": "biolink:related_to_at_instance_level",
     "has_vcf_reference": "biolink:related_to_at_instance_level",
     "has_vcf_command": "biolink:related_to_at_instance_level",
 }
+
+NF_CURIE_PREFIX = "nfdataportal"
