@@ -1,8 +1,10 @@
 import os
 
-# import pandas
+
 import polars as pl
 
+
+from .nodes import _is_empty
 
 class Edge:
     def __init__(self, attribute_names: list, attributes: dict = None):
@@ -69,24 +71,26 @@ class EdgeSet:
             rep += f"{edge}:{str(self.edges[edge])}\n"
         return rep
 
-    def update_edges(self, new_edge: dict, new_edge_id=None):
+    def update_edges(self, new_edge: dict, new_edge_id=None, fill_empty: bool = False):
         self.set_attributes = [x for x in self.attributes if "string[]" in x]
         new_edge_id_1 = new_edge_id or new_edge.get(":START_ID", "no_start")
         new_edge_id_2 = new_edge_id or new_edge.get(":END_ID", "no_end")
         new_edge_id_3 = new_edge_id or new_edge.get(":TYPE", "no_type")
         new_edge_id = f"{new_edge_id_1}_{new_edge_id_2}:{new_edge_id_3}" or new_edge_id
         if new_edge_id in self.edges:
-            for attribute in self.set_attributes:
+            for attribute in self.attributes:
                 attr_val = new_edge.get(attribute, "")
-                if attribute not in self.set_attributes:
-                    ## standardize empty data representation
-                    if attr_val.replace('"', "").replace("'", "") != "":
-                        self.edges[new_edge_id][attribute].add(attr_val)
-                else:
+                if attribute in self.set_attributes:
                     attr_val = set([attr_val]) if type(attr_val) == str else attr_val
                     self.edges[new_edge_id][attribute] = self.edges[new_edge_id][
                         attribute
                     ].union(attr_val)
+                elif (
+                    fill_empty
+                    and _is_empty(self.edges[new_edge_id][attribute])
+                    and not _is_empty(attr_val)
+                ):
+                    self.edges[new_edge_id][attribute] = attr_val
         else:
             self.edges[new_edge_id] = dict()
             for attribute in self.attributes:
