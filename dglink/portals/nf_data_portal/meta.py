@@ -17,8 +17,6 @@ from dglink.core.nodes import NodeSet, _is_empty
 from dglink.core.edges import EdgeSet
 from dglink import write_graph
 from dglink.core.grounding import ground_entity, slugify
-from bioregistry import normalize_curie, get_bioregistry_iri
-from indra.ontology.bio import bio_ontology
 import tqdm
 import logging
 import os

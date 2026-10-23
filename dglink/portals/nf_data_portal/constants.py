@@ -51,7 +51,9 @@ NODE_ATTRIBUTES = [
     "genotype",
     "quality",
     ## publication fields
-    "DOI",
+    "doi",
+    "pmid",
+    "year",
     ## nf data portal tool fields (maybe move elsewhere)
     "tool_type",
     ## genomic fields
@@ -203,6 +205,9 @@ NF_EDGE_TO_BIOLINK = {
     "has_vcf_format": "biolink:related_to_at_instance_level",
     "has_vcf_reference": "biolink:related_to_at_instance_level",
     "has_vcf_command": "biolink:related_to_at_instance_level",
+    ## publication values ## 
+    "has_author": "biolink:has_author",
+    "has_journal": "biolink:has_publisher",
 }
 
 NF_CURIE_PREFIX = "nfdataportal"
