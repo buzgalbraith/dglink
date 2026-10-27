@@ -119,6 +119,7 @@ METADATA_NODES = [
     "institutions",
 ]
 
+PUBLICATION_METADATA_NODES = ['author', 'journal', 'fundingAgency']
 ## placeholder values (compared lower-cased) are kept as Study attributes only, never as
 ## nodes, so they do not link unrelated studies
 NF_PLACEHOLDER_VALUES = {"multiple", "other", "unknown", "not applicable", "not reported"}
@@ -150,15 +151,20 @@ EXPERIMENT_FIELDS = ["assay", "nf1Genotype", "nf2Genotype", "diagnosis", "tumorT
 ## NF Data Portal native entity type -> concrete Biolink category (the native distinction is
 ## kept in `raw_label`). 
 NF_LABEL_TO_BIOLINK = {
+    ## project related nodes ## 
     "Project": "biolink:Study",
+    ## metadata related nodes ## 
     "initiative": "biolink:Study",
     "institutions": "biolink:Agent",
     "fundingAgency": "biolink:Agent",
+    ## publication related nodes ## 
+    "publication": "biolink:Publication",
     "author": "biolink:Agent",
     "journal": "biolink:Agent",
-    "publication": "biolink:Publication",
+    ## tool and wiki fields ## 
     "tool": "biolink:NamedThing",  ## refined per row by NF_TOOL_TYPE_TO_BIOLINK
     "Wiki": "biolink:DatasetSummary",
+    ## modality specific fields ## 
     "specimen": "biolink:MaterialSample",
     "sample": "biolink:MaterialSample",  ## VCF samples
     "sequencing_experiment": "biolink:Dataset",
@@ -170,6 +176,48 @@ NF_LABEL_TO_BIOLINK = {
     "VCF_command": "biolink:NamedThing",
 }
 
+
+
+## (subject, object) -> Biolink predicate. Subject / object are NF raw labels or metadata
+## field names; "entity" is any grounded entity. The native field is kept in `raw_type`.
+NF_KG_SCHEMA = {
+    ## project level ##
+    ("Project", "initiative"): "biolink:part_of",
+    ("Project", "Project"): "biolink:related_to_at_instance_level",  ## relatedStudies
+    ("Project", "predicted_relatedStudies_GL"): "biolink:related_to_at_instance_level",
+    ("Project", "institutions"): "biolink:related_to_at_instance_level",  ## contributor is Agent -> ICE
+    ("Project", "fundingAgency"): "biolink:related_to_at_instance_level",
+    ("Project", "diseaseFocus"): "biolink:related_to_at_instance_level",
+    ("Project", "manifestation"): "biolink:related_to_at_instance_level",
+    ## publication level ##
+    ("Project", "publication"): "biolink:has_part",  ## publication studyId field
+    ("publication", "author"): "biolink:has_author",
+    ("publication", "journal"): "biolink:has_publisher",
+    ("publication", "diseaseFocus"): "biolink:related_to_at_instance_level",
+    ("publication", "manifestation"): "biolink:related_to_at_instance_level",
+    ("publication", "fundingAgency"): "biolink:related_to_at_instance_level",
+    ## not yet converted modules (wiki / tools / fastq / dicom / vcf), carried over from
+    ## the old flat map; revisit each when its module is converted
+    ("Project", "Wiki"): "biolink:has_part",
+    ("Wiki", "entity"): "biolink:mentions",
+    ("Project", "tool"): "biolink:related_to_at_instance_level",
+    ("Project", "specimen"): "biolink:has_part",
+    ("Project", "sample"): "biolink:has_part",  ## VCF samples
+    ("specimen", "sequencing_experiment"): "biolink:has_part",  ## direction to check in fastq.py
+    ("specimen", "organism"): "biolink:related_to_at_instance_level",
+    ("Project", "organism"): "biolink:related_to_at_instance_level",
+    ("Project", "DICOM_series"): "biolink:has_part",
+    ("sample", "genetic_variant"): "biolink:related_to_at_instance_level",  ## has_sequence_variant needs a GenomicEntity subject
+    ## VCF header edges, to be folded into file properties
+    ("sample", "VCF_file_format"): "biolink:related_to_at_instance_level",
+    ("sample", "VCF_reference"): "biolink:related_to_at_instance_level",
+    ("sample", "VCF_command"): "biolink:related_to_at_instance_level",
+}
+
+## fields whose ungrounded nodes get their own id namespace instead of sharing their
+## category's (so an author never merges with a funder or institution of the same name)
+NF_OWN_NAMESPACE_FIELDS = {"author", "journal"}
+
 ## NF tools table `resourceType` -> Biolink category. Antibody, Genetic Reagent and
 ## Biobank have no Biolink class and fall back to NF_DEFAULT_BIOLINK_CATEGORY.
 NF_TOOL_TYPE_TO_BIOLINK = {
@@ -178,38 +226,5 @@ NF_TOOL_TYPE_TO_BIOLINK = {
 }
 
 NF_DEFAULT_BIOLINK_CATEGORY = "biolink:NamedThing"
-
-## NF Data Portal native edge type -> Biolink predicate. The native relation is kept in
-## `raw_type`. Study -> grounded entity edges (has_{INDRA type}) use
-## GROUP_ENTITY_BIOLINK_PREDICATE from dglink.core.constants, same as tabular data.
-NF_EDGE_TO_BIOLINK = {
-    ## study metadata (Study -> X)
-    "has_initiative": "biolink:part_of",
-    "has_relatedStudies": "biolink:related_to_at_instance_level",
-    "predicted_relatedStudies_GL": "biolink:related_to_at_instance_level",
-    "has_institutions": "biolink:related_to_at_instance_level",  ## contributor is Agent -> ICE
-    "has_fundingAgency": "biolink:related_to_at_instance_level",
-    "has_diseaseFocus": "biolink:related_to_at_instance_level",
-    "has_manifestation": "biolink:related_to_at_instance_level",
-    "has_parentId": "biolink:part_of",  ## to be folded into a Study property
-    "hasWiki": "biolink:has_part",
-    "published": "biolink:has_part",
-    "usesTool": "biolink:related_to_at_instance_level",
-    "mentions": "biolink:mentions",  ## Wiki -> entity
-    ## samples and experiments
-    "has_specimen": "biolink:has_part",  ## Study -> MaterialSample
-    "has_sample": "biolink:has_part",  ## Study -> MaterialSample (VCF)
-    "has_sequencing_experiment": "biolink:has_part",  ## Procedure -> MaterialSample, needs flipping in fastq.py
-    "has_organism": "biolink:related_to_at_instance_level",
-    "has_dicom": "biolink:has_part",  ## Study -> Dataset
-    "has_genetic_variant": "biolink:related_to_at_instance_level",  ## has_sequence_variant needs a GenomicEntity subject
-    ## VCF header edges, to be folded into file properties
-    "has_vcf_format": "biolink:related_to_at_instance_level",
-    "has_vcf_reference": "biolink:related_to_at_instance_level",
-    "has_vcf_command": "biolink:related_to_at_instance_level",
-    ## publication values ## 
-    "has_author": "biolink:has_author",
-    "has_journal": "biolink:has_publisher",
-}
 
 NF_CURIE_PREFIX = "nfdataportal"

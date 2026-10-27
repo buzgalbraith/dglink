@@ -1,6 +1,12 @@
-from .constants import syn, NF_DATA_PORTAL_CACHE_DIR
+from .constants import syn, NF_DATA_PORTAL_CACHE_DIR, NF_CURIE_PREFIX, NF_PLACEHOLDER_VALUES, NF_LABEL_TO_BIOLINK, \
+    GROUND_FIELDS, NF_GROUND_FIELD_CATEGORIES, NF_GROUNDING_MIN_SPAN_FRACTION, NF_UNGROUNDED_CATEGORY, \
+    NF_KG_SCHEMA, NF_STUDIES_BASE_URL, NF_OWN_NAMESPACE_FIELDS
 from dglink.core.constants import TABULAR_FILE_TYPES, DGLINK_CACHE, REPORT_PATH
-from .constants import NF_CURIE_PREFIX
+from dglink.core import _is_empty
+from dglink import NodeSet, EdgeSet
+from dglink.core.grounding import ground_entity, slugify
+
+
 import polars as pl
 import pandas
 from synapseutils import walk
@@ -10,11 +16,18 @@ import os
 import re
 from pathlib import Path
 import asyncio
-from typing import Iterator, Union
+from typing import Iterator, Union, Tuple
 import tqdm
 import logging 
 
 logger = logging.getLogger(__name__)
+
+SYNAPSE_ID = re.compile(r"syn\d+")
+SOURCE_TO_HEAD = {
+    'metadata' : 'Project',
+    'publications' : 'publication',
+}
+
 
 
 
@@ -300,3 +313,128 @@ def get_file_annotations(file_ids:list)->dict[str, dict]:
 def nf_curie(uuid: str) -> str:
     """Prefix a raw NF UUID as a `nfdataportal:` CURIE (Biolink requires CURIE node ids)."""
     return f"{NF_CURIE_PREFIX}:{uuid}"
+
+## helper functions for parsing meta, publications and tools ##
+def _is_placeholder(value: str) -> bool:
+    return value.strip().lower() in NF_PLACEHOLDER_VALUES
+
+
+def _unpack_dict_list(dict: dict, key: str) -> list:
+    """Non-empty values of a dictionary metadata (could be publication metadata as well) field as strings, dropping leaked boolean annotations."""
+    values = dict.get(key, "")
+    values = values if type(values) == list else [values]
+    return [
+        str(v)
+        for v in values
+        if not _is_empty(v) and str(v).lower() not in ("true", "false")
+    ]
+def meta_node_curie(key: str, entry: str) -> str:
+    """CURIE for an ungrounded metadata value. `key` is usually the Biolink category, so the
+    same name under two fields of one category (e.g. a funder that is also an institution)
+    is one node; fields in NF_OWN_NAMESPACE_FIELDS pass their field name instead."""
+    return nf_curie(f"{key.split(':')[-1].lower()}_{slugify(entry)}")
+
+def _process_grounded_field(entry:str, meta_curie:str, node_type:str):
+    name, curie, iri, category = ground_entity(
+        entry, min_span_fraction=NF_GROUNDING_MIN_SPAN_FRACTION
+    )
+    if curie is not None and category not in NF_GROUND_FIELD_CATEGORIES[node_type]:
+        logger.debug(
+            f"{meta_curie}: {node_type} {entry!r} grounded to {curie} ({category}), treating as ungrounded"
+        )
+        curie = None
+    grounded = curie is not None
+    if not grounded:
+        category = NF_UNGROUNDED_CATEGORY[node_type]
+        name, iri = entry, None
+        curie = meta_node_curie(category, entry)
+    return name, curie, iri, category, "true" if grounded else "false"
+def parse_dict_fields(meta_curie:str, meta:dict, node_types: list[str], source:str, node_set: NodeSet, edge_set : EdgeSet ) -> Tuple[NodeSet, EdgeSet]:
+    """Parse fields from dictionary metadata (same procedure for publications)
+    Args:
+        meta_curie: curie identifying the dictionary source. often publication or project.
+        meta: dict with fields.
+        node_types: a list of field name containing the nodes to extract
+        source: where the information is being extracted from often publications or metadata 
+    """
+    head = SOURCE_TO_HEAD[source]
+    ## prase simple non grounded node types ##
+    for node_type in node_types:
+        for entry in _unpack_dict_list(meta, node_type):
+            if _is_placeholder(entry):
+                continue
+            if node_type in GROUND_FIELDS:
+                name, curie, iri, category, grounded = _process_grounded_field(entry, meta_curie, node_type)
+            else:
+                category = NF_LABEL_TO_BIOLINK.get(node_type, None)
+                if category is None:
+                    raise ValueError(f"Node type {node_type} not recognized...")
+                id_key = node_type if node_type in NF_OWN_NAMESPACE_FIELDS else category
+                curie = meta_node_curie(id_key, entry)
+                iri, grounded = None, None
+                name = entry
+            ## fill_empty so a value seen again (e.g. a shared funder) never overwrites the existing node
+            node_set.update_nodes(
+                {
+                    "curie:ID": curie,
+                    ":LABEL": category,
+                    "name": name,
+                    "raw_label" : node_type,
+                    "raw_texts:string[]": entry,
+                    "source:string[]": source,
+                    "iri": iri,
+                    "grounded:boolean": grounded,
+                },
+                fill_empty=True,
+            )
+            edge_set.update_edges(
+                {
+                    ":START_ID": meta_curie,
+                    ":END_ID": curie,
+                    ":TYPE": NF_KG_SCHEMA[(head, node_type)],
+                    "raw_type:string[]": node_type,
+                    "source:string[]": source,
+                }
+            )
+    return node_set, edge_set
+
+
+def parse_related_studies(meta_curie:str, meta:dict, key:str, source:str, node_set: NodeSet, edge_set : EdgeSet ):
+    """parse related studies (for metadata) or StudyIDs for publications."""
+    to_url = lambda x: NF_STUDIES_BASE_URL.replace("{study_id}", x)
+    for entry in _unpack_dict_list(meta, key):
+        curie = entry if SYNAPSE_ID.fullmatch(entry) else None
+        if curie is None:
+            logger.debug(f"{meta_curie}: skipping {key} value {entry!r}")
+            continue
+        ## add the related study as a project only if not present in other nodes ##
+        if not curie in node_set.nodes:
+            node_set.update_nodes(
+                {
+                    "curie:ID": curie,
+                    ":LABEL": NF_LABEL_TO_BIOLINK.get("Project"),
+                    "raw_label": "Project",
+                    "study_url": to_url(curie),
+                    "source:string[]": source,
+                }
+            )
+        if source == 'metadata':
+            start = meta_curie
+            end = curie
+            edge_key = ("Project", "Project") 
+        elif source == 'publications':
+            start = curie 
+            end = meta_curie
+            edge_key =  ("Project", "publication")
+        else:
+            raise ValueError(f"bad source given {source}")
+        edge_set.update_edges(
+            {
+                ":START_ID": start,
+                ":END_ID": end,
+                ":TYPE": NF_KG_SCHEMA[edge_key],
+                "raw_type:string[]": key,
+                "source:string[]": source,
+            }
+        )
+    return node_set, edge_set
