@@ -154,6 +154,8 @@ NF_LABEL_TO_BIOLINK = {
     "initiative": "biolink:Study",
     "institutions": "biolink:Agent",
     "fundingAgency": "biolink:Agent",
+    "author": "biolink:Agent",
+    "journal": "biolink:Agent",
     "publication": "biolink:Publication",
     "tool": "biolink:NamedThing",  ## refined per row by NF_TOOL_TYPE_TO_BIOLINK
     "Wiki": "biolink:DatasetSummary",
