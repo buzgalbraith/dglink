@@ -18,6 +18,7 @@ from indra.ontology.bio import bio_ontology
 from dglink.core.constants import map_biolink_category
 
 GROUNDING_SCORE_THRESHOLD = 0.5
+DEFAULT_BIOLINK_CATEGORY = "biolink:NamedThing"
 
 
 def slugify(name: str) -> str:
@@ -93,4 +94,7 @@ def ground_entity(
     term = match.term
     curie = normalize_curie(f"{term.db}:{term.id}")
     category = map_biolink_category(bio_ontology.get_type(term.db, term.id), curie)
+    ## INDRA has no type for some terms, and unknown types come back unmapped
+    if not category or not category.startswith("biolink:"):
+        category = DEFAULT_BIOLINK_CATEGORY
     return term.entry_name, curie, get_bioregistry_iri(term.db, term.id), category
