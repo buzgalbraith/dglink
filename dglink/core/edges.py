@@ -5,6 +5,7 @@ import polars as pl
 
 
 from .nodes import _is_empty
+from .tsv import clean_tsv_text
 
 class Edge:
     def __init__(self, attribute_names: list, attributes: dict = None):
@@ -143,12 +144,15 @@ class EdgeSet:
                     val = self.edges[curie][col]
                     if type(val) == set:
                         if len(val) > 20:
-                            val = list(val)[:20] ## take max of 20 ## 
-                        joined = ";".join(v for v in val if v)  
+                            val = list(val)[:20] ## take max of 20 ##
+                        items = (clean_tsv_text(v, array_item=True) for v in val)
+                        joined = ";".join(v for v in items if v)
                         val = f'"{joined}"' if joined else ""
                     elif val is None or val == 'None':
                         val = ''
-                    write_str += f"{val}".replace("\n", "") + "\t"
+                    else:
+                        val = clean_tsv_text(val)
+                    write_str += f"{val}" + "\t"
                 write_str = write_str.replace('""', '')
                 f.write(write_str[:-1] + "\n")   
 

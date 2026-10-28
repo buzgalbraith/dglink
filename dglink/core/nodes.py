@@ -1,9 +1,12 @@
+import math
 import os
 import polars as pl
 
+from .tsv import clean_tsv_text
+
 def _is_empty(val) -> bool:
-    ## standardize empty data representation
-    if val is None:
+    ## standardize empty data representation (pandas fills missing cells with NaN)
+    if val is None or (isinstance(val, float) and math.isnan(val)):
         return True
     return str(val).replace('"', "").replace("'", "").strip() in ("", "None")
 
@@ -143,13 +146,16 @@ class NodeSet:
                     if type(val) == set:
                         if len(val) > 20:
                             val = list(val)[:20]
+                        items = (clean_tsv_text(v, array_item=True) for v in val)
                         joined = ";".join(
-                            v for v in val if v
+                            v for v in items if v
                         )  # also skip empty strings within the set
                         val = f'"{joined}"' if joined else ""
                     elif val is None or val == "None":
                         val = ""
-                    write_str += f"{val}".replace("\n", "") + "\t"
+                    else:
+                        val = clean_tsv_text(val)
+                    write_str += f"{val}" + "\t"
                 write_str = write_str.replace('""', "")
                 f.write(write_str[:-1] + "\n")
 
