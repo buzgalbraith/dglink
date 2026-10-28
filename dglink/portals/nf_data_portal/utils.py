@@ -17,6 +17,7 @@ import re
 from pathlib import Path
 import asyncio
 from typing import Iterator, Union, Tuple
+from functools import lru_cache
 import tqdm
 import logging 
 
@@ -29,8 +30,6 @@ SOURCE_TO_HEAD = {
 }
 
 
-
-
 def download_all_nf_studies():
     """
     Saves a list of all studies on the NF Data Portal
@@ -40,17 +39,30 @@ def download_all_nf_studies():
     df = query.asDataFrame()
     df.to_csv(f"{DGLINK_CACHE}/all_nf_studies.tsv", sep="\t", index=False)
 
-def get_all_nf_studies():
-    """
-    Checks the list of all studies on the NF Data Portal exists and makes it if not. Returns all nf study ids as a list.
-    """
+def _nf_studies_path() -> str:
+    """Path to the cached NF studies table, downloading it first if needed."""
     nf_studies_path = f"{DGLINK_CACHE}/all_nf_studies.tsv"
     if not os.path.exists(nf_studies_path):
         logger.info("NF Data Portal studies list not found.")
         logger.info("Pulling NF Data Portal studies list")
         download_all_nf_studies()
         logger.info(f"NF Data Portal studies list saved to {nf_studies_path}")
-    return pandas.read_csv(nf_studies_path, sep="\t")["studyId"].to_list()
+    return nf_studies_path
+
+
+def get_all_nf_studies():
+    """
+    Checks the list of all studies on the NF Data Portal exists and makes it if not. Returns all nf study ids as a list.
+    """
+    return pandas.read_csv(_nf_studies_path(), sep="\t")["studyId"].to_list()
+
+
+@lru_cache(maxsize=1)
+def _studies_table() -> dict:
+    """studyId -> row of the NF studies table (names and summaries are not in the project
+    metadata). Loaded on first use, from the same cache as get_all_nf_studies."""
+    df = pandas.read_csv(_nf_studies_path(), sep="\t")
+    return {row["studyId"]: row for row in df.to_dict("records")}
 
 
 def safe_download(syn_id:str)->str|None:
@@ -328,6 +340,7 @@ def _unpack_dict_list(dict: dict, key: str) -> list:
         for v in values
         if not _is_empty(v) and str(v).lower() not in ("true", "false")
     ]
+
 def meta_node_curie(key: str, entry: str) -> str:
     """CURIE for an ungrounded metadata value. `key` is usually the Biolink category, so the
     same name under two fields of one category (e.g. a funder that is also an institution)
@@ -413,6 +426,8 @@ def parse_related_studies(meta_curie:str, meta:dict, key:str, source:str, node_s
                 {
                     "curie:ID": curie,
                     ":LABEL": NF_LABEL_TO_BIOLINK.get("Project"),
+                    "name" : get_project_name(curie),
+                    "summary": get_project_summary(curie),
                     "raw_label": "Project",
                     "study_url": to_url(curie),
                     "source:string[]": source,
@@ -438,3 +453,14 @@ def parse_related_studies(meta_curie:str, meta:dict, key:str, source:str, node_s
             }
         )
     return node_set, edge_set
+
+def get_project_name(study_id)->str:
+    """helper function looks for a project name and if not found return curie"""
+    name = _studies_table().get(study_id, {}).get("name")
+    return study_id if _is_empty(name) else str(name)
+
+
+def get_project_summary(study_id) -> str:
+    """the study summary from the NF studies table, or "" if there is none"""
+    summary = _studies_table().get(study_id, {}).get("summary")
+    return "" if _is_empty(summary) else str(summary)

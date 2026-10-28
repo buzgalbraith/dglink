@@ -24,6 +24,7 @@ NODE_ATTRIBUTES = [
     "source:string[]",
     ## Synapse project field
     "study_url",
+    "summary",  ## study summary from the NF studies table
     "studyStatus:string[]",
     "parentId:string[]",
     "dataStatus:string[]",
@@ -136,6 +137,9 @@ PROJECT_ATTRS = [
 ]
 
 WIKI_FIELDS = ["markdown", "title"]
+## wiki free text is noisy; categories dropped from wiki mentions (NamedThing is INDRA "other",
+## mostly generic terms like "quality of life" or "methods")
+NF_WIKI_EXCLUDED_CATEGORIES = {"biolink:NamedThing"}
 NF_DATA_PORTAL_CACHE_DIR = os.path.join(
     os.getenv("HOME"),
     ".data",
@@ -161,9 +165,8 @@ NF_LABEL_TO_BIOLINK = {
     "publication": "biolink:Publication",
     "author": "biolink:Agent",
     "journal": "biolink:Agent",
-    ## tool and wiki fields ## 
+    ## tool fields ##
     "tool": "biolink:NamedThing",  ## refined per row by NF_TOOL_TYPE_TO_BIOLINK
-    "Wiki": "biolink:DatasetSummary",
     ## modality specific fields ## 
     "specimen": "biolink:MaterialSample",
     "sample": "biolink:MaterialSample",  ## VCF samples
@@ -196,10 +199,10 @@ NF_KG_SCHEMA = {
     ("publication", "diseaseFocus"): "biolink:related_to_at_instance_level",
     ("publication", "manifestation"): "biolink:related_to_at_instance_level",
     ("publication", "fundingAgency"): "biolink:related_to_at_instance_level",
-    ## not yet converted modules (wiki / tools / fastq / dicom / vcf), carried over from
-    ## the old flat map; revisit each when its module is converted
-    ("Project", "Wiki"): "biolink:has_part",
-    ("Wiki", "entity"): "biolink:mentions",
+    ## wiki level: entities found in the study wiki, linked straight to the study ##
+    ("Project", "wiki_mention"): "biolink:mentions",
+    ## not yet converted modules (tools / fastq / dicom / vcf), carried over from the old
+    ## flat map; revisit each when its module is converted
     ("Project", "tool"): "biolink:related_to_at_instance_level",
     ("Project", "specimen"): "biolink:has_part",
     ("Project", "sample"): "biolink:has_part",  ## VCF samples

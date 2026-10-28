@@ -1,5 +1,5 @@
 from .constants import PROJECT_ATTRS, METADATA_NODES, GROUND_FIELDS, syn
-from .utils import _unpack_dict_list, parse_dict_fields, parse_related_studies
+from .utils import _unpack_dict_list, parse_dict_fields, parse_related_studies, get_project_name, get_project_summary
 from dglink.core.constants import RESOURCE_PATH 
 from dglink import NodeSet, EdgeSet, write_graph
 
@@ -18,7 +18,10 @@ def parse_project_attrs(project_id:str, project_metadata:dict, node_set:NodeSet)
     project_attrs = {}
     for attr in PROJECT_ATTRS:
         project_attrs[f'{attr}:string[]'] = _unpack_dict_list(project_metadata, attr)
-    node_set.update_nodes(project_attrs, new_node_id=project_id)
+    # take the name as the curie when no text name is available #
+    project_attrs['name'] = get_project_name(project_id)
+    project_attrs['summary'] = get_project_summary(project_id)
+    node_set.update_nodes(project_attrs, new_node_id=project_id, fill_empty=True)
     return node_set
 
 def parse_project_meta(project_id:str, project_metadata:dict, node_set: NodeSet, edge_set: EdgeSet)->NodeSet:
