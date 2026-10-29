@@ -55,6 +55,7 @@ NODE_ATTRIBUTES = [
     "doi",
     "pmid",
     "year",
+    "journal",
     ## nf data portal tool fields (maybe move elsewhere)
     "tool_type",
     ## genomic fields
@@ -120,7 +121,9 @@ METADATA_NODES = [
     "institutions",
 ]
 
-PUBLICATION_METADATA_NODES = ['author', 'journal', 'fundingAgency']
+## journal is a publication property, not a node: few papers share one, and has_publisher
+## points at the publisher, not the journal
+PUBLICATION_METADATA_NODES = ['author', 'fundingAgency']
 ## placeholder values (compared lower-cased) are kept as Study attributes only, never as
 ## nodes, so they do not link unrelated studies
 NF_PLACEHOLDER_VALUES = {"multiple", "other", "unknown", "not applicable", "not reported"}
@@ -164,7 +167,6 @@ NF_LABEL_TO_BIOLINK = {
     ## publication related nodes ## 
     "publication": "biolink:Publication",
     "author": "biolink:Agent",
-    "journal": "biolink:Agent",
     ## tool fields ##
     "tool": "biolink:NamedThing",  ## refined per row by NF_TOOL_TYPE_TO_BIOLINK
     ## modality specific fields ## 
@@ -195,15 +197,15 @@ NF_KG_SCHEMA = {
     ## publication level ##
     ("Project", "publication"): "biolink:has_part",  ## publication studyId field
     ("publication", "author"): "biolink:has_author",
-    ("publication", "journal"): "biolink:has_publisher",
     ("publication", "diseaseFocus"): "biolink:related_to_at_instance_level",
     ("publication", "manifestation"): "biolink:related_to_at_instance_level",
     ("publication", "fundingAgency"): "biolink:related_to_at_instance_level",
+    ## tool level ##
+    ("publication", "tool"): "biolink:mentions",  ## tools db Usage / Development tables
     ## wiki level: entities found in the study wiki, linked straight to the study ##
     ("Project", "wiki_mention"): "biolink:mentions",
     ## not yet converted modules (tools / fastq / dicom / vcf), carried over from the old
     ## flat map; revisit each when its module is converted
-    ("Project", "tool"): "biolink:related_to_at_instance_level",
     ("Project", "specimen"): "biolink:has_part",
     ("Project", "sample"): "biolink:has_part",  ## VCF samples
     ("specimen", "sequencing_experiment"): "biolink:has_part",  ## direction to check in fastq.py
@@ -219,7 +221,7 @@ NF_KG_SCHEMA = {
 
 ## fields whose ungrounded nodes get their own id namespace instead of sharing their
 ## category's (so an author never merges with a funder or institution of the same name)
-NF_OWN_NAMESPACE_FIELDS = {"author", "journal"}
+NF_OWN_NAMESPACE_FIELDS = {"author"}
 
 ## NF tools table `resourceType` -> Biolink category. Antibody, Genetic Reagent and
 ## Biobank have no Biolink class and fall back to NF_DEFAULT_BIOLINK_CATEGORY.
