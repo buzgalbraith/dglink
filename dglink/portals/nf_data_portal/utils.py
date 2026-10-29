@@ -1,10 +1,12 @@
 from .constants import syn, NF_DATA_PORTAL_CACHE_DIR, NF_CURIE_PREFIX, NF_PLACEHOLDER_VALUES, NF_LABEL_TO_BIOLINK, \
     GROUND_FIELDS, NF_GROUND_FIELD_CATEGORIES, NF_GROUNDING_MIN_SPAN_FRACTION, NF_UNGROUNDED_CATEGORY, \
-    NF_KG_SCHEMA, NF_STUDIES_BASE_URL, NF_OWN_NAMESPACE_FIELDS
+    NF_KG_SCHEMA, NF_STUDIES_BASE_URL, NF_OWN_NAMESPACE_FIELDS, NF_TOOLS_TABLE, NF_PERSON_FIELDS
 from dglink.core.constants import TABULAR_FILE_TYPES, DGLINK_CACHE, REPORT_PATH
 from dglink.core import _is_empty
 from dglink import NodeSet, EdgeSet
 from dglink.core.grounding import ground_entity, slugify
+
+from bioregistry import normalize_curie, get_bioregistry_iri
 
 
 import polars as pl
@@ -27,6 +29,7 @@ SYNAPSE_ID = re.compile(r"syn\d+")
 SOURCE_TO_HEAD = {
     'metadata' : 'Project',
     'publications' : 'publication',
+    'tools' : 'tool',
 }
 
 
@@ -347,10 +350,42 @@ def meta_node_curie(key: str, entry: str) -> str:
     is one node; fields in NF_OWN_NAMESPACE_FIELDS pass their field name instead."""
     return nf_curie(f"{key.split(':')[-1].lower()}_{slugify(entry)}")
 
+ORCID_SOURCE = "nf_tools_investigator_name_match"
+
+
+@lru_cache(maxsize=1)
+def _investigator_orcids() -> dict:
+    """slugified investigator name -> ORCID CURIE, from the NF tools db. Neither publications
+    table has author ids, so a portal author whose full name matches an investigator gets
+    that investigator's ORCID. Loaded on first use."""
+    df = syn.tableQuery(f"SELECT investigatorName, orcid FROM {NF_TOOLS_TABLE}").asDataFrame()
+    orcids = dict()
+    for name, orcid in df.itertuples(index=False):
+        ## a single token (e.g. a surname) is too ambiguous to match on
+        if _is_empty(name) or _is_empty(orcid) or len(str(name).split()) < 2:
+            continue
+        orcids[slugify(str(name))] = normalize_curie(f"orcid:{str(orcid).strip()}")
+    return orcids
+
+
+def author_curie(name: str) -> Tuple[str, str | None]:
+    """CURIE for a person (publication author or tool investigator): their ORCID when the
+    tools db has one for that name, else an `author_` id. Also returns where the ORCID came
+    from (None when there is no ORCID)."""
+    orcid = _investigator_orcids().get(slugify(name))
+    if orcid:
+        return orcid, ORCID_SOURCE
+    return meta_node_curie("author", name), None
+
+
+@lru_cache(maxsize=None)
+def _ground(entry: str):
+    ## tools repeat the same few values hundreds of times (e.g. "Neurofibromatosis type 1")
+    return ground_entity(entry, min_span_fraction=NF_GROUNDING_MIN_SPAN_FRACTION)
+
+
 def _process_grounded_field(entry:str, meta_curie:str, node_type:str):
-    name, curie, iri, category = ground_entity(
-        entry, min_span_fraction=NF_GROUNDING_MIN_SPAN_FRACTION
-    )
+    name, curie, iri, category = _ground(entry)
     if curie is not None and category not in NF_GROUND_FIELD_CATEGORIES[node_type]:
         logger.debug(
             f"{meta_curie}: {node_type} {entry!r} grounded to {curie} ({category}), treating as ungrounded"
@@ -362,29 +397,36 @@ def _process_grounded_field(entry:str, meta_curie:str, node_type:str):
         name, iri = entry, None
         curie = meta_node_curie(category, entry)
     return name, curie, iri, category, "true" if grounded else "false"
-def parse_dict_fields(meta_curie:str, meta:dict, node_types: list[str], source:str, node_set: NodeSet, edge_set : EdgeSet ) -> Tuple[NodeSet, EdgeSet]:
-    """Parse fields from dictionary metadata (same procedure for publications)
+def parse_dict_fields(meta_curie:str, meta:dict, node_types: list[str], source:str, node_set: NodeSet, edge_set : EdgeSet, head: str | None = None) -> Tuple[NodeSet, EdgeSet]:
+    """Parse fields from dictionary metadata (same procedure for publications and tools)
     Args:
         meta_curie: curie identifying the dictionary source. often publication or project.
         meta: dict with fields.
         node_types: a list of field name containing the nodes to extract
-        source: where the information is being extracted from often publications or metadata 
+        source: where the information is being extracted from often publications or metadata
+        head: NF_KG_SCHEMA subject name, if not the default for `source` (e.g. "tool_model")
     """
-    head = SOURCE_TO_HEAD[source]
+    head = head or SOURCE_TO_HEAD[source]
     ## prase simple non grounded node types ##
     for node_type in node_types:
         for entry in _unpack_dict_list(meta, node_type):
             if _is_placeholder(entry):
                 continue
-            if node_type in GROUND_FIELDS:
+            orcid_source = None
+            ## fields with a category allow-list are grounded
+            if node_type in NF_GROUND_FIELD_CATEGORIES:
                 name, curie, iri, category, grounded = _process_grounded_field(entry, meta_curie, node_type)
             else:
                 category = NF_LABEL_TO_BIOLINK.get(node_type, None)
                 if category is None:
                     raise ValueError(f"Node type {node_type} not recognized...")
-                id_key = node_type if node_type in NF_OWN_NAMESPACE_FIELDS else category
-                curie = meta_node_curie(id_key, entry)
-                iri, grounded = None, None
+                if node_type in NF_PERSON_FIELDS:
+                    curie, orcid_source = author_curie(entry)
+                else:
+                    id_key = node_type if node_type in NF_OWN_NAMESPACE_FIELDS else category
+                    curie = meta_node_curie(id_key, entry)
+                iri = get_bioregistry_iri(*curie.split(":", 1)) if orcid_source else None
+                grounded = None
                 name = entry
             ## fill_empty so a value seen again (e.g. a shared funder) never overwrites the existing node
             node_set.update_nodes(
@@ -397,6 +439,7 @@ def parse_dict_fields(meta_curie:str, meta:dict, node_types: list[str], source:s
                     "source:string[]": source,
                     "iri": iri,
                     "grounded:boolean": grounded,
+                    "orcid_source": orcid_source,
                 },
                 fill_empty=True,
             )

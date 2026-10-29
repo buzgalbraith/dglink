@@ -1,5 +1,6 @@
 from dglink.core.constants import RESOURCE_PATH 
-from .constants import syn, GROUND_FIELDS, PUBLICATION_METADATA_NODES, NF_LABEL_TO_BIOLINK
+from .constants import syn, GROUND_FIELDS, PUBLICATION_METADATA_NODES, NF_LABEL_TO_BIOLINK, \
+    PORTAL_PUBLICATIONS_TABLE, TOOLS_PUBLICATIONS_TABLE
 from .utils import _unpack_dict_list, parse_dict_fields, parse_related_studies
 from dglink import NodeSet, EdgeSet, write_graph
 from dglink.core import _is_empty
@@ -42,12 +43,6 @@ def publication_curie(pub: dict) -> str | None:
     pmid_curie, _ = _normalize_publication_id(pub.get("pmid", ''), 'pmid')
     doi_curie, _ = _normalize_publication_id(pub.get("doi", ''), 'doi')
     return pmid_curie or doi_curie
-
-
-## portal publications table, and the NF tools db publications table (papers that used or
-## developed a tool, most of which are not tied to any portal study)
-PORTAL_PUBLICATIONS_TABLE = "syn16857542"
-TOOLS_PUBLICATIONS_TABLE = "syn26486839"
 
 
 def _tools_publication_to_portal(pub: dict) -> dict:
