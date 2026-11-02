@@ -7,11 +7,8 @@ from dglink import NodeSet, EdgeSet, write_graph
 import tqdm
 import logging
 import os
-import re
 
 logger = logging.getLogger(__name__)
-
-SYNAPSE_ID = re.compile(r"syn\d+")
 
 def parse_project_attrs(project_id:str, project_metadata:dict, node_set:NodeSet)->NodeSet:
     """Extract study node attributes from metadata"""
@@ -24,7 +21,7 @@ def parse_project_attrs(project_id:str, project_metadata:dict, node_set:NodeSet)
     node_set.update_nodes(project_attrs, new_node_id=project_id, fill_empty=True)
     return node_set
 
-def parse_project_meta(project_id:str, project_metadata:dict, node_set: NodeSet, edge_set: EdgeSet)->NodeSet:
+def parse_project_meta(project_id:str, project_metadata:dict, node_set: NodeSet, edge_set: EdgeSet)->tuple[NodeSet, EdgeSet]:
     node_set = parse_project_attrs(project_id = project_id, project_metadata=project_metadata,node_set=node_set)
     node_set, edge_set = parse_dict_fields(
                                         meta_curie=project_id,

@@ -14,6 +14,8 @@ else:
         ) from e
 
 NF_STUDIES_BASE_URL = "https://nf.synapse.org/Explore/Studies/{study_id}/Details"
+## every NF study, with its name and summary (cached by utils.download_all_nf_studies)
+NF_STUDIES_TABLE = "syn52694652"
 NF_DATA_PORTAL_CACHE_DIR = os.path.join(
     os.getenv("HOME"),
     ".data",

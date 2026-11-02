@@ -2,11 +2,10 @@ from .constants import (
     syn,
     NF_KG_SCHEMA,
     WIKI_FIELDS,
-    NF_GROUNDING_MIN_SPAN_FRACTION,
     NF_WIKI_EXCLUDED_CATEGORIES,
 )
+from .utils import _ground
 from dglink.core import _is_empty
-from dglink.core.grounding import ground_entity
 from dglink.core.constants import RESOURCE_PATH
 from dglink import write_graph, NodeSet, EdgeSet
 
@@ -28,12 +27,10 @@ def get_entities_from_wiki(
         entry = study_wiki.get(field)
         if _is_empty(entry):
             continue
-        ## annotate finds the spans, ground_entity re-grounds each span with the shared
-        ## score / span / category rules. inefficient but simple.
+        ## annotate finds the spans, _ground re-grounds each span with the shared
+        ## score / span / category rules (cached, as terms repeat across wikis)
         for annotation in gilda.annotate(entry):
-            name, curie, iri, category = ground_entity(
-                annotation.text, min_span_fraction=NF_GROUNDING_MIN_SPAN_FRACTION
-            )
+            name, curie, iri, category = _ground(annotation.text)
             ## skip things that can not be grounded, and generic categories ##
             if curie is None or category in NF_WIKI_EXCLUDED_CATEGORIES:
                 continue
@@ -42,8 +39,10 @@ def get_entities_from_wiki(
                     "curie:ID": curie,
                     ":LABEL": category,
                     "name": name,
+                    "raw_label": "wiki_mention",
                     "raw_texts:string[]": annotation.text,
                     "iri": iri,
+                    "grounded:boolean": "true",
                     "source:string[]": "wiki",
                 },
                 fill_empty=True,

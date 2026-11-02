@@ -1,6 +1,7 @@
 from .constants import syn, NF_DATA_PORTAL_CACHE_DIR, NF_CURIE_PREFIX, NF_PLACEHOLDER_VALUES, NF_LABEL_TO_BIOLINK, \
     GROUND_FIELDS, NF_GROUND_FIELD_CATEGORIES, NF_GROUNDING_MIN_SPAN_FRACTION, NF_UNGROUNDED_CATEGORY, \
-    NF_KG_SCHEMA, NF_STUDIES_BASE_URL, NF_OWN_NAMESPACE_FIELDS, NF_TOOLS_TABLE, NF_PERSON_FIELDS
+    NF_KG_SCHEMA, NF_STUDIES_BASE_URL, NF_OWN_NAMESPACE_FIELDS, NF_TOOLS_TABLE, NF_PERSON_FIELDS, \
+    NF_STUDIES_TABLE
 from dglink.core.constants import TABULAR_FILE_TYPES, DGLINK_CACHE, REPORT_PATH
 from dglink.core import _is_empty
 from dglink import NodeSet, EdgeSet
@@ -38,7 +39,7 @@ def download_all_nf_studies():
     Saves a list of all studies on the NF Data Portal
     """
     os.makedirs(Path(DGLINK_CACHE), exist_ok=True)
-    query = syn.tableQuery("SELECT * FROM syn52694652")
+    query = syn.tableQuery(f"SELECT * FROM {NF_STUDIES_TABLE}")
     df = query.asDataFrame()
     df.to_csv(f"{DGLINK_CACHE}/all_nf_studies.tsv", sep="\t", index=False)
 
@@ -334,14 +335,15 @@ def _is_placeholder(value: str) -> bool:
     return value.strip().lower() in NF_PLACEHOLDER_VALUES
 
 
-def _unpack_dict_list(dict: dict, key: str) -> list:
-    """Non-empty values of a dictionary metadata (could be publication metadata as well) field as strings, dropping leaked boolean annotations."""
-    values = dict.get(key, "")
-    values = values if type(values) == list else [values]
+def _unpack_dict_list(meta: dict, key: str) -> list:
+    """Non-empty values of a dictionary metadata (could be publication metadata as well) field
+    as stripped strings, dropping leaked boolean annotations."""
+    values = meta.get(key, "")
+    values = values if isinstance(values, list) else [values]
     return [
-        str(v)
+        str(v).strip()
         for v in values
-        if not _is_empty(v) and str(v).lower() not in ("true", "false")
+        if not _is_empty(v) and str(v).strip().lower() not in ("true", "false")
     ]
 
 def meta_node_curie(key: str, entry: str) -> str:
