@@ -84,7 +84,7 @@ def map_biolink_category(indra_type, curie=None):
     whatever their INDRA type. Any non-ambiguous type is looked up in
     INDRA_BIOLINK_EXPERIMENTAL_DATA_TYPE_MAP; unknown types are returned as-is.
     """
-    prefix = str(curie).split(":")[0].lower() if curie else ""
+    prefix = curie.split(":")[0].lower() if isinstance(curie, str) and curie else ""
     if prefix in PHENOTYPE_CURIE_PREFIXES:
         return "biolink:PhenotypicFeature"
     if indra_type in GENE_OR_PROTEIN_INDRA_TYPES:

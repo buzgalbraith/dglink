@@ -7,10 +7,7 @@ from pathlib import Path
 import pandas
 from numpy.random import default_rng
 from typing import Any
-from functools import lru_cache
-from indra.ontology.bio import bio_ontology
-from bioregistry import normalize_curie, get_bioregistry_iri
-import gilda
+from dglink.core.grounding import annotate_text
 import logging
 import re
 
@@ -129,8 +126,33 @@ class TabularDataset:
         return col_sample
 
     def ground_table(self, biolink_entity_types: bool = False):
-        """Ground the table using gilda"""
-        self.table = self.table.apply(self._apply_ground, axis=1)
+        """Ground the table using gilda.
+
+        Replaces each column `col` with six columns (GROUNDING_SUFFIXES): `col_entity`,
+        `col_type`, `col_name`, `col_raw_text`, `col_column_name` and `col_iri`. Each
+        distinct value of a column is grounded once (`_ground_value`), and the gilda lookup
+        itself is cached across columns and tables (`annotate_text`).
+        """
+        grounded = {}
+        for col in self.table.columns:
+            values = self.table[col]
+            ## distinct text in this column -> its grounding. Keyed by the text, since
+            ## e.g. 1, 1.0 and True compare equal but are different text.
+            column_groundings = {}
+            cells = []
+            for val in values:
+                if pandas.isna(val):
+                    cells.append(_MISSING_CELL)
+                    continue
+                text = str(val)
+                if text not in column_groundings:
+                    column_groundings[text] = self._ground_value(text)
+                curie, entity_type, name, iri = column_groundings[text]
+                cells.append((curie, entity_type, name, val, col, iri))
+            fields = list(zip(*cells)) if cells else [()] * len(GROUNDING_SUFFIXES)
+            for suffix, field in zip(GROUNDING_SUFFIXES, fields):
+                grounded[f"{col}_{suffix}"] = pandas.Series(field, index=values.index, dtype=object)
+        self.table = pandas.DataFrame(grounded, index=self.table.index)
         ## map back to biolink if desired
         if biolink_entity_types:
             self.biolink_entity_types = True
@@ -141,68 +163,19 @@ class TabularDataset:
                     for t, e in zip(self.table[type_col], self.table[entity_col])
                 ]
 
-    def _apply_ground(self, row):
-        """Apply entity grounding to all columns in a DataFrame row.
-
-        Transforms a row of raw text values into grounded entity information by calling
-        cached_annotate on each cell. Creates new columns with suffixes: _entity, _type,
-        _name, _raw_text, _column_name, _iri.
-
-        Args:
-            row: pandas Series representing one row of the DataFrame
+    def _ground_value(self, text: str) -> tuple:
+        """Ground a (non-missing) cell's text with Gilda (see `annotate_text`).
 
         Returns:
-            pandas Series with grounded entity information for all columns
-
-        Note:
-            This function is designed to be used with DataFrame.apply(axis=1)
+            Tuple of (curie, entity_type, name, iri); all pandas.NA if the text does not
+            ground or its match is one of this table's `terms_to_exclude`.
         """
-        result = {}
-        for col in row.index:
-            (
-                result[f"{col}_entity"],
-                result[f"{col}_type"],
-                result[f"{col}_name"],
-                result[f"{col}_raw_text"],
-                result[f"{col}_column_name"],
-                result[f"{col}_iri"],
-            ) = self._cached_annotate(row[col], col)
-        return pandas.Series(result)
+        grounding = annotate_text(normalize_for_grounding(text))
+        if grounding is None or grounding.norm_text in self.terms_to_exclude:
+            return pandas.NA, pandas.NA, pandas.NA, pandas.NA
+        return grounding.curie, grounding.entity_type, grounding.name, grounding.iri
 
-    @lru_cache(maxsize=None)
-    def _cached_annotate(self, val, col):
-        """Ground a cell value to biomedical ontology terms using Gilda (cached).
 
-        Uses Gilda to identify biomedical entities in text and normalizes them to
-        standard ontology terms. Results are cached to avoid redundant API calls.
-
-        Args:
-            val: Cell value to ground (will be converted to string)
-            col: Column name for tracking provenance
-
-        Returns:
-            Tuple of (curie, entity_type, name, raw_text, column_name, iri)
-            Returns tuple of pandas.NA values if grounding fails or value is null
-
-        Note:
-            Uses INDRA bio_ontology for entity typing and bioregistry for IRI generation.
-            Only the top-ranked Gilda match is used.
-        """
-        if pandas.notna(val):
-            ans = gilda.annotate(normalize_for_grounding(str(val)))
-            if ans:
-                nsid = ans[0].matches[0].term
-                if nsid.norm_text in self.terms_to_exclude:
-                    return pandas.NA, pandas.NA, pandas.NA, val, col, pandas.NA
-                else:
-                    return (
-                        normalize_curie(f"{nsid.db}:{nsid.id}"),
-                        bio_ontology.get_type(nsid.db, nsid.id),
-                        nsid.entry_name,
-                        val,
-                        col,
-                        get_bioregistry_iri(nsid.db, nsid.id),
-                    )
-            else:
-                return pandas.NA, pandas.NA, pandas.NA, val, col, pandas.NA
-        return pandas.NA, pandas.NA, pandas.NA, pandas.NA, pandas.NA, pandas.NA
+## suffixes of the columns ground_table makes from each column, in order
+GROUNDING_SUFFIXES = ("entity", "type", "name", "raw_text", "column_name", "iri")
+_MISSING_CELL = (pandas.NA,) * len(GROUNDING_SUFFIXES)

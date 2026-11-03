@@ -7,9 +7,14 @@ non-invasive" fails, whereas `annotate` finds the grounded span within it. Among
 grounded spans we keep the one covering the *longest* substring (the most specific
 concept, not a generic sub-token like "carcinoma") above a score threshold; otherwise the
 caller falls back to a portal-local id.
+
+`annotate_text` is the simpler strategy tabular data uses (the top match of the first
+span gilda finds, no threshold), cached since tables repeat the same values many times.
 """
 
 import re
+from functools import lru_cache
+from typing import NamedTuple
 
 import gilda
 from bioregistry import normalize_curie, get_bioregistry_iri
@@ -19,6 +24,9 @@ from dglink.core.constants import map_biolink_category
 
 GROUNDING_SCORE_THRESHOLD = 0.5
 DEFAULT_BIOLINK_CATEGORY = "biolink:NamedThing"
+## distinct texts kept by annotate_text; a full portal run sees millions, so it is bounded
+## (least recently used texts are dropped, and re-grounded if seen again)
+ANNOTATE_CACHE_SIZE = 2**20
 
 
 def slugify(name: str) -> str:
@@ -74,6 +82,38 @@ def ground_term(text: str, score_threshold: float = GROUNDING_SCORE_THRESHOLD) -
         term.entry_name,
         normalize_curie(f"{term.db}:{term.id}"),
         get_bioregistry_iri(term.db, term.id),
+    )
+
+
+class TextGrounding(NamedTuple):
+    """A gilda grounding of a piece of text (see annotate_text)."""
+
+    curie: str
+    entity_type: str | None  ## raw INDRA type; callers map it to Biolink if they want
+    name: str
+    iri: str | None
+    norm_text: str  ## the matched term's normalized text, for caller-side exclusion lists
+
+
+@lru_cache(maxsize=ANNOTATE_CACHE_SIZE)
+def annotate_text(text: str) -> TextGrounding | None:
+    """Top match of the first span `gilda.annotate` finds in `text`, or None.
+
+    The tabular grounding strategy: unlike `ground_entity` there is no score threshold and
+    no whole-string match first. A pure function of the text, so it is cached across
+    columns, tables and portals; callers apply their own exclusions (e.g. a table's
+    terms_to_exclude) to the result.
+    """
+    ans = gilda.annotate(text)
+    if not ans:
+        return None
+    term = ans[0].matches[0].term
+    return TextGrounding(
+        curie=normalize_curie(f"{term.db}:{term.id}"),
+        entity_type=bio_ontology.get_type(term.db, term.id),
+        name=term.entry_name,
+        iri=get_bioregistry_iri(term.db, term.id),
+        norm_text=term.norm_text,
     )
 
 
