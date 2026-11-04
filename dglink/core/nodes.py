@@ -144,8 +144,8 @@ class NodeSet:
                 for col in self.attributes:
                     val = self.nodes[curie][col]
                     if type(val) == set:
-                        if len(val) > 20:
-                            val = list(val)[:20]
+                        ## sort for deterministic output, then take max of 20
+                        val = sorted(val, key=str)[:20]
                         items = (clean_tsv_text(v, array_item=True) for v in val)
                         joined = ";".join(
                             v for v in items if v

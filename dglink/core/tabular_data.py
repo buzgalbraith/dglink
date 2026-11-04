@@ -13,22 +13,25 @@ from .constants import (
 from .utils import write_graph
 from .nodes import NodeSet
 from .edges import EdgeSet
-import os
-from frictionless import Schema, Resource, formats, Package
-from .column_selectors import HeuristicSelector, LLMSelector
+from .column_selectors import HeuristicSelector, LLMSelector, HierarchicalSelector
 from .tabular_dataset import TabularDataset
-import pandas
-from pathlib import Path
-from functools import lru_cache
-from indra.ontology.bio import bio_ontology
-from bioregistry import normalize_curie, get_bioregistry_iri
-import tqdm
-import gilda
-import logging
-from typing import Iterator
-import json
+
+from frictionless import Schema, Resource, formats, Package
 import numpy as np
 from openai import BadRequestError
+import pandas
+from indra.ontology.bio import bio_ontology
+from bioregistry import normalize_curie, get_bioregistry_iri
+
+
+from pathlib import Path
+from functools import lru_cache
+import logging
+import tqdm
+from typing import Iterator
+import os
+import json
+
 
 logger = logging.getLogger(__name__)
 
@@ -354,10 +357,13 @@ def load_file(group_identifier: str, fp: str):
 def quality_check_groundings(qc_method: str, table: TabularDataset, **kwargs) -> None:
     if qc_method == "heuristic":
         selector = HeuristicSelector(**kwargs)
-        selector.execute(table, verbose=True)
     elif qc_method == "llm_schema_match":
         selector = LLMSelector(**kwargs)
-        selector.execute(table, verbose=True)
+    elif qc_method in ("hierarchical_selector", "hierarchal_selector"):
+        selector = HierarchicalSelector(**kwargs)
+    else:
+        raise ValueError(f"invalid QC method {qc_method}")
+    selector.execute(table, verbose=True)
 
 
 def get_tabular_data(

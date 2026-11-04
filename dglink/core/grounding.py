@@ -37,7 +37,7 @@ def slugify(name: str) -> str:
     )
 
 
-def _best_match(text: str, score_threshold: float, min_span_fraction: float):
+def _best_match(text: str, score_threshold: float, min_span_fraction: float, context: str | None = None):
     """Best gilda match for `text`, or None.
 
     First tries to ground the whole string with `gilda.ground` (the most specific match);
@@ -45,18 +45,22 @@ def _best_match(text: str, score_threshold: float, min_span_fraction: float):
     within the string, provided that span covers at least `min_span_fraction` of the text
     (so "xyzzy unknown disease" does not ground to "disease"). Either way only matches
     at/above `score_threshold` are accepted.
+
+    `context` (e.g. the document `text` was found in) is passed to gilda, which uses it to
+    disambiguate strings it has a disambiguation model for, and ignores it otherwise.
     """
     if not isinstance(text, str) or not text.strip():
         return None
 
     ## 1) prefer a grounding of the entire string
-    full = gilda.ground(text)
+    full = gilda.ground(text, context=context)
     if full and full[0].score >= score_threshold:
         return full[0]
 
-    ## 2) fall back to the longest grounded span within the string
+    ## 2) fall back to the longest grounded span within the string. Without a context,
+    ## gilda.annotate uses `text` itself as the context
     best_match, best_span = None, -1
-    for annotation in gilda.annotate(text):
+    for annotation in gilda.annotate(text, context_text=context):
         if not annotation.matches:
             continue
         top = annotation.matches[0]  # gilda returns matches best-score-first
@@ -121,14 +125,16 @@ def ground_entity(
     text: str,
     score_threshold: float = GROUNDING_SCORE_THRESHOLD,
     min_span_fraction: float = 0.0,
+    context: str | None = None,
 ) -> tuple:
     """Return a (normalized_name, curie, iri, biolink_category) tuple for `text`.
 
     Like `ground_term`, but also types the grounding (INDRA type mapped to a Biolink
-    category) and can reject partial matches covering less than `min_span_fraction` of
-    the text. curie/iri/category are None when nothing grounds.
+    category), can reject partial matches covering less than `min_span_fraction` of
+    the text, and can take a `context` to disambiguate with (see `_best_match`).
+    curie/iri/category are None when nothing grounds.
     """
-    match = _best_match(text, score_threshold, min_span_fraction)
+    match = _best_match(text, score_threshold, min_span_fraction, context=context)
     if match is None:
         return text, None, None, None
     term = match.term
