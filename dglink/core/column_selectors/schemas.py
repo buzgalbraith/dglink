@@ -32,3 +32,15 @@ class EvaluationResponse(BaseModel):
     protein_family_complex: float
     human_gene_other: float
     no_schema_match: float
+
+
+class ColumnEvaluation(EvaluationResponse):
+    """EvaluationResponse with the column it describes (used by the table-wide selector)"""
+
+    column_name: str
+
+
+class EvaluationResponseBatch(BaseModel):
+    """Response model for batch (table-wide) column evaluation"""
+
+    columns: list[ColumnEvaluation]
