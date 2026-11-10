@@ -6,13 +6,15 @@ from dglink.core.api_clients import GqlClient
 from .constants import NCI_PDC_CACHE_DIR, PDC_GQL_ENDPOINT
 
 import polars as pl
-from gql import gql
+from dglink.core.optional_deps import import_optional
 from urllib3.util.retry import Retry
 
 import hashlib
 import os
 import requests
 from requests.adapters import HTTPAdapter
+
+gql = import_optional("gql", "nci").gql
 
 
 class NciProteomicCommonsClient:

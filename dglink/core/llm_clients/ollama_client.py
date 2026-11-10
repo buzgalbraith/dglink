@@ -10,10 +10,8 @@ import logging
 from typing import Type
 from pydantic import BaseModel
 
-from ollama import chat, ChatResponse
-
-
 from .llm_client import LLMClient
+from ..optional_deps import import_optional
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +40,8 @@ class OllamaClient(LLMClient):
         """
         Make an LLM API call with structured pydantic response format
         """
+        ollama = import_optional("ollama", "ollama")
+        chat, ChatResponse = ollama.chat, ollama.ChatResponse
         num_retries = 0
         messages = [
             {"role": "system", "content": context},

@@ -6,7 +6,9 @@ from dglink.core.api_clients import Gen3Client, GqlClient
 from .constants import NCI_GQL_ENDPOINT, NCI_GEN3_ENDPOINT, NCI_GC_CACHE_DIR
 import polars as pl
 import os
-from gql import gql
+from dglink.core.optional_deps import import_optional
+
+gql = import_optional("gql", "nci").gql
 
 
 class NciGeneralCommonsClient:

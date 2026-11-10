@@ -12,7 +12,9 @@ from .nodes import NodeSet
 from .edges import EdgeSet
 from .utils import write_graph
 from dglink.portals.nf_data_portal.utils import get_project_files 
-import pydicom
+from .optional_deps import import_optional
+
+pydicom = import_optional("pydicom", "dicom")
 import os
 from bioregistry import normalize_curie
 from indra.ontology.bio import bio_ontology

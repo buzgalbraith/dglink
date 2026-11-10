@@ -1,42 +1,86 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "dglink"
 version = "0.1.0"
-description = "Add your description here"
+description = "Semantic interoperability for biomedical data portals through automated metadata extraction and knowledge graph construction."
 readme = "README.md"
 requires-python = "~=3.10"
 dependencies = [
-    "biolink-model==4.4.3",
+    ## semantic tools ##
     "bioregistry>=0.12.42",
-    "bmt>=1.4.0",
-    "chardet>=5.2.0",
-    "frictionless>=5.18.1",
-    "gen3>=4.28.1",
     "gilda>=1.4.1",
-    "gql>=4.0.0",
     "indra>=1.24.0",
-    "ipdb>=0.13.13",
-    "ipython>=8.37.0",
-    "ollama>=0.6.2",
-    "openai>=2.14.0",
-    "openpyxl>=3.1.5",
+    ## tabular data parsing ##
+    "frictionless>=5.18.1",
+    "numpy>=1.24",
     "pandas>=2.3.2",
     "polars>=1.35.2",
     "pyarrow>=22.0.0",
-    "pydicom>=3.0.1",
-    "pyvcf3>=1.0.4",
-    "synapseclient>=4.9.0",
+    "openpyxl>=3.1.5",
     "xlrd>=2.0.2",
+    ## utilities ##
+    "tqdm>=4.0",
+    "requests>=2.0",
+    "pydantic>=2.0",
 ]
+
 [project.optional-dependencies]
 dev = [
-	'ipdb',
-	'jedi',
-	'black',
-	'pylint',
+    "ipdb",
+    "jedi",
+    "black",
+    "pylint",
+    "ipython>=8.37.0",
+    ## used by examples/programatic_build.py ##
+    "chardet>=5.2.0",
 ]
+
+validate_kg = [
+    "biolink-model==4.4.3",
+    "bmt>=1.4.0",
+]
+
 graph_embedding = [
-    'pykeen'
+    "pykeen",
 ]
+
+synapse = [
+    "synapseclient>=4.9.0",
+]
+
+gen3 = ["gen3>=4.28.1"]
+gql  = ["gql>=4.0.0"]
+nci   = ["dglink[gen3,gql]"]   # gc uses both; pdc uses gql
+nhlbi = ["dglink[gen3]"]       # bdc
+
+## vcf / dicom extraction reads files via the NF data portal's Synapse client
+vcf = [
+    "pyvcf3>=1.0.4",
+    "dglink[synapse]",
+]
+
+dicom = [
+    "pydicom>=3.0.1",
+    "dglink[synapse]",
+]
+
+openai = [
+    "openai>=2.14.0",
+]
+
+ollama = [
+    "ollama>=0.6.2",
+]
+
+llm_clients = ["dglink[ollama,openai]"]
+
+modality_specific = ["dglink[vcf,dicom]"]
+
+all = ["dglink[validate_kg,graph_embedding,synapse,llm_clients,modality_specific,nci,nhlbi]"]
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["dglink*"]

@@ -17,20 +17,14 @@ from .column_selectors import HeuristicSelector, LLMSelector, HierarchicalSelect
 from .tabular_dataset import TabularDataset
 
 from frictionless import Schema, Resource, formats, Package
-import numpy as np
-from openai import BadRequestError
 import pandas
-from indra.ontology.bio import bio_ontology
-from bioregistry import normalize_curie, get_bioregistry_iri
 
 
 from pathlib import Path
-from functools import lru_cache
 import logging
 import tqdm
 from typing import Iterator
 import os
-import json
 
 
 logger = logging.getLogger(__name__)
@@ -372,7 +366,7 @@ def get_tabular_data(
     edge_set: EdgeSet,
     tabular_iterator: Iterator,
     write_reports: bool = True,
-    quality_check_method: str = "heuristic",
+    quality_check_method: str|None = "heuristic",
     **kwargs,
 ) -> list[pandas.DataFrame]:
     """Process tabular data files from multiple groups and build knowledge graph.
@@ -384,6 +378,7 @@ def get_tabular_data(
     logger.info(f"Adding tabular experimental data for {len(group_identifiers)} groups")
     files_read = []
     cols_read = []
+    quality_check_method = quality_check_method or 'heuristic'
     for group_identifier, file_paths, file_ids in tqdm.tqdm(
         tabular_iterator, total=len(group_identifiers)
     ):

@@ -16,7 +16,9 @@ from importlib.resources import files
 import re
 import sys
 
-import bmt
+from dglink.core.optional_deps import import_optional
+
+bmt = import_optional("bmt", "validate_kg")
 
 ## pinned in pyproject.toml; the schema is read from the installed biolink-model
 ## package rather than bmt's default (an older release fetched from GitHub)

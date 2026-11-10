@@ -1,5 +1,8 @@
-import synapseclient
 import os
+
+from dglink.core.optional_deps import import_optional
+
+synapseclient = import_optional("synapseclient", "synapse")
 
 ## --- Synapse ------------------------------------------------------------------
 token = os.getenv("SYNAPSE_AUTHTOKEN")

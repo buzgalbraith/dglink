@@ -2,8 +2,7 @@
 Helper client for interfacing with GraphQL APIs
 """
 
-from gql import Client, GraphQLRequest, gql
-from gql.transport.requests import RequestsHTTPTransport
+from ..optional_deps import import_optional
 
 import logging
 
@@ -16,24 +15,27 @@ class GqlClient:
         endpoint,
         fetch_schema_from_transport: bool = True,
     ):
+        gql_transport = import_optional("gql.transport.requests", "gql")
+        gql = import_optional("gql", "gql")
         self.endpoint = endpoint
-        self.transport = RequestsHTTPTransport(
+        self.transport = gql_transport.RequestsHTTPTransport(
             url=endpoint,
             verify=True,
         )
-        self.client = Client(
+        self.client = gql.Client(
             transport=self.transport,
             execute_timeout=30,
             fetch_schema_from_transport=fetch_schema_from_transport,
         )
 
     def execute(
-        self, query: str | GraphQLRequest, variable_values: dict, max_retries: int = 3
+        self, query: str, variable_values: dict, max_retries: int = 3
     ):
         """Run a query with some set of parameters"""
-        if not isinstance(query, GraphQLRequest):
+        gql = import_optional("gql", "gql")
+        if not isinstance(query, gql.GraphQLRequest):
             try:
-                query = gql(query)
+                query = gql.gql(query)
             except TypeError as e:
                 raise TypeError(f"Invalid query: {e}") from e
         for attempt in range(max_retries):
@@ -46,7 +48,7 @@ class GqlClient:
 
     def batch_execute(
         self,
-        query: str | GraphQLRequest,
+        query: str,
         variable_values: dict,
         page_size: int = 1000,
         key: str = None,

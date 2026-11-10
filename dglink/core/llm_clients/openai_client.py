@@ -10,15 +10,8 @@ from typing import Type
 from pydantic import BaseModel
 import os
 
-from openai import OpenAI
-from openai.types.responses.parsed_response import ParsedResponse
-
-
 from .llm_client import LLMClient
-
-open_ai_client = OpenAI(
-    api_key=os.environ.get("OPENAI_API_KEY"),
-)
+from ..optional_deps import import_optional
 
 logger = logging.getLogger(__name__)
 REASONING_MODELS = {"gpt-5", "gpt-5-mini", "o1", "o3", "o3-mini", "o4-mini"}
@@ -33,9 +26,13 @@ class OpenAIClient(LLMClient):
         self,
         model: str = "gpt-5-mini",
     ):
+        OpenAI = import_optional("openai", "openai").OpenAI
         self.model: str = model
         self.provider = "openAI"
         self.reasoning_model = self.model in REASONING_MODELS
+        self.client = OpenAI(
+            api_key=os.environ.get("OPENAI_API_KEY"),
+        )
 
     def structured_call(
         self,
@@ -49,13 +46,16 @@ class OpenAIClient(LLMClient):
         """
         Make an LLM API call with structured pydantic response format
         """
+        ParsedResponse = import_optional(
+            "openai.types.responses.parsed_response", "openai"
+        ).ParsedResponse
         num_retries = 0
         response = None
         ## temperature not used in reasoning models so by pass in that case.
         temperature = temperature if not self.reasoning_model else None
         while num_retries < max_retries:
             try:
-                response = open_ai_client.responses.parse(
+                response = self.client.responses.parse(
                     model=self.model,
                     input=[
                         {

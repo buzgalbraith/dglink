@@ -11,7 +11,9 @@ from .nodes import NodeSet
 from .edges import EdgeSet
 from .utils import write_graph
 from dglink.portals.nf_data_portal.utils import get_project_files 
-import vcf
+from .optional_deps import import_optional
+
+vcf = import_optional("vcf", "vcf")
 import os
 from bioregistry import normalize_curie, get_iri, parse_curie
 import logging
@@ -143,7 +145,7 @@ def extract_vcf_metadata(
     node_set.update_nodes(
         {
             "curie:ID": reference,
-            ":LABEL": "VCR_reference",
+            ":LABEL": "VCF_reference",
             "name": reference,
             "file_id:string[]": file_id,
             "source:string[]": data_source,
