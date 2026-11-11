@@ -6,6 +6,7 @@ from dglink.core.constants import TABULAR_FILE_TYPES, DGLINK_CACHE, REPORT_PATH
 from dglink.core import _is_empty
 from dglink import NodeSet, EdgeSet
 from dglink.core.grounding import ground_entity, slugify
+from dglink.core.timing import TIMER
 
 from bioregistry import normalize_curie, get_bioregistry_iri
 
@@ -72,9 +73,15 @@ def _studies_table() -> dict:
 def safe_download(syn_id:str)->str|None:
     """safe method to download from nf data portal"""
     try:
-        entity = syn.get(syn_id, ifcollision="keep.local") ## keep local file if already downloaded ie do not re-download.
+        with TIMER.stage("download"):
+            entity = syn.get(syn_id, ifcollision="keep.local") ## keep local file if already downloaded ie do not re-download.
+        try:
+            TIMER.add("download", files=1, bytes=os.path.getsize(entity.path))
+        except (OSError, TypeError):
+            TIMER.add("download", files=1)
         return entity.path
     except Exception:
+        TIMER.add("download", failed=1)
         logger.warning(f"Could not download file {syn_id}", exc_info=True)
         return None
 
@@ -90,14 +97,19 @@ def fetch_nf_tabular_files()->pl.DataFrame:
             'tabular_file_paths.tsv'
         )
     if os.path.exists(output_path):
-        logger.info("Loading tabular file paths from cache...")
+        logger.warning(
+            f"Loading tabular file paths from cache {output_path}: no files will be "
+            "downloaded, so download timing will be empty. Delete it for a cold run."
+        )
+        TIMER.add("download", from_path_cache=1)
         tabular_project_files = pl.read_csv(output_path, separator='\t')
     else:
-        logger.info("fetching tabular files from the NF data portal...")    
+        logger.info("fetching tabular files from the NF data portal...")
         ## get a full list of studies
         project_ids = get_all_nf_studies()
         ## crawl all projects
-        project_files = get_projects_files(project_ids=project_ids, )
+        with TIMER.stage("crawl_file_listing"):
+            project_files = get_projects_files(project_ids=project_ids, )
         ## filter for tabular projects
         file_types_pattern = f"({'|'.join(re.escape(s) for s in TABULAR_FILE_TYPES)})$"
         tabular_project_files = project_files.filter(

@@ -12,6 +12,7 @@ import os
 
 from .llm_client import LLMClient
 from ..optional_deps import import_optional
+from ..timing import TIMER
 
 logger = logging.getLogger(__name__)
 REASONING_MODELS = {"gpt-5", "gpt-5-mini", "o1", "o3", "o3-mini", "o4-mini"}
@@ -31,8 +32,8 @@ class OpenAIClient(LLMClient):
         self.provider = "openAI"
         self.reasoning_model = self.model in REASONING_MODELS
         self.client = OpenAI(
-            api_key=os.environ.get("OPENAI_API_KEY"),
-        )
+                api_key=os.environ.get("OPENAI_API_KEY"),
+            )
 
     def structured_call(
         self,
@@ -55,17 +56,24 @@ class OpenAIClient(LLMClient):
         temperature = temperature if not self.reasoning_model else None
         while num_retries < max_retries:
             try:
-                response = self.client.responses.parse(
-                    model=self.model,
-                    input=[
-                        {
-                            "role": "system",
-                            "content": context,
-                        },
-                        {"role": "user", "content": user_prompt},
-                    ],
-                    temperature=None,
-                    text_format=schema,
+                with TIMER.stage("llm"):
+                    response = self.client.responses.parse(
+                        model=self.model,
+                        input=[
+                            {
+                                "role": "system",
+                                "content": context,
+                            },
+                            {"role": "user", "content": user_prompt},
+                        ],
+                        temperature=None,
+                        text_format=schema,
+                    )
+                usage = getattr(response, "usage", None)
+                TIMER.add(
+                    "llm",
+                    input_tokens=getattr(usage, "input_tokens", None),
+                    output_tokens=getattr(usage, "output_tokens", None),
                 )
                 break
             except:

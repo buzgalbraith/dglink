@@ -4,7 +4,7 @@ Select entity columns by asking an LLM to classify each column against a schema
 from .column_selector import ColumnSelector
 from .schemas import BiologicalEntity
 from dglink.core.tabular_dataset import TabularDataset
-from dglink.core.llm_clients import OllamaClient, OpenAIClient, LLMClient
+from dglink.core.llm_clients import OllamaClient, OpenAIClient, LLMClient, AnthropicClient
 from pydantic import BaseModel
 from typing import Type
 from pandas import DataFrame
@@ -22,6 +22,8 @@ def make_llm_client(provider: str, model: str) -> LLMClient:
         return OpenAIClient(model=model)
     elif provider == "ollama":
         return OllamaClient(model=model)
+    elif provider == "anthropic":
+        return AnthropicClient(model = model)
     raise ValueError(f"{provider} is not a recognized model provider.")
 
 

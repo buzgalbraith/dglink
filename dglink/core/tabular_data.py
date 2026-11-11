@@ -15,6 +15,7 @@ from .nodes import NodeSet
 from .edges import EdgeSet
 from .column_selectors import HeuristicSelector, LLMSelector, HierarchicalSelector
 from .tabular_dataset import TabularDataset
+from .timing import TIMER
 
 from frictionless import Schema, Resource, formats, Package
 import pandas
@@ -25,6 +26,7 @@ import logging
 import tqdm
 from typing import Iterator
 import os
+import time
 
 
 logger = logging.getLogger(__name__)
@@ -208,7 +210,7 @@ def extract_df_graph(
         Edge types are dynamically created based on entity type (e.g., "has_protein").
     """
     pascalify = lambda x: "".join(
-        w.capitalize() for w in x.strip("biolink:").split("_")
+        w.capitalize() for w in x.removeprefix("biolink:").split("_")
     )
     generate_edge_type = lambda x: (
         f"has_{x}" if not table.biolink_entity_types else GROUP_ENTITY_BIOLINK_PREDICATE
@@ -383,8 +385,17 @@ def get_tabular_data(
         tabular_iterator, total=len(group_identifiers)
     ):
         for fp, file_id in zip(file_paths, file_ids):
+            t0 = time.perf_counter()
             dfs, read_states = load_file(group_identifier=group_identifier, fp=fp)
+            parse_s = time.perf_counter() - t0
+            TIMER.record("tabular.parse", parse_s)
+            try:
+                TIMER.add("tabular.parse", files=1, bytes=os.path.getsize(fp))
+            except OSError:
+                TIMER.add("tabular.parse", files=1)
             for df, read_state in zip(dfs, read_states):
+                read_state["file_id"] = file_id
+                read_state["parse_seconds"] = round(parse_s, 4)
                 files_read.append(read_state)
                 if df is not None:
                     tabular_dataset = TabularDataset(
@@ -393,11 +404,14 @@ def get_tabular_data(
                         table=df,
                     )
                     ## try to ground everything in the dataframe
+                    t0 = time.perf_counter()
                     tabular_dataset.ground_table(biolink_entity_types=True)
+                    t1 = time.perf_counter()
                     ## quality check groundings and only select those that pass ##
                     quality_check_groundings(
                         qc_method=quality_check_method, table=tabular_dataset, **kwargs
                     )
+                    t2 = time.perf_counter()
                     node_set, edge_set = extract_df_graph(
                         tabular_dataset,
                         group_identifier,
@@ -405,6 +419,13 @@ def get_tabular_data(
                         node_set=node_set,
                         edge_set=edge_set,
                     )
+                    t3 = time.perf_counter()
+                    TIMER.record("tabular.grounding", t1 - t0)
+                    TIMER.record("tabular.column_selection", t2 - t1)
+                    TIMER.record("tabular.extract", t3 - t2)
+                    read_state["grounding_seconds"] = round(t1 - t0, 4)
+                    read_state["column_selection_seconds"] = round(t2 - t1, 4)
+                    read_state["extract_seconds"] = round(t3 - t2, 4)
                     for col in tabular_dataset.entity_columns:
                         cols_read.append(
                             {
@@ -415,7 +436,9 @@ def get_tabular_data(
                                 "col": col,
                             }
                         )
-        write_graph(node_set=node_set, edge_set=edge_set)
+        ## checkpoint the graph after each group (timed separately: it's I/O, not processing)
+        with TIMER.stage("tabular.checkpoint_write"):
+            write_graph(node_set=node_set, edge_set=edge_set)
     files_df = pandas.DataFrame(data=files_read)
     cols_df = pandas.DataFrame(data=cols_read)
     if write_reports:
